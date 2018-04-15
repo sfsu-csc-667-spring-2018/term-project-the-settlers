@@ -1,8 +1,14 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
+  font: 14px "Arial", Helvetica, Arial, sans-serif;
+  width: 50%;
+  margin: auto;
 
+}
+.main container{
+align-self: center;
+}
 a {
   color: #00B7FF;
 }
+
