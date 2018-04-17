@@ -7,6 +7,11 @@ body {
   background-size: cover;
   background-color: #c64947;
 }
+.lobby{
+  background: url(/images/game-background.jpg) no-repeat center center fixed;
+  background-size: cover;
+  background-color: #c64947;
+}
 h1{
   padding:10px;
 }
