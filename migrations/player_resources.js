@@ -24,10 +24,6 @@ module.exports = {
                 },
                 resource_id: {
                     type: Sequelize.INTEGER,
-                    references: {
-                        model: 'members',
-                        key: 'id'
-                    },
                     unique: true
                 }
             }
