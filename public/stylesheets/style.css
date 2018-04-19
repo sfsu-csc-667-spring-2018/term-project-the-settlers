@@ -15,6 +15,11 @@ body {
 h1{
   padding:10px;
 }
+.row{
+  background-color:#fff;
+  padding: 10px;
+  margin:10px;
+}
 .btn.btn-primary{
   padding:5px;
   border:5px;
