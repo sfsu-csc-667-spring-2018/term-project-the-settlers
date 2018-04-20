@@ -10,7 +10,7 @@ module.exports = {
           autoIncrement:true,
           primaryKey:true
         },
-        user_id: Sequelize.INTEGER,
+        player_id: Sequelize.INTEGER,
         building_type: Sequelize.STRING
       })
   },
