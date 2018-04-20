@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable( 
+    return queryInterface.createTable(
       'Game_Resources',
       {
         id: {
@@ -13,7 +13,7 @@ module.exports = {
         vertex_id: {
           type: Sequelize.INTEGER,
           allowNull: false
-        }, 
+        },
         dice_number: {
           type: Sequelize.INTEGER,
           allowNull: false
@@ -21,15 +21,15 @@ module.exports = {
         resource: {
           type: Sequelize.STRING,
           allowNull: false
-        }
+        },
         game_id: {
           type: Sequelize.INTEGER,
           allowNull: false
-        }
+        },
         createdAt: {
           type: Sequelize.DATE,
           allowNull: false
-        }
+        },
         updatedAt: {
           type: Sequelize.DATE,
           allowNull: false
@@ -39,6 +39,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Game_Resources'); 
+    return queryInterface.dropTable('Game_Resources');
   }
 };
