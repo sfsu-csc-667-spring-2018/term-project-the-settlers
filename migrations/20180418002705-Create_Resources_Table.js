@@ -9,7 +9,7 @@ module.exports = {
           type: Sequelize.INTEGER,
           primaryKey: true,
           autoIncrement: true
-        }, 
+        },
         resource_type: {
           type: Sequelize.STRING,
           allowNull:false
@@ -23,6 +23,6 @@ module.exports = {
       });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Resources');  
+    return queryInterface.dropTable('Resources');
   }
 };

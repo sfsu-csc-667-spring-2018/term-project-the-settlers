@@ -15,7 +15,7 @@ module.exports = {
           type:Sequelize.INTEGER,
           allowNull: false
         },
-        games_id: Sequelize.INTEGER,
+        game_id: Sequelize.INTEGER,
         port_id: Sequelize.INTEGER,
         robber: Sequelize.BOOLEAN,
         building_id: Sequelize.INTEGER
