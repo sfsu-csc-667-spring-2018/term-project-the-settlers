@@ -2,120 +2,120 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.addConstraint('Players', ['user_id'],{
+    return queryInterface.addConstraint('players', ['user_id'],{
                               type: 'foreign key',
                               name: 'player_user_id_fk',
                               references:{
-                                  table:'Users',
+                                  table:'users',
                                   field:'id'
                               }
                             }
             )
-            .then( () => queryInterface.addConstraint('Player_Resources', ['player_id'], {
+            .then( () => queryInterface.addConstraint('player_resources', ['player_id'], {
                               type: 'foreign key',
                               name: 'player_resources_player_id_fk',
                               references:{
-                                  table: 'Players',
+                                  table: 'players',
                                   field: 'id'
                                 },
                                 onDelete:'cascade'
                             }
             ))
-            .then( () => queryInterface.addConstraint('Player_Resources',['game_id'], {
+            .then( () => queryInterface.addConstraint('player_resources',['game_id'], {
                               type: 'foreign key',
                               name: 'player_resources_game_id_fk',
                               references:{
-                                  table: 'Games',
+                                  table: 'games',
                                   field: 'id'
                               },
                                 onDelete: 'cascade'
                             }
             ))
-            .then( () => queryInterface.addConstraint('Player_Resources', ['resource_id'], {
+            .then( () => queryInterface.addConstraint('player_resources', ['resource_id'], {
                               type: 'foreign key',
                               name: 'player_resources_resource_id_fk',
                               references:{
-                                  table: 'Resources',
+                                  table: 'resources',
                                   field: 'id'
                               },
                                 onDelete: 'cascade'
                             }
             ))
-            .then( () => queryInterface.addConstraint('Buildings',['player_id'],{
+            .then( () => queryInterface.addConstraint('buildings',['player_id'],{
                                 type: 'foreign key',
                                 name: 'buildings_player_id_fk',
                                 references: {
-                                  table: 'Players',
+                                  table: 'players',
                                   field: 'id'
                                 },
                                   onDelete: 'cascade'
                               }
             ))
-            .then( () => queryInterface.addConstraint('Vertices',['game_id'],{
+            .then( () => queryInterface.addConstraint('vertices',['game_id'],{
                                 type: 'foreign key',
                                 name: 'vertices_game_id_fk',
                                 references: {
-                                  table: 'Games',
+                                  table: 'games',
                                   field: 'id'
                                 },
                                 onDelete: 'cascade'
                           }
             ))
-            .then( () => queryInterface.addConstraint('Vertices',['building_id'],{
+            .then( () => queryInterface.addConstraint('vertices',['building_id'],{
                                 type: 'foreign key',
                                 name: 'vertices_building_id_fk',
                                 references: {
-                                  table: 'Buildings',
+                                  table: 'buildings',
                                   field: 'id'
                                 },
                                 onDelete: 'cascade'
                           }
             ))
-            .then( () => queryInterface.addConstraint('Dev_Cards',['game_id'],{
+            .then( () => queryInterface.addConstraint('dev_cards',['game_id'],{
                                 type: 'foreign key',
                                 name: 'dev_cards_game_id_fk',
                                 references: {
-                                  table: 'Games',
+                                  table: 'games',
                                   field: 'id'
                                 },
                                 onDelete: 'cascade'
                           }
             ))
-            .then( () => queryInterface.addConstraint('Dev_Cards',['player_id'],{
+            .then( () => queryInterface.addConstraint('dev_cards',['player_id'],{
                             type: 'foreign key',
                             name: 'dev_cards_player_id_fk',
                             references: {
-                                table: 'Players',
+                                table: 'players',
                                 field: 'id'
                             },
                             onDelete: 'cascade'
                           }
             ))
-            .then( () => queryInterface.addConstraint('Game_Resources',['vertex_id'],{
+            .then( () => queryInterface.addConstraint('game_resources',['vertex_id'],{
                             type: 'foreign key',
                             name: 'game_resources_vertex_id_fk',
                             references: {
-                                table: 'Vertices',
+                                table: 'vertices',
                                 field: 'id'
                             },
                             onDelete: 'cascade'
                           }
             ))
-            .then( () => queryInterface.addConstraint('Connections', ['vertex_start'], {
+            .then( () => queryInterface.addConstraint('connections', ['vertex_start'], {
                           type: 'foreign key',
                           name: 'connections_vertex_id_strt_fk',
                           references: {
-                              table: 'Vertices',
+                              table: 'vertices',
                               field: 'id'
                           },
                           onDelete: 'cascade'
                         }
             ))
-            .then( () => queryInterface.addConstraint('Connections', ['vertex_end'], {
+            .then( () => queryInterface.addConstraint('connections', ['vertex_end'], {
                           type: 'foreign key',
                           name: 'connections_vertex_id_end_fk',
                           references: {
-                              table: 'Vertices',
+                              table: 'vertices',
                               field: 'id'
                           },
                           onDelete: 'cascade'

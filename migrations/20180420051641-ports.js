@@ -3,7 +3,7 @@
 module.exports = {
     up: (queryInterface, Sequelize) => {
         return queryInterface.createTable(
-            'Ports',
+            'ports',
             {
                 createdAt: Sequelize.DATE,
                 updatedAt: Sequelize.DATE,
