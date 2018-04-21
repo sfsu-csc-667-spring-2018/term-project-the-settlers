@@ -1,0 +1,21 @@
+doctype html
+head
+    link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css', integrity='sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4', crossorigin='anonymous')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+body
+    .main.container
+        .col-5
+            .row.row-3
+                h2 Create Game
+                form(method='POST' action='/game')
+                    div.form-group
+                    label(for='lobbyName') Lobby Name
+                    input.form-control(type='text' id='lobbyName' placeholder='Lobby' name='lobby')
+                    div.form-group
+                    label(for='players') No. of Players
+                    input.form-control(type='numPlayers' id='numPlayers' placeholder='Max: 4' name='numPlayers')
+                    a(href="lobby"): button.btn.btn-primary(type="button") Create Game
+            .row.row-7
+                h2 Join Game
+        .col-5
+  

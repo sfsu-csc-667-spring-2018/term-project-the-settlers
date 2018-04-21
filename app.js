@@ -3,6 +3,9 @@ if(process.env.NODE_ENV === 'development') {
 }
 
 var express = require('express');
+//const passport = require('passport');
+//const session = require('express-session');
+//const RedisStore = require('connect-redis')(session);
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -12,8 +15,8 @@ var bodyParser = require('body-parser');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var tests = require('./routes/tests');
-
-
+var register = require('./routes/register');
+const lobby = require('./routes/lobby');
 
 var app = express();
 
@@ -32,6 +35,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/tests', tests);
+app.use('/register', register);
+app.use('/lobby', lobby);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -39,6 +44,17 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+//for passport, username and password authentication
+// app.use(session({
+//   store: new RedisStore({
+//     url: config.redisStore.url
+//   }),
+//   secret: config.redisStore.secret,
+//   resave: false,
+//   saveUninitialized: false
+// }))
+// app.use(passport.initialize())
+// app.use(passport.session())
 
 // error handler
 app.use(function(err, req, res, next) {
