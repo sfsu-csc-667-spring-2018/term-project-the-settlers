@@ -21,6 +21,8 @@ body
     .main.container
         .row
             .col-4
+        .col-5
+            .row.row-3
                 h2 Create Game
                 form(method='POST' action='/game')
                     div.form-group
@@ -28,6 +30,7 @@ body
                     input.form-control(type='text' id='lobbyName' placeholder='Lobby' name='lobby')
                     div.form-group
                     label(for='players') No. of Players
+
                     input.form-control(type='numPlayers' id='numPlayers' placeholder='4' name='numPlayers')
 
             .col-4
@@ -56,4 +59,9 @@ body
                     });
                 });
 
-
+                    input.form-control(type='numPlayers' id='numPlayers' placeholder='Max: 4' name='numPlayers')
+                    a(href="lobby"): button.btn.btn-primary(type="button") Create Game
+            .row.row-7
+                h2 Join Game
+        .col-5
+ 
