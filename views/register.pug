@@ -7,6 +7,9 @@ block content
         h1.display-4.m-b-2 Sign Up
         form(method='POST' action='/register')
           div.form-group
+            label(for='e-mail') E-mail
+            input.form-control(type='text' id='e-mail' placeholder='E-mail' name='e-mail')
+          div.form-group
             label(for='username') Username:
             input#name.form-control(type='text', placeholder='Ex: elitedragonslayer' name='username')
           div.form-group
