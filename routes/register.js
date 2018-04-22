@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const db = require('../db');
-const users  = require('../db/users')(db);
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('register', { title: 'Express' });
@@ -11,7 +11,7 @@ router.post('/', function(request, response, next){
   const username = request.body['username'];
   const email = request.body['e-mail'];
   const password = request.body['password'];
-  users.createUser(username,email,password,'fake_path')
+  db.users.createUser(username,email,password, username+email)
     .then( (successMsg) =>  {
                               response.json(successMsg);
                             }
