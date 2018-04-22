@@ -9,6 +9,7 @@ body {
 }
 .lobby{
   background: url(/images/game-background.jpg) no-repeat center center fixed;
+  opacity: 0.5;
   background-size: cover;
   background-color: #c64947;
 }
@@ -30,5 +31,18 @@ align-self: center;
 }
 a {
   color: #00B7FF;
+}
+/*****************************
+
+      Game Page
+
+***************/
+.col players{
+display:flex;
+justify-content:flex-end;
+}
+.bottomUI{
+  display:flex;
+  align-items:flex-end;
 }
 
