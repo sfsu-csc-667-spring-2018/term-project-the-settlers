@@ -1,18 +1,14 @@
 var express = require('express');
 var router = express.Router();
-const passport = require('../authentication');
+const authenticate = require('../authentication/authenticated');
 
+router.use(authenticate);
 
 
 /* GET home page. */
 router.get('/', function(request, response, next) {
-                              console.log(request.user);
-                              if(request.user){
-                                response.render('lobby', {title: 'Express'});
-                              }else{
-                                response.redirect('/');
-                              }
-                            }
-);
+            console.log(request.user);
+            response.render('lobby', {title: 'Express'});
+});
 
 module.exports = router;
