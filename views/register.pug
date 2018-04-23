@@ -1,11 +1,8 @@
 extends layout
 
 block content
-   .main.container
-    .row
-      .col-md-6.col-md-offset-3
-        h1.display-4.m-b-2 Sign Up
-        form(method='POST' action='/register')
+   .main.container.auth
+        form(method='POST' action='/register').form
           div.form-group
             label(for='e-mail') E-mail
             input.form-control(type='text' id='e-mail' placeholder='E-mail' name='e-mail')
@@ -18,4 +15,4 @@ block content
           div.form-group
             label(for='pw2') Confirm Password:
             input#pw2.form-control(type='password' name='confirmPassword')
-          button.btn.btn-primary(type='submit') Sign up
+          button.front.btn.btn-primary(type='submit') Sign up

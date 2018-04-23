@@ -1,20 +1,22 @@
+@font-face{
+  font-family:Nova;
+  src: url(/fonts/nova.ttf);
+}
 body {
   padding: 50px;
-  font: 14px "Arial", Helvetica, Arial, sans-serif;
-  width: 75%;
   margin: auto;
+  font-family:Nova;
   background: url(/images/background.jpg) no-repeat center center fixed;
-  background-size: cover;
-  background-color: #c64947;
-}
-.lobby{
-  background: url(/images/game-background.jpg) no-repeat center center fixed;
-  opacity: 0.5;
   background-size: cover;
   background-color: #c64947;
 }
 h1{
   padding:10px;
+}
+.title{
+  text-align:center;
+  padding-bottom: 50px;
+  padding-top: 20px;
 }
 .row{
   background-color:#fff;
@@ -22,16 +24,46 @@ h1{
   margin:10px;
 }
 .btn.btn-primary{
-  padding:5px;
-  border:5px;
-  margin: 5px;
+  margin-top:5px;
+  margin-bottom:10px;
 }
-.main container{
-align-self: center;
+.btn.front{
+  width:100%;
+}
+.btn.turn{
+padding:5%;
+}
+.container{
+ border-radius:10px;
+ align-self: center;
+ background-color: #fff;
 }
 a {
   color: #00B7FF;
 }
+.auth{
+  width:35%;
+}
+.form{
+  padding-top: 5%;
+}
+/******************************
+
+    Lobby
+
+*******************************/
+.lobby{
+  width:75%;
+}
+.row{
+  width:100%;
+}
+img{
+  margin:5px;
+  padding:5px;
+  size: 50%;
+}
+
 /*****************************
 
       Game Page
