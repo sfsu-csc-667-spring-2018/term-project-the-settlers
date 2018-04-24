@@ -21,44 +21,44 @@ head
     #messages li:nth-child(odd) {
     background: #eee;
     }
-.main.container
-  .row
-    .col-5
-      .row-3
-        h2 Create Game
-        form(method='POST', action='/game')
-          .form-group
-          label(for='lobbyName') Lobby Name
-          input#lobbyName.form-control(type='text', placeholder='Lobby', name='lobby')
-          .form-group
-          label(for='players') No. of Players
-          input#numPlayers.form-control(type='numPlayers', placeholder='4', name='numPlayers')
+.main.container.lobby
+    .row
+        .col
+          .row-3
+            h2 Create Game
+            form(method='POST', action='/game')
+            .form-group
+            label(for='lobbyName') Lobby Name
+            input#lobbyName.form-control(type='text', placeholder='Lobby', name='lobby')
+            .form-group
+            label(for='players') No. of Players
+            input#numPlayers.form-control(type='numPlayers', placeholder='4', name='numPlayers')
+            a(href='game')
+                button.front.btn.btn-primary(type='button') Create Game
+          .row-7
+            h2 Join Game
+        .col
+          ul#messages
+          br
+          form(action='')
+            input#m.form-control(autocomplete='off', placeholder='Enter your message')
+            br
+            button.btn.btn-info Send
+script.
+  $(function() {
+  var socket = io();
+  $('form').submit(function() {
+  socket.emit('chat message', $('#m').val());
+  $('#m').val('');
+  return false;
+  });
+  socket.on('chat message', function(msg) {
+  if (msg) {
+  $('#messages').append($('<li>').text(msg));
+  }
+  });
+  });
 
-          a(href="game"): button.btn.btn-primary(type="button") Create Game   
-
-      .row-7
-        h2 Join Game
-    .col-5
-      ul#messages
-      br
-      form(action='')
-        input#m.form-control(autocomplete='off', placeholder='Enter your message')
-        br
-        button.btn.btn-info Send
-  script.
-    $(function() {
-    var socket = io();
-    $('form').submit(function() {
-    socket.emit('chat message', $('#m').val());
-    $('#m').val('');
-    return false;
-    });
-    socket.on('chat message', function(msg) {
-    if (msg) {
-    $('#messages').append($('<li>').text(msg));
-    }
-    });
-    });
 
 
  
