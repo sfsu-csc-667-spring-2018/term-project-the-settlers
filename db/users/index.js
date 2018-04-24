@@ -14,7 +14,7 @@ module.exports = function(db){
     }
 
     userFunctions.checkUser = (username, password) => {
-      return new Promise(
+        return new Promise(
         function(resolve,reject){
           db.one('SELECT id FROM "users"'
                   +' WHERE username = $1 AND password = $2',
