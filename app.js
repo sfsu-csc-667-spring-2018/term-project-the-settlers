@@ -3,9 +3,9 @@ if(process.env.NODE_ENV === 'development') {
 }
 
 var express = require('express');
-//const passport = require('passport');
-//const session = require('express-session');
-//const RedisStore = require('connect-redis')(session);
+const passport = require('passport');
+const session = require('express-session');
+
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
@@ -33,6 +33,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+//for passport, username and password authentication
+app.use(session({ secret: "catan",
+                  resave: "true",
+                  saveUninitialized: "true",
+                  cookie : { secure : false, maxAge : (4 * 60 * 60 * 1000) }}
+                  ));
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+//Define routes
 app.use('/', index);
 app.use('/users', users);
 app.use('/tests', tests);
@@ -46,17 +58,6 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
-//for passport, username and password authentication
-// app.use(session({
-//   store: new RedisStore({
-//     url: config.redisStore.url
-//   }),
-//   secret: config.redisStore.secret,
-//   resave: false,
-//   saveUninitialized: false
-// }))
-// app.use(passport.initialize())
-// app.use(passport.session())
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -68,5 +69,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 module.exports = app;
