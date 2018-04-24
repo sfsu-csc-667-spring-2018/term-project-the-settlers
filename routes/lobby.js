@@ -1,9 +1,9 @@
 var express = require('express');
 var router = express.Router();
 const authenticate = require('../authentication/authenticated');
+const chat = require('../chat');
 
 router.use(authenticate);
-
 
 /* GET home page. */
 router.get('/', function(request, response, next) {
