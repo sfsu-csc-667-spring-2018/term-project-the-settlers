@@ -3,17 +3,15 @@ extends layout
 block content
   .main.container
         h2 Log In
-        form(method='POST' action='/login')
+        form(method='POST' action='/')
           div.form-group
-            label(for='Username') Username
-            input.form-control(type='text' id='username' placeholder='Username' name='Username')
+            label(for='username') Username
+            input.form-control(type='text' id='username' placeholder='Username' name='username')
           div.form-group
             label(for='password') Password
-            input.form-control(type='password' id='password' placeholder='password' name='password')
-          button.btn.btn-primary(type='submit') Log in 
+            input.form-control(type='password' id='password' placeholder='Password' name='password')
+          button.btn.btn-primary(type='submit') Log in
 
           a(href="register"): button.btn.btn-primary(type="button") Register
-          
+
           a(href="lobby"): button.btn.btn-primary(type="button") Lobby
-
-
