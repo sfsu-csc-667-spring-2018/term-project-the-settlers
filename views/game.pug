@@ -2,9 +2,18 @@ doctype html
 head
   link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css', integrity='sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4', crossorigin='anonymous')
   link(rel='stylesheet', href='/stylesheets/style.css')
+  script(type='text/javascript', src='/scripts/d6.js')
 .d-flex.xl-row.align-items-stretch.justify-content-between
   .d-flex.flex-column
     h1 Chat
+  .d-flex.flex-column
+    h1 Board
+    script(type='text/javascript').
+      function attack(result) {
+      alert('You rolled ' + result + '!');
+      }
+      D6.dice(2, attack);
+
   .d-flex.flex-column
     .row
       h3 Player 1
