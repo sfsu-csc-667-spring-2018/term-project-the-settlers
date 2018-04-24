@@ -10,9 +10,6 @@ body {
   background-size: cover;
   background-color: #c64947;
 }
-h1{
-  padding:10px;
-}
 .title{
   text-align:center;
   padding-bottom: 50px;
@@ -20,7 +17,7 @@ h1{
 }
 .row{
   background-color:#fff;
-  padding: 10px;
+  padding-top: 10px;
   margin:10px;
 }
 .btn.btn-primary{
@@ -46,6 +43,16 @@ a {
 }
 .form{
   padding-top: 5%;
+  margin-top:10%;
+}
+/*****************************
+
+Login
+
+*******************************/
+.logspace{
+  margin-top:5%;
+  padding-bottom:1px;
 }
 /******************************
 
@@ -57,11 +64,6 @@ a {
 }
 .row{
   width:100%;
-}
-img{
-  margin:5px;
-  padding:5px;
-  size: 50%;
 }
 
 /*****************************
