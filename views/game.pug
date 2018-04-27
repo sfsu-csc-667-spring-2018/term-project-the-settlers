@@ -1,8 +1,11 @@
 doctype html
 head
   link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css', integrity='sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4', crossorigin='anonymous')
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+  script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js", integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm", crossorigin="anonymous")
   link(rel='stylesheet', href='/stylesheets/style.css')
   script(type='text/javascript', src='/scripts/d6.js')
+body
 .d-flex.xl-row.align-items-stretch.justify-content-between
   .d-flex.flex-column
     h1 Chat
@@ -33,16 +36,14 @@ head
          img(src='images/resources/food.png')
          img(src='images/resources/stone.png')
   .d-flex.flex-column.justify-content-end
-    ul.nav.nav-tabs
-        li.nav-item
-            a.nav-link(href='#') Build
-        li.nav.item
-            a.nav-link(href='#') Trade
-    .d-flex.row.justify-content-lg-around.align-items-end
-        h5 Road
-        h5 Settlement
-        h5 City
-        h5 Development Card
+    ul#myTab.nav.nav-tabs(role='tablist')
+      li.nav-item
+        a#home-tab.nav-link.active(data-toggle='tab', href='#home', role='tab', aria-controls='home', aria-selected='true') Home
+      li.nav-item
+        a#profile-tab.nav-link(data-toggle='tab', href='#profile', role='tab', aria-controls='profile', aria-selected='false') Profile
+    #myTabContent.tab-content
+      #home.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='home-tab') ...
+      #profile.tab-pane.fade(role='tabpanel', aria-labelledby='profile-tab') ...
 
   .d-flex.flex-column
   button.turn.btn.btn-primary(type='button') End Turn
