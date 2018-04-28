@@ -3,52 +3,71 @@ head
   link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css', integrity='sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4', crossorigin='anonymous')
   script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
   script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js", integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm", crossorigin="anonymous")
+  script(src='/socket.io/socket.io.js')
+  script(src='https://code.jquery.com/jquery-1.11.1.js')
   link(rel='stylesheet', href='/stylesheets/game.css')
   script(type='text/javascript', src='/scripts/d6.js')
-body
-  .main.container
-    .row
-      .col-1
-        .row-5
-          h1 Chat
-        .row-5
-          ul#myTab.nav.nav-tabs(role='tablist')
-            li.nav-item
-              a#home-tab.nav-link.active(data-toggle='tab', href='#home', role='tab', aria-controls='home', aria-selected='true') Home
-            li.nav-item
-              a#profile-tab.nav-link(data-toggle='tab', href='#profile', role='tab', aria-controls='profile', aria-selected='false') Profile
-          #myTabContent.tab-content
-            #home.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='home-tab') ...
-            #profile.tab-pane.fade(role='tabpanel', aria-labelledby='profile-tab') ...
-      .col-8
-        .d-flex.flex-column
-          h1 Board
-          script(type='text/javascript').
-            function attack(result) {
-            alert('You rolled ' + result + '!');
-            }
-            D6.dice(2, attack);
-      .col-1
-        .row-3
-          .row
-            h3 Player 1
-          .row
-            h3 Player 2
-          .row
-            h3 Player 3
-          .row
-            h3 Player 4
-        .row-3
-          h4 Resources
-          .col-2
-            img(src='images/resources/wood.png')
-          .col-2
-            img(src='images/resources/bricks.png')
-          .col-2
-            img(src='images/resources/sheep.png')
-          .col-2
-            img(src='images/resources/food.png')
-          .col-2
-            img(src='images/resources/stone.png')
-        .row-3
-          button.turn.btn.btn-primary(type='button') End Turn
+.row.justify-content-between
+  .col.col-2
+    .row-5
+      ul#messages
+      form(action='')
+        input#m.form-control(autocomplete='off', placeholder='Enter your message')
+        .send
+          button.btn.float-right.btn-info Send    
+    .row-5
+      ul#myTab.nav.nav-tabs(role='tablist')
+        li.nav-item
+          a#home-tab.nav-link.active(data-toggle='tab', href='#build', role='tab', aria-controls='build', aria-selected='true') Build
+        li.nav-item
+          a#profile-tab.nav-link(data-toggle='tab', href='#trade', role='tab', aria-controls='trade', aria-selected='false') Trade
+      #myTabContent.tab-content
+        #home.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='build-tab') ...
+        #profile.tab-pane.fade(role='tabpanel', aria-labelledby='trade-tab') ...
+  .col.col-8
+    .d-flex.flex-column
+      h1 Board
+      script(type='text/javascript').
+        function attack(result) {
+        alert('You rolled ' + result + '!');
+        }
+        D6.dice(2, attack);
+  .col.col-2
+    .row-3
+      .row
+        h3 Player 1
+      .row
+        h3 Player 2
+      .row
+        h3 Player 3
+      .row
+        h3 Player 4
+    .row-3
+      h4 Resources
+      .col-2
+        img(src='images/resources/wood.png')
+      .col-2
+        img(src='images/resources/bricks.png')
+      .col-2
+        img(src='images/resources/sheep.png')
+      .col-2
+        img(src='images/resources/food.png')
+      .col-2
+        img(src='images/resources/stone.png')
+    .row-3
+      button.turn.btn.btn-primary(type='button') End Turn
+
+  script.
+    $(function() {
+      var socket = io();
+      $('form').submit(function() {
+      socket.emit('chat message', $('#m').val());
+      $('#m').val('');
+      return false;
+      });
+      socket.on('chat message', function(msg) {
+      if (msg) {
+      $('#messages').append($('<li>').text(msg));
+      }
+      });
+      });

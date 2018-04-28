@@ -3,20 +3,36 @@
     src: url(/fonts/nova.ttf);
 }
 body{
-    padding: 50px;
     font-family:Nova;
     background: url(/images/background.jpg) no-repeat center center fixed;
     background-size: cover;
     background-color: #c64947;
 }
 .container{
-    width:100%;
-    margin:auto;
+    margin:2%;
 }
-.row{
-    padding-right:-2%;
-   
+.col{
+    padding-top:1%;
+    padding-left:1%;
 }
-.col-1{
-    background: #fff;
+.row-5{
+    padding-left:3px;
+    padding-right:5px;
+    margin-top:5%;
 }
+#messages {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    height: 400px;
+    background: white;
+    overflow: auto;
+    border-radius: 10px;
+    border: #368BC1 5px solid;
+    }
+    #messages li {
+    padding: 5px 10px;
+    }
+    #messages li:nth-child(odd) {
+    background: #eee;
+    }
