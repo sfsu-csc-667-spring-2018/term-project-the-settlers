@@ -6,20 +6,20 @@ head
   script(src='https://code.jquery.com/jquery-1.11.1.js')
   style.
     #messages {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    height: 500px;
-    background: white;
-    overflow: auto;
-    border-radius: 15px;
-    border: #368BC1 5px solid;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        height: 500px;
+        background: white;
+        overflow: auto;
+        border-radius: 15px;
+        border: #368BC1 5px solid;
     }
     #messages li {
-    padding: 5px 10px;
+        padding: 5px 10px;
     }
     #messages li:nth-child(odd) {
-    background: #eee;
+        background: #eee;
     }
 .main.container.lobby
     .row
@@ -50,7 +50,7 @@ script.
         var socket = io();
         $('form').submit(function() {
             // Send to server
-            socket.emit('chat message', $('#user').val() + ' ' + $('#m').val());
+            socket.emit('chat message', { message: $('#m').val(), username: $('#user').val() });
             $('#m').val('');
             return false;
         });
