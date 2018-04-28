@@ -44,12 +44,13 @@ head
             input#m.form-control(autocomplete='off', placeholder='Enter your message')
             br
             button.btn.btn-info Send
+            input#user(type="hidden", name="postid", value=user)
 script.
     $(function() {
         var socket = io();
         $('form').submit(function() {
             // Send to server
-            socket.emit('chat message', $('#m').val());
+            socket.emit('chat message', $('user').value + $('#m').val());
             $('#m').val('');
             return false;
         });
@@ -68,8 +69,3 @@ script.
             }
         });
     });
-
-
-
-
- 

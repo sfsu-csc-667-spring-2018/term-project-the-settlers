@@ -9,8 +9,7 @@ var user;
 /* GET home page. */
 router.get('/', function(request, response, next) {
             console.log(request.user);
-            user = request.user;
-            response.render('lobby', {title: 'Express'});
+            response.render('lobby', {title: 'Express', user: request.user.username});
 });
 
 module.exports = router;
