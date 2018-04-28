@@ -50,7 +50,7 @@ script.
         var socket = io();
         $('form').submit(function() {
             // Send to server
-            socket.emit('chat message', $('user').val + $('#m').val());
+            socket.emit('chat message', $('#user').val() + ' ' + $('#m').val());
             $('#m').val('');
             return false;
         });
