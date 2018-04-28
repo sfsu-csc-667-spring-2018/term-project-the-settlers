@@ -76,21 +76,4 @@ Login
   border-bottom:3%;
 }
 
-/*****************************
-
-      Game Page
-
-***************/
-.col players{
-display:flex;
-justify-content:flex-end;
-}
-.bottomUI{
-  display:flex;
-  align-items:flex-end;
-}
-.tab-content{
-  background-color: #fff;
-  text-decoration-color: black;
-}
 
