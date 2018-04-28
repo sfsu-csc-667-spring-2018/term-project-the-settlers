@@ -65,18 +65,15 @@ Login
 .row{
   width:100%;
 }
-
-/*****************************
-
-      Game Page
-
-***************/
-.col players{
-display:flex;
-justify-content:flex-end;
+.send{
+  padding-top: 3%;
+  padding-bottom:5%;
 }
-.bottomUI{
-  display:flex;
-  align-items:flex-end;
+.text{
+  margin-top: 3%;
+  margin-bottom:3%;
+  padding-bottom:3%;
+  border-bottom:3%;
 }
+
 
