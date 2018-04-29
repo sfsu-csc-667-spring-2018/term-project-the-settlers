@@ -7,59 +7,60 @@ head
   script(src='https://code.jquery.com/jquery-1.11.1.js')
   link(rel='stylesheet', href='/stylesheets/game.css')
   script(type='text/javascript', src='/scripts/d6.js')
-.row.justify-content-between
-  .col.col-2
-    .row-5
-      ul#messages
-      form(action='')
-        input#m.form-control(autocomplete='off', placeholder='Enter your message')
-        .send
-          button.btn.float-right.btn-info Send    
-    .row-5
-      ul#myTab.nav.nav-tabs(role='tablist')
-        li.nav-item
-          a#home-tab.nav-link.active(data-toggle='tab', href='#build', role='tab', aria-controls='build', aria-selected='true') Build
-        li.nav-item
-          a#profile-tab.nav-link(data-toggle='tab', href='#trade', role='tab', aria-controls='trade', aria-selected='false') Trade
-      #myTabContent.tab-content
-        #home.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='build-tab') ...
-        #profile.tab-pane.fade(role='tabpanel', aria-labelledby='trade-tab') ...
-  .col.col-8
-    .d-flex.flex-column
-      h1 Board
-      script(type='text/javascript').
-        function attack(result) {
-        alert('You rolled ' + result + '!');
-        }
-        D6.dice(2, attack);
-  .col.col-2
-    .row-3
-      .row
-        h3 Player 1
-      .row
-        h3 Player 2
-      .row
-        h3 Player 3
-      .row
-        h3 Player 4
-    .row-3
-      h4 Resources
-      .col-2
-        img(src='images/resources/wood.png')
-      .col-2
-        img(src='images/resources/bricks.png')
-      .col-2
-        img(src='images/resources/sheep.png')
-      .col-2
-        img(src='images/resources/food.png')
-      .col-2
-        img(src='images/resources/stone.png')
-    .row-3
-      button.turn.btn.btn-primary(type='button') End Turn
+  script(type='text/javascript', src='/scripts/board.js')
+  script(type='text/javascript', src='/scripts/helper.js')
+body
+  .row.justify-content-between
+    .col.col-2
+      .row-5
+        ul#messages
+        form(action='')
+          input#m.form-control(autocomplete='off', placeholder='Enter your message')
+          .send
+            button.btn.float-right.btn-info Send    
+      .row-5
+        ul#myTab.nav.nav-tabs(role='tablist')
+          li.nav-item
+            a#home-tab.nav-link.active(data-toggle='tab', href='#build', role='tab', aria-controls='build', aria-selected='true') Build
+          li.nav-item
+            a#profile-tab.nav-link(data-toggle='tab', href='#trade', role='tab', aria-controls='trade', aria-selected='false') Trade
+        #myTabContent.tab-content
+          #home.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='build-tab') ...
+          #profile.tab-pane.fade(role='tabpanel', aria-labelledby='trade-tab') ...
+    .col.col-8
+      .d-flex.flex-column
+        .board
+          script.
+            function makeBoard(){
+              let game;
+              game = newPseudoRandomGame();
+              displayBoard(game);
+            }
+            makeBoard();
+          script.
+            function attack(result) {
+            alert('You rolled ' + result + '!');
+            }
+            D6.dice(2, attack);
+    .col.col-2
+      .row-sm-3
+        -for(let i=0; i< 4; i ++){
+          .row
+            h3 Player 
+        -}
+      .row-sm-3
+        h4 Resources
+        - let playerResources = ["wood", "bricks", "sheep", "food", "stone"];
+        - for(let i =0; i < playerResources.length; i++){
+          .col-sm-2
+            img(src='/images/resources/' + playerResources[i]+ '.png')
+        - }
+      .row-sm-3
+        button.turn.btn.btn-primary(type='button') End Turn
 
   script.
     $(function() {
-      var socket = io();
+    var socket = io();
       $('form').submit(function() {
       socket.emit('chat message', $('#m').val());
       $('#m').val('');
@@ -71,3 +72,6 @@ head
       }
       });
       });
+
+
+

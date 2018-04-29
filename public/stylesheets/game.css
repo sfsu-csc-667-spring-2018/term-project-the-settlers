@@ -9,11 +9,14 @@ body{
     background-color: #c64947;
 }
 .container{
-    margin:2%;
+    margin:1%;
 }
 .col{
     padding-top:1%;
     padding-left:1%;
+}
+.col-2{
+    margin:0px 0 0 0;
 }
 .row-5{
     padding-left:3px;
@@ -29,10 +32,132 @@ body{
     overflow: auto;
     border-radius: 10px;
     border: #368BC1 5px solid;
-    }
-    #messages li {
+}
+#messages li {
     padding: 5px 10px;
     }
     #messages li:nth-child(odd) {
     background: #eee;
-    }
+}
+.board{
+    position: relative;
+}
+
+.tile {
+	width: 152px;
+	margin-right: -2px;
+	height: 172px;
+	display: inline-block;
+	vertical-align: top;
+
+	background-size: cover;
+}
+.tile[prob]:after {
+	display: block;
+	width: 50px;
+	height: 35px;
+	margin: 60px 0 0 50px;
+
+	content: attr(prob) "\A" attr(dots);
+
+	line-height: 10px;
+	padding-top: 13px;
+
+	background-color: #E9D49D;
+	border: 2px solid #AD9D75;
+	border-radius: 27px;
+	
+	font-size: 25px;
+	font-weight: bold;
+
+	white-space: pre;
+}
+
+div.tablerow {
+	display: block;
+	text-align: center;
+}
+div.tablerow{
+    margin-top:50px;
+}
+div.tablerow:not(:first-child) {
+	margin-top: -43px;
+}
+.ocean {
+  position:absolute;
+  width: 994px;
+  top: -37px;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  z-index: -1;
+}
+/**
+
+SHIPS
+
+**/
+div[class^="ship-"] {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+  }
+  
+  div[class^="ship-"] img {
+      max-width: 100%;
+      max-height: 100%;
+  }
+  
+  .ship-0 {
+    top: -58px;
+    left: calc(50% - 243px);
+
+  }
+  
+  .ship-1 {
+    top: -58px;
+    left: calc(50% + 23px);
+
+  }
+  
+  .ship-2 {
+    top: 183px;
+    left: calc(50% - 382px);
+
+  }
+  
+  .ship-3 {
+    top: 71px;
+    left: calc(50% + 261px);
+
+  }
+  
+  .ship-4 {
+    top: 459px;
+    left: calc(50% - 389px);
+
+  }
+  
+  .ship-5 {
+    top: 320px;
+    left: calc(50% + 396px);
+
+  }
+  
+  .ship-6 {
+    top: 689px;
+    left: calc(50% - 249px);
+
+  }
+  
+  .ship-7 {
+    top: 689px;
+    left: calc(50% + 34px);
+
+  }
+  
+  .ship-8 {
+    top: 553px;
+    left: calc(50% + 268px);
+
+  }
+    
