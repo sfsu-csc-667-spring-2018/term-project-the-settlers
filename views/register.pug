@@ -2,18 +2,15 @@ extends layout
 
 block content
    .main.container.auth
+        h1.reg_title Register
         form(method='POST' action='/register').form
           div.form-group
-            label(for='e-mail') E-mail
-            input.form-control(type='email' id='e-mail' placeholder='E-mail' name='e-mail')
+            input.form-control(type='email' id='email' placeholder='Email' name='email')
           div.form-group
-            label(for='username') Username:
-            input#name.form-control(type='text', placeholder='Ex: elitedragonslayer' name='username')
+            input#name.form-control(type='text', placeholder='Username' name='username')
           div.form-group
-            label(for='pw') Password:
-            input#pw.form-control(type='password' name='password')
+            input#pw.form-control(type='password', placeholder='Password' name='password')
           div.form-group
-            label(for='pw2') Confirm Password:
-            input#pw2.form-control(type='password' name='confirmPassword')
-          
-          button.front.btn.btn-primary(type='submit') Sign Up
+            input#pw2.form-control(type='password', placeholder='Confirm Password' name='confirmPassword')
+             
+          button.front.btn.btn-primary.reg_btn(type='submit') Sign Up

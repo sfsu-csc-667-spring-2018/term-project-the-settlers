@@ -15,6 +15,10 @@ body {
   padding-bottom: 50px;
   padding-top: 20px;
 }
+.reg_title{
+  text-align:center;
+  padding-top: 50px;
+}
 .row{
   background-color:#fff;
   padding-top: 10px;
@@ -23,6 +27,10 @@ body {
 .btn.btn-primary{
   margin-top:5px;
   margin-bottom:10px;
+}
+.btn.btn-primary.reg_btn{
+  margin-bottom:20px;
+  margin-top:20px;
 }
 .btn.front{
   width:100%;
