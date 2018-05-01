@@ -69,9 +69,13 @@ script.
         var socket = io();
         $('form').submit(function() {
             // Send to server
-            socket.emit('chat message', { message: $('#m').val(), username: $('#user').val() });
-            $('#m').val('');
-            return false;
+            if ($('#m').val()) {
+                socket.emit('chat message', { message: $('#m').val(), username: $('#user').val() });
+                $('#m').val('');
+                return false;
+            } else {
+                return false;
+            }
         });
         // Receive from server
         socket.on('chat send', function(data) {
