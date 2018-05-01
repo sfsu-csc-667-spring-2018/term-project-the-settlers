@@ -49,11 +49,17 @@ body
             h3 Player 
         -}
       .row-sm-3
-        h4 Resources
+        h5 Resources
         - let playerResources = ["wood", "bricks", "sheep", "food", "stone"];
         - for(let i =0; i < playerResources.length; i++){
-          .col-sm-2
-            img(src='/images/resources/' + playerResources[i]+ '.png')
+            .resource
+              img(src='/images/resources/' + playerResources[i]+ '.png')
+        - }
+        h5 Development Cards
+        -let devCards = ["plenty", "monopoly", "knight", "roadbuilding", "victorypoint" ];
+        - for(let i =0; i < devCards.length; i++){
+            .resource
+              img(src='/images/devcards/' + devCards[i]+ '.png')
         - }
       .row-sm-3
         button.turn.btn.btn-primary(type='button') End Turn
