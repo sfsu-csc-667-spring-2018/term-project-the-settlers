@@ -12,4 +12,15 @@ router.get("/", (request, response) => {
   })
 });
 
+router.get("/games", (request,response) => {
+  // db.games.createGame()
+  // .then( data => console.log(data.id))
+  // .catch( error => console.log("createGame" + error));
+
+  db.games.getGames()
+  .then (data => data.forEach( (game) => console.log(game.game_id)))
+  .catch( error => console.log("getGames" + error));
+  response.json("RAN TESTS");
+})
+
 module.exports = router;
