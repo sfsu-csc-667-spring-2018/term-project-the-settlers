@@ -4,47 +4,31 @@ head
   link(rel='stylesheet', href='/stylesheets/style.css')
   script(src='/socket.io/socket.io.js')
   script(src='https://code.jquery.com/jquery-1.11.1.js')
-  style.
-    #messages {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        height: 500px;
-        background: white;
-        overflow: auto;
-        border-radius: 15px;
-        border: #368BC1 5px solid;
-    }
-    #messages li {
-        padding: 5px 10px;
-    }
-    #messages li:nth-child(odd) {
-        background: #eee;
-    }
-.main.container.lobby
-    .row
-        .col
-          .row-3
-            h2 Create Game
-            form(method='POST', action='/game')
-            .form-group
-            label(for='lobbyName') Lobby Name
-            input#lobbyName.form-control(type='text', placeholder='Lobby', name='lobby')
-            .form-group
-            label(for='players') No. of Players
-            input#numPlayers.form-control(type='numPlayers', placeholder='4', name='numPlayers')
-            a(href='game')
-                button.front.btn.btn-primary(type='button') Create Game
-          .row-7
-            h2 Join Game
-        .col
-          ul#messages
-          br
-          form(action='')
-            input#m.form-control(autocomplete='off', placeholder='Enter your message')
-            br
-            button.btn.btn-info Send
-            input#user(type="hidden", name="postid", value=user)
+body
+    .main.container.lobby
+        .row
+            .col
+                .row-3
+                    h2 Create Game
+                    form(method='POST', action='/game')
+                    .form-group
+                        label(for='lobbyName') Lobby Name
+                        input#lobbyName.form-control(type='text', placeholder='Lobby', name='lobby')
+                    .form-group
+                        label(for='players') No. of Players
+                        input#numPlayers.form-control(type='numPlayers', placeholder='4', name='numPlayers')
+                    a(href='game')
+                    button.front.btn.btn-primary(type='button') Create Game
+                .row-7
+                    h2 Join Game
+            .col
+                .text
+                    ul#messages
+                    form(action='')
+                        input#m.form-control(autocomplete='off', placeholder='Enter your message')
+                        .send
+                            button.btn.float-right.btn-info Send      
+             input#user(type="hidden", name="postid", value=user)
 script.
     $(function() {
         var socket = io();

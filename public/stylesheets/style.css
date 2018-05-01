@@ -75,5 +75,21 @@ Login
   padding-bottom:3%;
   border-bottom:3%;
 }
+#messages {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  height: 500px;
+  background: white;
+  overflow: auto;
+  border-radius: 15px;
+  border: #368BC1 5px solid;
+  }
+  #messages li {
+  padding: 5px 10px;
+  }
+  #messages li:nth-child(odd) {
+  background: #eee;
+  }
 
 

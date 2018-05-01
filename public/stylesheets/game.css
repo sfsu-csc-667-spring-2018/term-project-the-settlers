@@ -3,20 +3,241 @@
     src: url(/fonts/nova.ttf);
 }
 body{
-    padding: 50px;
     font-family:Nova;
     background: url(/images/background.jpg) no-repeat center center fixed;
     background-size: cover;
     background-color: #c64947;
 }
 .container{
-    width:100%;
-    margin:auto;
+    margin:1%;
 }
-.row{
-    padding-right:-2%;
-   
+.col{
+    padding-top:1%;
+    padding-left:1%;
 }
-.col-1{
-    background: #fff;
+.col-2{
+    margin:0px 0 0 0;
 }
+.row-5{
+    padding-left:3px;
+    padding-right:5px;
+    margin-top:5%;
+}
+
+#messages {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    height: 400px;
+    background: white;
+    overflow: auto;
+    border-radius: 10px;
+    border: #368BC1 5px solid;
+}
+#messages li {
+    padding: 5px 10px;
+    }
+    #messages li:nth-child(odd) {
+    background: #eee;
+}
+.board{
+    position: relative;
+}
+  /**
+
+  HOUSES AND CITIES
+
+  **/
+  #spots {
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+  .chunk {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+  }
+  
+  .chunk:nth-of-type(1)  { width: 321px; }
+  .chunk:nth-of-type(2)  { width: 464px; }
+  .chunk:nth-of-type(3)  { width: 464px; }
+  .chunk:nth-of-type(4)  { width: 617px; }
+  .chunk:nth-of-type(5)  { width: 617px; }
+  .chunk:nth-of-type(6)  { width: 763px; }
+  .chunk:nth-of-type(7)  { width: 763px; }
+  .chunk:nth-of-type(8)  { width: 617px; }
+  .chunk:nth-of-type(9)  { width: 617px; }
+  .chunk:nth-of-type(10) { width: 464px; }
+  .chunk:nth-of-type(11) { width: 464px; }
+  .chunk:nth-of-type(12) { width: 321px; }
+  
+  .chunk:nth-of-type(2n) { padding-top: 19px; }
+  .chunk:nth-of-type(2n + 1) { padding-top: 71px; }
+  
+  .chunk span {
+      width: 20px;
+      height: 20px;
+      border-radius: 10px;
+      text-align: center;
+      opacity: 0.4;
+  
+      box-sizing: border-box;
+  }
+  
+  .chunk span.red, 
+  .chunk span.blue, 
+  .chunk span.yellow, 
+  .chunk span.white {
+      opacity: 1;
+      border-radius: 1px;
+      height: 30px;
+  
+      margin-top: -10px;
+  }
+  
+  .chunk span.red { background-color: red; }
+  .chunk span.blue { background-color: blue; }
+  .chunk span.yellow { background-color: yellow; }
+  .chunk span.white { background-color: white; }
+  
+  .chunk span.first {
+      border: 2px solid black;
+  }
+  
+  .chunk span.open {
+      background-color: white;
+      cursor: pointer;
+      animation: open-animation 3s infinite;
+  }
+
+.tile {
+	width: 152px;
+	margin-right: -2px;
+	height: 172px;
+	display: inline-block;
+	vertical-align: top;
+
+	background-size: cover;
+}
+.tile[prob]:after {
+	display: block;
+	width: 50px;
+	height: 50px;
+	margin: 60px 0 0 50px;
+
+	content: attr(prob) "\A" attr(dots);
+
+	line-height: 10px;
+	padding-top: 13px;
+
+	background-color: #E9D49D;
+	border: 2px solid #AD9D75;
+	border-radius: 30px;
+	
+	font-size: 25px;
+	font-weight: bold;
+
+	white-space: pre;
+}
+
+div.tablerow {
+	display: block;
+	text-align: center;
+}
+div.tablerow{
+    margin-top:75px;
+}
+div.tablerow:not(:first-child) {
+	margin-top: -43px;
+}
+.ocean {
+  position:absolute;
+  width: 994px;
+  top: -15px;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  z-index: -1;
+}
+.resource img{
+    display:inline;
+    max-width:32px;
+}
+.resource{
+max-width:64px;
+margin: 0 0 5 0;
+padding-right:5px;
+display:inline;
+}
+/**
+
+SHIPS
+
+**/
+div[class^="ship-"] {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    margin-top:60px;
+  }
+  
+  div[class^="ship-"] img {
+      max-width: 100%;
+      max-height: 100%;
+  }
+  
+  .ship-0 {
+    top: -58px;
+    left: calc(50% - 243px);
+
+  }
+  
+  .ship-1 {
+    top: -58px;
+    left: calc(50% + 23px);
+
+  }
+  
+  .ship-2 {
+    top: 183px;
+    left: calc(50% - 382px);
+
+  }
+  
+  .ship-3 {
+    top: 71px;
+    left: calc(50% + 261px);
+
+  }
+  
+  .ship-4 {
+    top: 459px;
+    left: calc(50% - 389px);
+
+  }
+  
+  .ship-5 {
+    top: 320px;
+    left: calc(50% + 396px);
+
+  }
+  
+  .ship-6 {
+    top: 689px;
+    left: calc(50% - 249px);
+
+  }
+  
+  .ship-7 {
+    top: 689px;
+    left: calc(50% + 34px);
+
+  }
+  
+  .ship-8 {
+    top: 553px;
+    left: calc(50% + 268px);
+
+  }
+    
