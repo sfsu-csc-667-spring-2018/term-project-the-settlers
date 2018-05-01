@@ -15,21 +15,23 @@ module.exports = {
                 player_id: {
                     type: Sequelize.INTEGER,
                     allowNull: false,
-                    unique: true
                 },
                 game_id: {
                     type: Sequelize.INTEGER,
                     allowNull: false,
-                    unique: true
                 },
-                resource_id: {
-                    type: Sequelize.INTEGER,
-                    unique: true
-                }
+                resource_type: {
+                  type: Sequelize.STRING,
+                  allowNull:false
+                },
+                count: {
+                  type: Sequelize.INTEGER,
+                  allowNull: false
+                },
             }
         );
     },
     down: (queryInterface, Sequelize) => {
-        return queryInterface.dropTable('Player_Resources');
+        return queryInterface.dropTable('player_resources');
     }
 };

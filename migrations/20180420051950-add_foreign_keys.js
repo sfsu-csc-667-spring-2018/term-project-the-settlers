@@ -31,16 +31,6 @@ module.exports = {
                                 onDelete: 'cascade'
                             }
             ))
-            .then( () => queryInterface.addConstraint('player_resources', ['resource_id'], {
-                              type: 'foreign key',
-                              name: 'player_resources_resource_id_fk',
-                              references:{
-                                  table: 'resources',
-                                  field: 'id'
-                              },
-                                onDelete: 'cascade'
-                            }
-            ))
             .then( () => queryInterface.addConstraint('buildings',['player_id'],{
                                 type: 'foreign key',
                                 name: 'buildings_player_id_fk',
