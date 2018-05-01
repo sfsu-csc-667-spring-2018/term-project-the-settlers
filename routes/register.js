@@ -13,11 +13,11 @@ router.post('/', function(request, response, next){
   const password = request.body['password'];
   db.users.createUser(username,email,password, username+email)
     .then( (successMsg) =>  {
-                              response.json(successMsg);
+                              response.redirect("./");
                             }
 
     ).catch( (rejectMsg) => {
-                              response.json(rejectMsg);
+                              response.redirect("./register");
                             }
     )
 })
