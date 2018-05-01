@@ -6,7 +6,8 @@ module.exports = {
       updatedAt: Sequelize.DATE,
       id: {
         type: Sequelize.INTEGER,
-        primaryKey: true
+        primaryKey: true,
+        autoIncrement: true
       }
     })
   },

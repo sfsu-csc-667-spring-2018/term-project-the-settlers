@@ -10,7 +10,8 @@
     "db:migrate": "sequelize db:migrate",
     "db:rollback": "sequelize db:migrate:undo",
     "db:rollback:all": "sequelize db:migrate:undo:all",
-    "postinstall": "sequelize db:migrate"
+    "postinstall": "sequelize db:migrate",
+    "test": "node ./tests"
   },
   "dependencies": {
     "body-parser": "~1.18.2",

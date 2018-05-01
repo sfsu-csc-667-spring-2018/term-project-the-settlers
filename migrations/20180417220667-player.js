@@ -16,7 +16,6 @@ module.exports = {
                     type: Sequelize.INTEGER,
                     foreignKey: 'id_game',
                     allowNull: false,
-                    unique: true
                 },
                 user_id: {
                     type: Sequelize.INTEGER,
@@ -26,7 +25,6 @@ module.exports = {
                 turn_order: {
                     type: Sequelize.INTEGER,
                     allowNull: false,
-                    unique: true
                 },
                 current_turn: {
                     type: Sequelize.BOOLEAN,
