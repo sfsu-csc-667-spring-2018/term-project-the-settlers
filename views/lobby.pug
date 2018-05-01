@@ -6,56 +6,66 @@ head
   script(src='https://code.jquery.com/jquery-1.11.1.js')
   style.
     #messages {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    height: 500px;
-    background: white;
-    overflow: auto;
-    border-radius: 15px;
-    border: #368BC1 5px solid;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        height: 500px;
+        background: white;
+        overflow: auto;
+        border-radius: 15px;
+        border: #368BC1 5px solid;
     }
     #messages li {
-    padding: 5px 10px;
+        padding: 5px 10px;
     }
     #messages li:nth-child(odd) {
-    background: #eee;
+        background: #eee;
     }
-body
-    .main.container.lobby
-        .row
-            .col
-                .row-3
-                    h2 Create Game
-                    form(method='POST', action='/game')
-                    .form-group
-                        label(for='lobbyName') Lobby Name
-                        input#lobbyName.form-control(type='text', placeholder='Lobby', name='lobby')
-                    .form-group
-                        label(for='players') No. of Players
-                        input#numPlayers.form-control(type='numPlayers', placeholder='4', name='numPlayers')
-                    a(href='game')
-                    button.front.btn.btn-primary(type='button') Create Game
-                .row-7
-                    h2 Join Game
-            .col
-                .text
-                    ul#messages
-                    form(action='')
-                        input#m.form-control(autocomplete='off', placeholder='Enter your message')
-                        .send
-                            button.btn.float-right.btn-info Send      
-    script.
-        $(function() {
+.main.container.lobby
+    .row
+        .col
+          .row-3
+            h2 Create Game
+            form(method='POST', action='/game')
+            .form-group
+            label(for='lobbyName') Lobby Name
+            input#lobbyName.form-control(type='text', placeholder='Lobby', name='lobby')
+            .form-group
+            label(for='players') No. of Players
+            input#numPlayers.form-control(type='numPlayers', placeholder='4', name='numPlayers')
+            a(href='game')
+                button.front.btn.btn-primary(type='button') Create Game
+          .row-7
+            h2 Join Game
+        .col
+          ul#messages
+          br
+          form(action='')
+            input#m.form-control(autocomplete='off', placeholder='Enter your message')
+            br
+            button.btn.btn-info Send
+            input#user(type="hidden", name="postid", value=user)
+script.
+    $(function() {
         var socket = io();
         $('form').submit(function() {
-        socket.emit('chat message', $('#m').val());
-        $('#m').val('');
-        return false;
+            // Send to server
+            socket.emit('chat message', { message: $('#m').val(), username: $('#user').val() });
+            $('#m').val('');
+            return false;
         });
-        socket.on('chat message', function(msg) {
-        if (msg) {
-        $('#messages').append($('<li>').text(msg));
-        }
+        // Receive from server
+        socket.on('chat send', function(data) {
+            if (data) {
+                var d = new Date()
+                var h = d.getHours()
+                var m = d.getMinutes()
+                var ampm = h < 12 ? 'AM' : 'PM';
+                h = h % 12;
+                h = h ? h : 12; // the hour '0' should be '12'
+                m = m < 10 ? '0'+m : m;
+                var strTime = h + ':' + m + ' ' + ampm;
+                $('#messages').append('<li>' + data.user.bold() + '(' + strTime +  '): ' + data.msg + '</li>');
+            }
         });
-        });
+    });
