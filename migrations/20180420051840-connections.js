@@ -7,7 +7,7 @@ module.exports = {
             {
                 createdAt: Sequelize.DATE,
                 updatedAt: Sequelize.DATE,
-                connection_id: {
+                id: {
                     type: Sequelize.INTEGER,
                     primaryKey: true,
                     autoIncrement: true
@@ -23,12 +23,10 @@ module.exports = {
                 player_id: {
                     type: Sequelize.INTEGER,
                     allowNull: false,
-                    unique: true
                 },
                 game_id: {
                     type: Sequelize.INTEGER,
                     allowNull: false,
-                    unique: true
                 }
             }
         );
