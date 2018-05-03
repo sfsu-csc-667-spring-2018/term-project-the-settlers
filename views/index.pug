@@ -1,8 +1,10 @@
 extends layout
 
+block head
+  title= 'Catan | Login'
+
 block content
   .main.container.auth
-
         h1.reg_title Welcome to Catan
         form(method='POST' action='/').form
           div.form-group
