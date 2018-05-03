@@ -8,7 +8,7 @@ module.exports = function(db){
                       +'(username,email,password,profile_pic_path) VALUES  ($1,$2,$3,$4)',
                         [username,email,password,profile_pic_path])
               .then( () => resolve('Account successfully created'))
-              .catch( error => reject('Username or email already exists' + error));
+              .catch( error => reject('Username or email already exists!'));
             }
           )
     }
