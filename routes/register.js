@@ -9,15 +9,17 @@ router.get('/', function(req, res, next) {
 
 router.post('/', function(request, response, next){
   const username = request.body['username'];
-  const email = request.body['e-mail'];
+  const email = request.body['email'];
   const password = request.body['password'];
   db.users.createUser(username,email,password, username+email)
     .then( (successMsg) =>  {
                               response.redirect("./");
+                              console.log(successMsg);
                             }
 
-    ).catch( (rejectMsg) => {
+    ).catch( (rejectMsg) => { 
                               response.redirect("./register");
+                              console.log(rejectMsg);
                             }
     )
 })
