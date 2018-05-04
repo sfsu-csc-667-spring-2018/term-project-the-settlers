@@ -61,6 +61,16 @@ module.exports = {
                                 onDelete: 'cascade'
                           }
             ))
+            .then( () => queryInterface.addConstraint('vertices',['port_id'],{
+                                type: 'foreign key',
+                                name: 'vertices_port_id_fk',
+                                references: {
+                                  table: 'ports',
+                                  field: 'id'
+                                },
+                                onDelete: 'cascade'
+                          }
+            ))
             .then( () => queryInterface.addConstraint('dev_cards',['game_id'],{
                                 type: 'foreign key',
                                 name: 'dev_cards_game_id_fk',
