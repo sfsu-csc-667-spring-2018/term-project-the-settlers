@@ -8,26 +8,41 @@ body{
     background-size: cover;
     background-color: #c64947;
 }
+.row-5{
+    margin-left: 5%;
+}
 .container{
     margin:1%;
 }
 .col{
-    padding-top:1%;
     padding-left:1%;
 }
 .col-2{
-    margin:0px 0 0 0;
+    margin:0 0 0 0;
+}
+.col-8{
+    padding-top:2%;
 }
 .row-5{
     padding-left:3px;
     padding-right:5px;
     margin-top:5%;
 }
-
+.playercards h3{
+    margin-right:50px;
+}
+.playerStats{
+    display:inline;
+}
+.playerStats img{
+    max-width: 64px;
+}
+.nav{
+    background-color:#fff;
+    border-radius: 10px;
+}
 #messages {
     list-style-type: none;
-    margin: 0;
-    padding: 0;
     height: 400px;
     background: white;
     overflow: auto;
@@ -35,14 +50,44 @@ body{
     border: #368BC1 5px solid;
 }
 #messages li {
-    padding: 5px 10px;
+    padding: 3px 10px;
     }
     #messages li:nth-child(odd) {
     background: #eee;
 }
 .board{
     position: relative;
+    width:1000px;
+    margin-left:10%;
 }
+.form{
+    width:10%;
+}
+#diceall{
+    width:128px;
+}
+.tab-content{
+    background: #fff;
+    border-radius:5px;
+    display: stretch;
+}
+.tab-pane img{
+    display:inline;
+    max-width:32px;
+    margin:3px;
+}
+.buildbtn{
+    margin: 5px 100% 5px 5px;
+}
+.playercards{
+    background-color: #fff;
+    border-radius: 5px;
+    margin-top: 3px;
+    padding-top: 5px;
+}
+
+
+
   /**
 
   HOUSES AND CITIES
@@ -162,7 +207,7 @@ div.tablerow:not(:first-child) {
 }
 .resource img{
     display:inline;
-    max-width:32px;
+    max-width:48px;
 }
 .resource{
 max-width:64px;
@@ -188,7 +233,7 @@ div[class^="ship-"] {
   }
   
   .ship-0 {
-    top: -58px;
+    top: -40px;
     left: calc(50% - 243px);
 
   }
@@ -206,7 +251,7 @@ div[class^="ship-"] {
   }
   
   .ship-3 {
-    top: 71px;
+    top: 80px;
     left: calc(50% + 261px);
 
   }
@@ -218,7 +263,7 @@ div[class^="ship-"] {
   }
   
   .ship-5 {
-    top: 320px;
+    top: 325px;
     left: calc(50% + 396px);
 
   }
@@ -240,4 +285,47 @@ div[class^="ship-"] {
     left: calc(50% + 268px);
 
   }
+  /**
+
+ROADS
+
+**/
+
+#edges {
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+.road{
+    display:flex;
+    margin: 0 auto;
+    justify-content: space-between;
+
+}
+.road span {
+    width: 50px;
+    height: 5px;
+    background-color: white;
+    cursor: pointer;
+    animation: open-animation 3s infinite;
+    text-align: center;
+    box-sizing: border-box;
+}
+.upRoad{transform: rotate(-30deg);}
+.downRoad{transform:rotate(30deg);}
+.vertRoad{transform:rotate(90deg);}
+.road:nth-of-type(1)  { width: 425px; padding-top: 25px;  }
+.road:nth-of-type(2)  { width: 500px; padding-top:40px; height:50px;}
+.road:nth-of-type(3)  { width: 575px; padding-top:65px;}
+.road:nth-of-type(4)  { width: 650px; }
+.road:nth-of-type(5)  { width: 725px; padding-top:60px;}
+.road:nth-of-type(6)  { width: 800px; }
+.road:nth-of-type(7)  { width: 725px; padding-top:60px;}
+.road:nth-of-type(8)  { width: 650px; }
+.road:nth-of-type(9)  { width: 575px; padding-top:60px;}
+.road:nth-of-type(10) { width: 500px; }
+.road:nth-of-type(11) { width: 425px; padding-top:60px;}
+.road:nth-of-type(2n) {padding-top:60px;}
+.road:first-child { padding-top: 90px; }
     
