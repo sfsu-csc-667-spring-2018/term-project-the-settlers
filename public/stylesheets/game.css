@@ -23,6 +23,15 @@ body{
     padding-right:5px;
     margin-top:5%;
 }
+.playercards h3{
+    margin-right:50px;
+}
+.playerStats{
+    display:inline;
+}
+.playerStats img{
+    max-width: 64px;
+}
 
 #messages {
     list-style-type: none;
@@ -42,7 +51,14 @@ body{
 }
 .board{
     position: relative;
+    width:1000px;
+    margin-left:10%;
 }
+#diceall{
+    width:128px;
+}
+
+
   /**
 
   HOUSES AND CITIES
@@ -162,7 +178,7 @@ div.tablerow:not(:first-child) {
 }
 .resource img{
     display:inline;
-    max-width:32px;
+    max-width:48px;
 }
 .resource{
 max-width:64px;
@@ -240,4 +256,47 @@ div[class^="ship-"] {
     left: calc(50% + 268px);
 
   }
+  /**
+
+ROADS
+
+**/
+
+#edges {
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+.road{
+    display:flex;
+    margin: 0 auto;
+    justify-content: space-between;
+
+}
+.road span {
+    width: 50px;
+    height: 5px;
+    background-color: white;
+    cursor: pointer;
+    animation: open-animation 3s infinite;
+    text-align: center;
+    box-sizing: border-box;
+}
+.upRoad{transform: rotate(-30deg);}
+.downRoad{transform:rotate(30deg);}
+.vertRoad{transform:rotate(90deg);}
+.road:nth-of-type(1)  { width: 425px; padding-top: 25px;  }
+.road:nth-of-type(2)  { width: 500px; padding-top:40px; height:50px;}
+.road:nth-of-type(3)  { width: 575px; padding-top:65px;}
+.road:nth-of-type(4)  { width: 650px; }
+.road:nth-of-type(5)  { width: 700px; padding-top:60px;}
+.road:nth-of-type(6)  { width: 800px; }
+.road:nth-of-type(7)  { width: 750px; padding-top:60px;}
+.road:nth-of-type(8)  { width: 650px; }
+.road:nth-of-type(9)  { width: 600px; padding-top:60px;}
+.road:nth-of-type(10) { width: 500px; }
+.road:nth-of-type(11) { width: 425px; padding-top:60px;}
+.road:nth-of-type(2n) {padding-top:60px;}
+.road:first-child { padding-top: 90px; }
     
