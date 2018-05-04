@@ -15,18 +15,43 @@ body
       .row-5
         ul#messages
         form(action='')
-          input#m.form-control(autocomplete='off', placeholder='Enter your message')
-          .send
-            button.btn.float-right.btn-info Send    
-      .row-5
+          input#m.form-control(autocomplete='off', placeholder='Enter your message')  
+      .row-5.actions
         ul#myTab.nav.nav-tabs(role='tablist')
           li.nav-item
-            a#home-tab.nav-link.active(data-toggle='tab', href='#build', role='tab', aria-controls='build', aria-selected='true') Build
+            a#build-tab.nav-link.active(data-toggle='tab', href='#build', role='tab', aria-controls='build', aria-selected='true') Build
           li.nav-item
-            a#profile-tab.nav-link(data-toggle='tab', href='#trade', role='tab', aria-controls='trade', aria-selected='false') Trade
+            a#trade-tab.nav-link(data-toggle='tab', href='#trade', role='tab', aria-controls='trade', aria-selected='false') Trade
         #myTabContent.tab-content
-          #home.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='build-tab') ...
-          #profile.tab-pane.fade(role='tabpanel', aria-labelledby='trade-tab') ...
+          #build.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='build-tab')
+            button.btn.btn-primary.buildbtn Build Road
+
+            img(src='/images/resources/wood.png')
+            img(src='/images/resources/brick.png')
+
+            button.btn.btn-primary.buildbtn Build Settlement
+
+            img(src='/images/resources/wood.png')
+            img(src='/images/resources/brick.png')
+            img(src='/images/resources/sheep.png')
+            img(src='/images/resources/wheat.png')
+
+            button.btn.btn-primary.buildbtn Build City
+
+            img(src='/images/resources/wheat.png')
+            img(src='/images/resources/wheat.png')
+            img(src='/images/resources/ore.png')
+            img(src='/images/resources/ore.png')
+            img(src='/images/resources/ore.png')
+
+            button.btn.btn-primary.buildbtn Build Development Card
+
+            img(src='/images/resources/ore.png')
+            img(src='/images/resources/wheat.png')
+            img(src='/images/resources/sheep.png')
+
+          #trade.tab-pane.fade.show(role='tabpanel', aria-labelledby='trade-tab') 
+            button.btn.btn-primary Trade
     .col.col-8
       .d-flex.flex-column
         .board
@@ -49,7 +74,7 @@ body
         -}
       .row-sm-3
         h5 Resources
-        - let playerResources = ["wood", "bricks", "sheep", "food", "stone"];
+        - let playerResources = ["wood", "brick", "sheep", "wheat", "ore"];
         - for(let i =0; i < playerResources.length; i++){
             .resource
               img(src='/images/resources/' + playerResources[i]+ '.png')
