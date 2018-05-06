@@ -31,11 +31,11 @@ body
                               input#user(type="hidden", name="postid", value=user)
 script.
     $(function() {
-        var socket = io();
+        var socket = io('/lobby');
         $('form').submit(function() {
             // Send to server
             if ($('#m').val()) {
-                socket.emit('chat message', { message: $('#m').val(), username: $('#user').val() });
+                socket.emit('lobby send message', { message: $('#m').val(), username: $('#user').val() });
                 $('#m').val('');
                 return false;
             } else {
@@ -43,7 +43,7 @@ script.
             }
         });
         // Receive from server
-        socket.on('chat send', function(data) {
+        socket.on('lobby receive message', function(data) {
             if (data) {
                 var d = new Date()
                 var h = d.getHours()
