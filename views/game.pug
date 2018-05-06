@@ -1,5 +1,6 @@
 doctype html
 head
+  title= 'Catan | Game'
   link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css', integrity='sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4', crossorigin='anonymous')
   script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
   script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js", integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm", crossorigin="anonymous")
@@ -15,19 +16,43 @@ body
       .row-5
         ul#messages
         form(action='')
-            input#m.form-control(autocomplete='off', placeholder='Enter your message')
-            .send
-                button.btn.float-right.btn-info Send
-                    input#user(type="hidden", name="postid", value=user)    
-      .row-5
+          input#m.form-control(autocomplete='off', placeholder='Enter your message')  
+      .row-5.actions
         ul#myTab.nav.nav-tabs(role='tablist')
           li.nav-item
-            a#home-tab.nav-link.active(data-toggle='tab', href='#build', role='tab', aria-controls='build', aria-selected='true') Build
+            a#build-tab.nav-link.active(data-toggle='tab', href='#build', role='tab', aria-controls='build', aria-selected='true') Build
           li.nav-item
-            a#profile-tab.nav-link(data-toggle='tab', href='#trade', role='tab', aria-controls='trade', aria-selected='false') Trade
+            a#trade-tab.nav-link(data-toggle='tab', href='#trade', role='tab', aria-controls='trade', aria-selected='false') Trade
         #myTabContent.tab-content
-          #home.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='build-tab') ...
-          #profile.tab-pane.fade(role='tabpanel', aria-labelledby='trade-tab') ...
+          #build.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='build-tab')
+            button.btn.btn-primary.buildbtn Build Road
+
+            img(src='/images/resources/wood.png')
+            img(src='/images/resources/brick.png')
+
+            button.btn.btn-primary.buildbtn Build Settlement
+
+            img(src='/images/resources/wood.png')
+            img(src='/images/resources/brick.png')
+            img(src='/images/resources/sheep.png')
+            img(src='/images/resources/wheat.png')
+
+            button.btn.btn-primary.buildbtn Build City
+
+            img(src='/images/resources/wheat.png')
+            img(src='/images/resources/wheat.png')
+            img(src='/images/resources/ore.png')
+            img(src='/images/resources/ore.png')
+            img(src='/images/resources/ore.png')
+
+            button.btn.btn-primary.buildbtn Build Development Card
+
+            img(src='/images/resources/ore.png')
+            img(src='/images/resources/wheat.png')
+            img(src='/images/resources/sheep.png')
+
+          #trade.tab-pane.fade.show(role='tabpanel', aria-labelledby='trade-tab') 
+            button.btn.btn-primary Trade
     .col.col-8
       .d-flex.flex-column
         .board
@@ -38,20 +63,19 @@ body
               displayBoard(game);
             }
             makeBoard();
-          script.
-            function attack(result) {
-            alert('You rolled ' + result + '!');
-            }
-            D6.dice(2, attack);
     .col.col-2
       .row-sm-3
         -for(let i=0; i< 4; i ++){
-          .row
+          .row.playercards
             h3 Player 
+            .playerStats
+              img(src='/images/devcards/victorypoint.png')
+              img(src='/images/devcards/victorypoint.png')
+              img(src='/images/devcards/victorypoint.png')
         -}
       .row-sm-3
         h5 Resources
-        - let playerResources = ["wood", "bricks", "sheep", "food", "stone"];
+        - let playerResources = ["wood", "brick", "sheep", "wheat", "ore"];
         - for(let i =0; i < playerResources.length; i++){
             .resource
               img(src='/images/resources/' + playerResources[i]+ '.png')
@@ -63,8 +87,13 @@ body
               img(src='/images/devcards/' + devCards[i]+ '.png')
         - }
       .row-sm-3
-        button.turn.btn.btn-primary(type='button') End Turn
-script.
+        script.
+          function attack(result) {
+          alert('You rolled ' + result + '!');
+          }
+          D6.dice(2, attack);
+
+  script.
     $(function() {
         var socket = io('/game');
         $('form').submit(function() {

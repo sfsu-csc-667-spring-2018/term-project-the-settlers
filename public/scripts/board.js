@@ -6,6 +6,9 @@ var allShips = ["3for1", "3for1", "3for1", "3for1", "wheat", "ore", "lumber", "b
 var moves = ['Red', 'Blue', 'Yellow', 'White', 'White', 'Yellow', 'Blue', 'Red'];
 var altMoves = [5, 2, 6, 3, 8, 10, 9, 12, 11, 4, 8, 10, 9, 4, 5, 6, 3, 11];
 var altOrder = [0, 3, 7, 12, 16, 17, 18, 15, 11, 6, 2, 1, 4, 8, 13, 14, 10, 5, 9];
+let upRoads=[0, 2, 4, 10, 12, 14, 16, 23, 25, 27, 29, 31, 40, 42, 44, 46, 48, 55, 57, 59, 61, 67, 69, 71];
+let downRoads=[1, 3, 5, 11, 13, 15, 17, 24, 26, 28, 30, 32, 39, 41, 43, 45, 47, 54, 56, 58, 60, 66, 68, 70];
+let vertRoads = [6, 7, 8, 9, 18, 19, 20, 21, 22, 33, 34, 35, 36, 37, 38, 49, 50, 51, 52, 53, 62, 63, 64, 65];
 
 var adjacent = {
   0: [1, 3, 4],
@@ -124,8 +127,31 @@ function displayBoard(game){
     }
   }
 
+  var edges = "</div><div id='edges'>";
+  var roadtemp ='';
+  for(var i =0; i < 72; i ++){
+    if ([0, 6, 10, 18, 23, 33, 39, 49, 54, 62, 66].includes(i)){
+      roadtemp += "</div><div class='road'>";
+    }
+    if(upRoads.includes(i)){
+      roadtemp += "<span road-num'" + i + "' class='upRoad'></span>";
+    }
+    else if(downRoads.includes(i)){
+      roadtemp += "<span road-num'" + i + "' class='downRoad'></span>";
+    }
+    else if(vertRoads.includes(i)){
+      roadtemp += "<span road-num'" + i + "' class='vertRoad'></span>";
+    }
+    else{
+      roadtemp+= "<span road-num'" + i + "' class='open'></span>"
+    }
+
+  }
   temp = temp.substring(6) + '</div>';
-  str += temp + "</div></div>";
+  console.log(temp);
+  roadtemp = roadtemp.substring(6) + '</div>';
+  console.log(roadtemp);
+  str += temp + edges + roadtemp + "</div></div>";
 
   // Add in the helper side view
 
