@@ -17,6 +17,7 @@ body
         ul#messages
         form(action='')
           input#m.form-control(autocomplete='off', placeholder='Enter your message')  
+          input#user(type="hidden", name="postid", value=user)
       .row-5.actions
         ul#myTab.nav.nav-tabs(role='tablist')
           li.nav-item
