@@ -51,7 +51,18 @@ body
             img(src='/images/resources/sheep.png')
 
           #trade.tab-pane.fade.show(role='tabpanel', aria-labelledby='trade-tab') 
-            button.btn.btn-primary Trade
+            ul.nav.nav-tabs(role='tablist')
+            p Offering
+            - let tradeResources = ["wood", "brick", "sheep", "wheat", "ore"];
+            - for(let i =0; i < tradeResources.length; i++){
+              img(src='/images/resources/' + tradeResources[i]+ '.png')
+            - }
+            p Recieving
+            - let recieveResources = ["wood", "brick", "sheep", "wheat", "ore"];
+            - for(let i =0; i < recieveResources.length; i++){
+              img(src='/images/resources/' + recieveResources[i]+ '.png')
+            - }
+            button.btn.btn-primary.buildbtn Trade
     .col.col-8
       .d-flex.flex-column
         .board
@@ -72,7 +83,7 @@ body
               img(src='/images/devcards/victorypoint.png')
               img(src='/images/devcards/victorypoint.png')
         -}
-      .row-sm-3
+      .row-sm-3.cards
         h5 Resources
         - let playerResources = ["wood", "brick", "sheep", "wheat", "ore"];
         - for(let i =0; i < playerResources.length; i++){
@@ -91,6 +102,8 @@ body
           alert('You rolled ' + result + '!');
           }
           D6.dice(2, attack);
+
+        button.btn.turnbutton End Turn
 
   script.
     $(function() {

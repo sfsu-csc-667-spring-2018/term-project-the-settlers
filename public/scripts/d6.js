@@ -463,7 +463,7 @@ D6.dice = function(numDice, callback, callbackData, useImages, buttonLabel) {
 	};
 	var genHtml = "<div id='diceall'>" + builder.genDiceHtml(layout, D6.middleManCallback, middleManData);
 	if (buttonLabel != "none") {
-		genHtml += "<div id='diceform'><form><input type='button' id='dicebutton' value='" + buttonLabel + "' onclick='D6AnimBuilder.get(\"dice\").reset(); D6AnimBuilder.get(\"dice\").start()' /></form></div>";
+		genHtml += "<div id='diceform' class='btn'><form><input type='button' id='dicebutton' value='" + buttonLabel + "' onclick='D6AnimBuilder.get(\"dice\").reset(); D6AnimBuilder.get(\"dice\").start()' /></form></div>";
 	}
 	genHtml += "</div>";
 	D6.genHtml = genHtml;
