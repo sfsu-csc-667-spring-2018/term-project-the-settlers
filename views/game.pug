@@ -17,6 +17,7 @@ body
         ul#messages
         form(action='')
           input#m.form-control(autocomplete='off', placeholder='Enter your message')  
+          input#user(type="hidden", name="postid", value=user)
       .row-5.actions
         ul#myTab.nav.nav-tabs(role='tablist')
           li.nav-item
@@ -95,18 +96,29 @@ body
 
   script.
     $(function() {
-    var socket = io();
-      $('form').submit(function() {
-      socket.emit('chat message', $('#m').val());
-      $('#m').val('');
-      return false;
-      });
-      socket.on('chat message', function(msg) {
-      if (msg) {
-      $('#messages').append($('<li>').text(msg));
-      }
-      });
-      });
-
-
-
+        var socket = io('/game');
+        $('form').submit(function() {
+            // Send to server
+            if ($('#m').val()) {
+                socket.emit('game send message', { message: $('#m').val(), username: $('#user').val() });
+                $('#m').val('');
+                return false;
+            } else {
+                return false;
+            }
+        });
+        // Receive from server
+        socket.on('game receive message', function(data) {
+            if (data) {
+                var d = new Date()
+                var h = d.getHours()
+                var m = d.getMinutes()
+                var ampm = h < 12 ? 'AM' : 'PM';
+                h = h % 12;
+                h = h ? h : 12; // the hour '0' should be '12'
+                m = m < 10 ? '0'+m : m;
+                var strTime = h + ':' + m + ' ' + ampm;
+                $('#messages').append('<li>' + data.user.bold() + '(' + strTime +  '): ' + data.msg + '</li>');
+            }
+        });
+    });
