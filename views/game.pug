@@ -51,18 +51,36 @@ body
             img(src='/images/resources/sheep.png')
 
           #trade.tab-pane.fade.show(role='tabpanel', aria-labelledby='trade-tab') 
-            ul.nav.nav-tabs(role='tablist')
-            p Offering
-            - let tradeResources = ["wood", "brick", "sheep", "wheat", "ore"];
-            - for(let i =0; i < tradeResources.length; i++){
-              img(src='/images/resources/' + tradeResources[i]+ '.png')
-            - }
-            p Recieving
-            - let recieveResources = ["wood", "brick", "sheep", "wheat", "ore"];
-            - for(let i =0; i < recieveResources.length; i++){
-              img(src='/images/resources/' + recieveResources[i]+ '.png')
-            - }
-            button.btn.btn-primary.buildbtn Trade
+            ul#tradeTab.nav.nav-tabs(role='tablist')
+              li.nav-item
+                a#build-tab.nav-link.active(data-toggle='tab', href='#interplayer', role='tab', aria-controls='interplayer', aria-selected='true') InterPlayer
+              li.nav-item
+                a#build-tab.nav-link(data-toggle='tab', href='#bank', role='tab', aria-controls='bank', aria-selected='true') Bank
+            #tradeTabContent.tab-content
+              #interplayer.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='interplayer-tab')
+                p Offering
+                - let tradeResources = ["wood", "brick", "sheep", "wheat", "ore"];
+                - for(let i =0; i < tradeResources.length; i++){
+                  input#image(type ='image',src='/images/resources/' + tradeResources[i]+'.png')
+                - }
+                p Recieving
+                - let recieveResources = ["wood", "brick", "sheep", "wheat", "ore"];
+                - for(let i =0; i < recieveResources.length; i++){
+                  binput#image(type ='image',src='/images/resources/' + recieveResources[i]+'.png')
+                - }
+                button.btn.btn-primary.buildbtn Trade
+              #bank.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='bank-tab') 
+                p Offering
+                - let tradeResources2 = ["wood", "brick", "sheep", "wheat", "ore"];
+                - for(let i =0; i < tradeResources2.length; i++){
+                img(src='/images/resources/' + tradeResources2[i]+ '.png')
+                - }
+                p Recieving
+                - let recieveResources2 = ["wood", "brick", "sheep", "wheat", "ore"];
+                - for(let i =0; i < recieveResources2.length; i++){
+                  img(src='/images/resources/' + recieveResources2[i]+ '.png')
+                - }
+                button.btn.btn-primary.buildbtn Trade
     .col.col-8
       .d-flex.flex-column
         .board

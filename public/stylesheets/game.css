@@ -99,6 +99,10 @@ body{
     align-self: flex-end;
 
 }
+#image{
+    max-width:32px;
+    display:inline;
+}
 
 
   /**
