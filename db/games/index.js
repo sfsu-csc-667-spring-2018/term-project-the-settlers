@@ -1,8 +1,8 @@
 module.exports = (db) => {
     const gameFunctions = {};
 
-    gameFunctions.createGame = () => {
-      return db.one('INSERT INTO "games" VALUES(NULL) RETURNING id');
+    gameFunctions.createGame = (gameName) => {
+      return db.one('INSERT INTO "games" (game_name) VALUES($1) RETURNING id,game_name',[gameName]);
     }
 
     gameFunctions.getGames = () => {

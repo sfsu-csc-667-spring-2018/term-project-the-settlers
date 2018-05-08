@@ -8,6 +8,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
+      },
+      game_name: {
+        type: Sequelize.STRING,
+        unique:true
       }
     })
   },
