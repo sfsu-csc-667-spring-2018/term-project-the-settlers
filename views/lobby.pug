@@ -15,13 +15,16 @@ body
                     .form-group
                         label(for='lobbyName') Lobby Name
                         input#lobbyName.form-control(type='text', placeholder='Lobby', name='lobby')
-                    .form-group
-                        label(for='players') No. of Players
-                        input#numPlayers.form-control(type='numPlayers', placeholder='4', name='numPlayers')
+                        label(for='numplayers') No. of Players
+                        select#sel1.form-control
+                          option 2
+                          option 3
+                          option 4
                     a(href='game')
                     button.front.btn.btn-primary(type='button') Create Game
                 .row-7
                     h2 Join Game
+                    
             .col
                 .text
                     ul#messages
