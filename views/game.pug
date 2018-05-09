@@ -17,6 +17,7 @@ body
         ul#messages
         form(action='')
           input#m.form-control(autocomplete='off', placeholder='Enter your message')  
+          input#user(type="hidden", name="postid", value=user)
       .row-5.actions
         ul#myTab.nav.nav-tabs(role='tablist')
           li.nav-item
@@ -52,17 +53,52 @@ body
             img(src='/images/resources/sheep.png')
 
           #trade.tab-pane.fade.show(role='tabpanel', aria-labelledby='trade-tab') 
-            button.btn.btn-primary Trade
+            ul#tradeTab.nav.nav-tabs(role='tablist')
+              li.nav-item
+                a#build-tab.nav-link.active(data-toggle='tab', href='#interplayer', role='tab', aria-controls='interplayer', aria-selected='true') InterPlayer
+              li.nav-item
+                a#build-tab.nav-link(data-toggle='tab', href='#bank', role='tab', aria-controls='bank', aria-selected='true') Bank
+            #tradeTabContent.tab-content
+              #interplayer.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='interplayer-tab')
+                p Offering
+                - let tradeResources = ["wood", "brick", "sheep", "wheat", "ore"];
+                - for(let i =0; i < tradeResources.length; i++){
+                  input#image(type ='image',src='/images/resources/' + tradeResources[i]+'.png')
+                - }
+                p Recieving
+                - let recieveResources = ["wood", "brick", "sheep", "wheat", "ore"];
+                - for(let i =0; i < recieveResources.length; i++){
+                  binput#image(type ='image',src='/images/resources/' + recieveResources[i]+'.png')
+                - }
+                button.btn.btn-primary.buildbtn Trade
+              #bank.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='bank-tab') 
+                p Offering
+                - let tradeResources2 = ["wood", "brick", "sheep", "wheat", "ore"];
+                - for(let i =0; i < tradeResources2.length; i++){
+                img(src='/images/resources/' + tradeResources2[i]+ '.png')
+                - }
+                p Recieving
+                - let recieveResources2 = ["wood", "brick", "sheep", "wheat", "ore"];
+                - for(let i =0; i < recieveResources2.length; i++){
+                  img(src='/images/resources/' + recieveResources2[i]+ '.png')
+                - }
+                button.btn.btn-primary.buildbtn Trade
     .col.col-8
       .d-flex.flex-column
         .board
-          script.
-            function makeBoard(){
-              let game;
-              game = newPseudoRandomGame();
-              displayBoard(game);
-            }
-            makeBoard();
+          #gbord
+            img.ocean(src='/images/tiles/ocean.png')
+            #display
+              each tile in tiles 
+                span.tile(data-prob=tile.die_number, data-type=tile.resource_type)
+
+          //- script.
+          //-   function makeBoard(){
+          //-     let game;
+          //-     game = newPseudoRandomGame();
+          //-     displayBoard(game);
+          //-   }
+          //-   makeBoard();
     .col.col-2
       .row-sm-3
         -for(let i=0; i< 4; i ++){
@@ -73,7 +109,7 @@ body
               img(src='/images/devcards/victorypoint.png')
               img(src='/images/devcards/victorypoint.png')
         -}
-      .row-sm-3
+      .row-sm-3.cards
         h5 Resources
         - let playerResources = ["wood", "brick", "sheep", "wheat", "ore"];
         - for(let i =0; i < playerResources.length; i++){
@@ -93,20 +129,33 @@ body
           }
           D6.dice(2, attack);
 
+        button.btn.turnbutton End Turn
+
   script.
     $(function() {
-    var socket = io();
-      $('form').submit(function() {
-      socket.emit('chat message', $('#m').val());
-      $('#m').val('');
-      return false;
-      });
-      socket.on('chat message', function(msg) {
-      if (msg) {
-      $('#messages').append($('<li>').text(msg));
-      }
-      });
-      });
-
-
-
+        var socket = io('/game');
+        $('form').submit(function() {
+            // Send to server
+            if ($('#m').val()) {
+                socket.emit('game send message', { message: $('#m').val(), username: $('#user').val() });
+                $('#m').val('');
+                return false;
+            } else {
+                return false;
+            }
+        });
+        // Receive from server
+        socket.on('game receive message', function(data) {
+            if (data) {
+                var d = new Date()
+                var h = d.getHours()
+                var m = d.getMinutes()
+                var ampm = h < 12 ? 'AM' : 'PM';
+                h = h % 12;
+                h = h ? h : 12; // the hour '0' should be '12'
+                m = m < 10 ? '0'+m : m;
+                var strTime = h + ':' + m + ' ' + ampm;
+                $('#messages').append('<li>' + data.user.bold() + '(' + strTime +  '): ' + data.msg + '</li>');
+            }
+        });
+    });
