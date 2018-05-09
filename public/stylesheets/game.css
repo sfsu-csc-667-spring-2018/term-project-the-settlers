@@ -346,3 +346,22 @@ ROADS
 .road:nth-of-type(2n) {padding-top:60px;}
 .road:first-child { padding-top: 90px; }
     
+.tile[data-type='desert'] {
+    background-image: url('/images/tiles/desert.png')
+}
+
+.tile[data-type='brick'] {
+    background-image: url('/images/tiles/brick.png')
+}
+.tile[data-type='lumber'] {
+    background-image: url('/images/tiles/lumber.png')
+}
+.tile[data-type='ore'] {
+    background-image: url('/images/tiles/ore.png')
+}
+.tile[data-type='wheat'] {
+    background-image: url('/images/tiles/wheat.png')
+}
+.tile[data-type='sheep'] {
+    background-image: url('/images/tiles/sheep.png')
+}

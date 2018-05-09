@@ -86,13 +86,19 @@ body
     .col.col-8
       .d-flex.flex-column
         .board
-          script.
-            function makeBoard(){
-              let game;
-              game = newPseudoRandomGame();
-              displayBoard(game);
-            }
-            makeBoard();
+          #gbord
+            img.ocean(src='/images/tiles/ocean.png')
+            #display
+              each tile in tiles 
+                span.tile(data-prob=tile.die_number, data-type=tile.resource_type)
+
+          //- script.
+          //-   function makeBoard(){
+          //-     let game;
+          //-     game = newPseudoRandomGame();
+          //-     displayBoard(game);
+          //-   }
+          //-   makeBoard();
     .col.col-2
       .row-sm-3
         -for(let i=0; i< 4; i ++){
