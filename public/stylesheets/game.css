@@ -349,7 +349,6 @@ ROADS
 .tile[data-type='desert'] {
     background-image: url('/images/tiles/desert.png')
 }
-
 .tile[data-type='brick'] {
     background-image: url('/images/tiles/brick.png')
 }
@@ -364,4 +363,42 @@ ROADS
 }
 .tile[data-type='sheep'] {
     background-image: url('/images/tiles/sheep.png')
+}
+
+#display {
+    position: relative;
+    width: 994px;
+    height: 873px;
+}
+#display .tile {
+    position: absolute;
+}
+#display .tile:nth-of-type(1) {
+    top: 76px;
+    left: 277px;
+}
+#display .tile:nth-of-type(2) {
+    top: 76px;
+    left: 428px;
+}
+#display .tile:nth-of-type(3) {
+    top: 76px;
+    left: 576px;
+}
+#display .tile:nth-of-type(8) {
+    top: 330px;
+    left: 125px;
+}
+
+#display .vertex {
+    position: absolute;
+    height: 26px;
+    width: 26px;
+    display: block;
+
+}
+#display .vertex[data-x="1"][data-y="4"] {
+    top: 330px;
+    left: 188px;
+    z-index: 10000;
 }

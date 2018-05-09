@@ -11,6 +11,8 @@ head
   script(type='text/javascript', src='/scripts/board.js')
   script(type='text/javascript', src='/scripts/helper.js')
 body
+  input#gameId(type='hidden', value=game.id)
+
   .row.justify-content-between
     .col.col-2
       .row-5
@@ -91,7 +93,8 @@ body
             #display
               each tile in tiles 
                 span.tile(data-prob=tile.die_number, data-type=tile.resource_type)
-
+              each vertex in vertices 
+                span.vertex(data-x=vertex.x, data-y=vertex.y, data-owner=vertex.user_id, data-item=vertex.item)
           //- script.
           //-   function makeBoard(){
           //-     let game;
@@ -131,6 +134,7 @@ body
 
         button.btn.turnbutton End Turn
 
+  script(src="/scripts/game.js")
   script.
     $(function() {
         var socket = io('/game');

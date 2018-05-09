@@ -22,34 +22,46 @@ function shuffle(array) {
   return result;
 }
 
+const intializeGame = db =>
+  Promise.all([
+    db.one('INSERT INTO "games" VALUES(NULL) RETURNING id'),
+    db.many("SELECT * FROM tiles ORDER BY RANDOM()")
+  ]);
+
+const insertGameTiles = db => ([game, tiles]) => {
+  const queries = shuffle(allProbs).map((probability, index) =>
+    db.none(
+      "INSERT INTO game_tiles VALUES(${game_id}, ${tile_id}, ${probability}, ${order})",
+      {
+        game_id: game.id,
+        tile_id: tiles[index].id,
+        probability,
+        order: index
+      }
+    )
+  );
+  queries.push(insertGameVertices(db)(game.id));
+  queries.push(game);
+
+  return Promise.all(queries);
+};
+
+const insertGameEdges = db => gameId => {};
+
+const insertGameVertices = db => gameId => {
+  db.none(
+    "INSERT INTO game_vertices (x, y, port_id, item, game_id) SELECT v.x, v.y, v.port_id, 'empty', $1 FROM game_vertex_lookup v",
+    [gameId]
+  );
+};
+
 module.exports = db => {
   const gameFunctions = {};
 
   gameFunctions.createGame = () =>
-    Promise.all([
-      db.one('INSERT INTO "games" VALUES(NULL) RETURNING id'),
-      db.many("SELECT * FROM tiles ORDER BY RANDOM()")
-    ])
-      .then(([game, tiles]) => {
-        console.log(tiles, game);
-        const queries = shuffle(allProbs).map((probability, index) =>
-          db.none(
-            "INSERT INTO game_tiles VALUES(${game_id}, ${tile_id}, ${probability}, ${order})",
-            {
-              game_id: game.id,
-              tile_id: tiles[index].id,
-              probability,
-              order: index
-            }
-          )
-        );
-        queries.push(game);
-
-        return Promise.all(queries);
-      })
-      .then(result => {
-        return result[allProbs.length];
-      });
+    intializeGame(db)
+      .then(insertGameTiles(db))
+      .then(result => result[allProbs.length + 1]);
 
   gameFunctions.getGame = id =>
     Promise.all([
@@ -57,8 +69,15 @@ module.exports = db => {
       db.many(
         "SELECT * FROM game_tiles JOIN tiles ON id=tile_id WHERE game_id=$1 ORDER BY game_tiles.order",
         [id]
-      )
-    ]).then(([game, tiles]) => ({ game, tiles }));
+      ),
+      db.many("SELECT * FROM game_vertices WHERE game_id=$1", [id])
+      // db.many("SELECT * FROM game_edges WHERE game_id=$1", [id])
+    ]).then(([game, tiles, vertices, edges]) => ({
+      game,
+      tiles,
+      vertices,
+      edges
+    }));
 
   gameFunctions.getGames = () => {
     return db.any(
