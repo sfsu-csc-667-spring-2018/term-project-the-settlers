@@ -100,4 +100,20 @@ Login
   background: #eee;
   }
 
+div.joinableGame {
+  border-bottom: solid black 2px;
+}
 
+div.joinableGame > .row > .players {
+  text-align:right;
+}
+
+div.joinableGame:hover {
+  border-bottom: solid blue 2px;
+  color: blue;
+}
+
+div.joinableGame.selected{
+  color:blue;
+  border-left: solid blue 5px;
+}

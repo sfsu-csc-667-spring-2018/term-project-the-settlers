@@ -24,8 +24,16 @@ body
                         input.front.btn.btn-primary(type='submit', value='Create Game')
                         //- button.front.btn.btn-primary(type='button') Create Game
                 .row-7
-                    h2 Join Game
-                    
+                    form.join(method = 'post', action='/game/join')
+                      h2 Join Game
+                      each game in games
+                        .joinableGame(data=game.id)
+                          .row
+                            .col.gameName=game.game_name
+                            .col.players=game.player_count+'/'+game.player_limit
+                      input.front.btn.btn-primary(type='submit', value='Join Game')
+
+
             .col
                 .text
                     ul#messages
@@ -34,5 +42,5 @@ body
                         .send
                             input.btn.float-right.btn-info(type='submit', value='send')
                             input#user(type="hidden", name="postid", value=user)
-                            
+
     script(src='/scripts/lobby.js')
