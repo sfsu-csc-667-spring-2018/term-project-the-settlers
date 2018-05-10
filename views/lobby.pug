@@ -11,36 +11,53 @@ body
             .col
                 .row-3
                     h2 Create Game
-                    form#createGame(method='POST', action='/game')
-                        .form-group
-                            label(for='lobbyName') Lobby Name
-                            input#lobbyName.form-control(type='text', placeholder='Lobby', name='lobby',required)
-                            label(for='numplayers') No. of Players
-                            select.form-control(name="playerLimit")
-                                option(value=2) 2
-                                option(value=3) 3
-                                option(value=4) 4
-                        input.front.btn.btn-primary(type='submit', value='Create Game')
-                        //- button.front.btn.btn-primary(type='button') Create Game
-
+                    form(method='POST', action='/game')
+                    .form-group
+                        label(for='lobbyName') Lobby Name
+                        input#lobbyName.form-control(type='text', placeholder='Lobby', name='lobby')
+                        label(for='numplayers') No. of Players
+                        select#sel1.form-control
+                          option 2
+                          option 3
+                          option 4
+                    a(href='game')
+                    button.front.btn.btn-primary(type='button') Create Game
                 .row-7
-                    form.join(method = 'post', action='/game/join')
-                      h2 Join Game
-                      each game in games
-                        .joinableGame(data=game.id)
-                          .row
-                            .col.gameName=game.game_name
-                            .col.players=game.player_count+'/'+game.player_limit
-                      input.front.btn.btn-primary(type='submit', value='Join Game')
-
-
+                    h2 Join Game
+                    
             .col
                 .text
                     ul#messages
-                    form.chat(action='/chat/lobby', method='post')
+                    form(action='')
                         input#m.form-control(autocomplete='off', placeholder='Enter your message')
                         .send
-                            input.btn.float-right.btn-info(type='submit', value='send')
-                            input#user(type="hidden", name="postid", value=user)
-
-    script(src='/scripts/lobby.js')
+                            button.btn.float-right.btn-info Send
+                              input#user(type="hidden", name="postid", value=user)
+script.
+    $(function() {
+        var socket = io('/lobby');
+        $('form').submit(function() {
+            // Send to server
+            if ($('#m').val()) {
+                socket.emit('lobby send message', { message: $('#m').val(), username: $('#user').val() });
+                $('#m').val('');
+                return false;
+            } else {
+                return false;
+            }
+        });
+        // Receive from server
+        socket.on('lobby receive message', function(data) {
+            if (data) {
+                var d = new Date()
+                var h = d.getHours()
+                var m = d.getMinutes()
+                var ampm = h < 12 ? 'AM' : 'PM';
+                h = h % 12;
+                h = h ? h : 12; // the hour '0' should be '12'
+                m = m < 10 ? '0'+m : m;
+                var strTime = h + ':' + m + ' ' + ampm;
+                $('#messages').append('<li>' + data.user.bold() + '(' + strTime +  '): ' + data.msg + '</li>');
+            }
+        });
+    });
