@@ -63,27 +63,19 @@ body
             #tradeTabContent.tab-content
               #interplayer.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='interplayer-tab')
                 p Offering
-                - let tradeResources = ["wood", "brick", "sheep", "wheat", "ore"];
-                - for(let i =0; i < tradeResources.length; i++){
-                  input#image(type ='image',src='/images/resources/' + tradeResources[i]+'.png')
-                - }
+                each val in  ["wood", "brick", "sheep", "wheat", "ore"]
+                  input#image(type ='image',src='/images/resources/' + val +'.png')
                 p Recieving
-                - let recieveResources = ["wood", "brick", "sheep", "wheat", "ore"];
-                - for(let i =0; i < recieveResources.length; i++){
-                  binput#image(type ='image',src='/images/resources/' + recieveResources[i]+'.png')
-                - }
+                each val in ["wood", "brick", "sheep", "wheat", "ore"]
+                  input#image(type ='image',src='/images/resources/' + val+'.png')
                 button.btn.btn-primary.buildbtn Trade
               #bank.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='bank-tab') 
                 p Offering
-                - let tradeResources2 = ["wood", "brick", "sheep", "wheat", "ore"];
-                - for(let i =0; i < tradeResources2.length; i++){
-                img(src='/images/resources/' + tradeResources2[i]+ '.png')
-                - }
+                each val in ["wood", "brick", "sheep", "wheat", "ore"]
+                  img(src='/images/resources/' + val+ '.png')
                 p Recieving
-                - let recieveResources2 = ["wood", "brick", "sheep", "wheat", "ore"];
-                - for(let i =0; i < recieveResources2.length; i++){
-                  img(src='/images/resources/' + recieveResources2[i]+ '.png')
-                - }
+                each val in  ["wood", "brick", "sheep", "wheat", "ore"]
+                  img(src='/images/resources/' + val + '.png')
                 button.btn.btn-primary.buildbtn Trade
     .col.col-8
       .d-flex.flex-column
@@ -91,17 +83,11 @@ body
           #gbord
             img.ocean(src='/images/tiles/ocean.png')
             #display
-              each tile in tiles 
+              each tile, index in tiles 
                 span.tile(data-prob=tile.die_number, data-type=tile.resource_type)
+
               each vertex in vertices 
                 span.vertex(data-x=vertex.x, data-y=vertex.y, data-owner=vertex.user_id, data-item=vertex.item)
-          //- script.
-          //-   function makeBoard(){
-          //-     let game;
-          //-     game = newPseudoRandomGame();
-          //-     displayBoard(game);
-          //-   }
-          //-   makeBoard();
     .col.col-2
       .row-sm-3
         -for(let i=0; i< 4; i ++){
