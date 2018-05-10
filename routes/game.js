@@ -38,7 +38,7 @@ router.post("/", function(req, res, next) {
   }
 });
 
-router.post("/join/",(request,response,next) => {
+router.post("/join/:id",(request,response,next) => {
   const {id: userId} = request.user;
   const {id: gameId} = request.params;
   addPlayer(userId,gameId)
