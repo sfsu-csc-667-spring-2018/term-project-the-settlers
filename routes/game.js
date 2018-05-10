@@ -17,9 +17,14 @@ addPlayer = (userId,gameId) => {
 router.use(authenticate);
 
 router.post("/", function(req, res, next) {
+  console.log("body is",req.body);
+  const {lobby: gameName, playerLimit} = req.body;
+  const{id:userId} = req.user;
+
   db.games
-    .createGame()
+    .createGame(gameName,playerLimit)
     .then(({ id }) => {
+
       res.redirect(`/game/${id}`);
     })
     .catch(error => console.log(error));

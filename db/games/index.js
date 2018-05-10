@@ -1,6 +1,31 @@
-const intializeGame = db =>
+const allProbs = [2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12];
+
+function shuffle(array) {
+  const result = array.map(i => i);
+
+  var currentIndex = result.length,
+    temporaryValue,
+    randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = result[currentIndex];
+    result[currentIndex] = result[randomIndex];
+    result[randomIndex] = temporaryValue;
+  }
+
+  return result;
+}
+
+const intializeGame = (db,gameName,playerLimit) =>
   Promise.all([
-    db.one('INSERT INTO "games" VALUES(NULL) RETURNING id'),
+    db.one('INSERT INTO "games" (game_name,player_limit) VALUES($1,$2) RETURNING id',
+            [gameName,playerLimit]),
     db.many("SELECT * FROM tiles ORDER BY RANDOM()")
   ]);
 
@@ -34,8 +59,8 @@ const insertGameVertices = db => gameId => {
 module.exports = db => {
   const gameFunctions = {};
 
-  gameFunctions.createGame = () =>
-    intializeGame(db)
+  gameFunctions.createGame = (gameName,playerLimit) =>
+    intializeGame(db,gameName,playerLimit)
       .then(insertGameTiles(db))
       .then(result => result[allProbs.length + 1]);
 
@@ -43,7 +68,7 @@ module.exports = db => {
     Promise.all([
       db.one("SELECT * FROM games WHERE id=$1", [id]),
       db.many(
-     
+
         "SELECT * FROM game_tiles JOIN tiles ON id=tile_id WHERE game_id=$1 ORDER BY game_tiles.order",
         [id]
       ),

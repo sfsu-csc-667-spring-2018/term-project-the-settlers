@@ -11,18 +11,18 @@ body
             .col
                 .row-3
                     h2 Create Game
-                    form(method='POST', action='/game')
+                    form#createGame(method='POST', action='/game')
                         .form-group
                             label(for='lobbyName') Lobby Name
-                            input#lobbyName.form-control(type='text', placeholder='Lobby', name='lobby')
+                            input#lobbyName.form-control(type='text', placeholder='Lobby', name='lobby',required)
                             label(for='numplayers') No. of Players
-                            select#sel1.form-control
-                                option 2
-                                option 3
-                                option 4
-                        a(href='game')
+                            select.form-control(name="playerLimit")
+                                option(value=2) 2
+                                option(value=3) 3
+                                option(value=4) 4
                         input.front.btn.btn-primary(type='submit', value='Create Game')
                         //- button.front.btn.btn-primary(type='button') Create Game
+
                 .row-7
                     form.join(method = 'post', action='/game/join')
                       h2 Join Game
