@@ -46,4 +46,9 @@ router.get("/:id", (request, response, next) => {
     .catch(error => console.log(error));
 });
 
+router.post("/:id/vertex", (request, response, next) => {
+  console.log(request.body);
+  response.sendStatus(200);
+});
+
 module.exports = router;
