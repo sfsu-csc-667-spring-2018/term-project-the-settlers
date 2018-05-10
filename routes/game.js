@@ -3,13 +3,18 @@ const router = express.Router();
 const authenticate = require("../authentication/authenticated");
 const db = require("../db");
 
-router.use(authenticate);
+addPlayer = (userId,gameId) => {
+  return db.games.getPlayerCount(gameId)
+      .then( (players) => {
+        const {player_count: count, player_limit} = players;
+        console.log(count + ' ' + player_limit);
+        if(count < player_limit){
+          return db.games.addPlayer(gameId,userId,parseInt(count)+1)
+        }
+      })
+};
 
-/* GET home page. */
-router.get("/", function(req, res, next) {
-  console.log("from game", req.user);
-  res.render("game", { title: "Express", user: req.user.username });
-});
+router.use(authenticate);
 
 router.post("/", function(req, res, next) {
   db.games
@@ -18,6 +23,15 @@ router.post("/", function(req, res, next) {
       res.redirect(`/game/${id}`);
     })
     .catch(error => console.log(error));
+});
+
+router.post("/join/:id",(request,response,next) => {
+  const {id: userId} = request.user;
+  const {id: gameId} = request.params;
+  addPlayer(userId,gameId)
+  .then( () =>
+    response.redirect("/game/" + gameId)
+  ).catch( error => console.log(error));
 });
 
 router.get("/:id", (request, response, next) => {

@@ -1,27 +1,3 @@
-const allProbs = [2, 3, 3, 4, 4, 5, 5, 6, 6, 8, 8, 9, 9, 10, 10, 11, 11, 12];
-
-function shuffle(array) {
-  const result = array.map(i => i);
-
-  var currentIndex = result.length,
-    temporaryValue,
-    randomIndex;
-
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = result[currentIndex];
-    result[currentIndex] = result[randomIndex];
-    result[randomIndex] = temporaryValue;
-  }
-
-  return result;
-}
-
 const intializeGame = db =>
   Promise.all([
     db.one('INSERT INTO "games" VALUES(NULL) RETURNING id'),
@@ -67,6 +43,7 @@ module.exports = db => {
     Promise.all([
       db.one("SELECT * FROM games WHERE id=$1", [id]),
       db.many(
+     
         "SELECT * FROM game_tiles JOIN tiles ON id=tile_id WHERE game_id=$1 ORDER BY game_tiles.order",
         [id]
       ),
@@ -80,12 +57,12 @@ module.exports = db => {
     }));
 
   gameFunctions.getGames = () => {
-    return db.any(
-      'SELECT game_id FROM "players" ' +
-        "GROUP BY game_id " +
-        "HAVING COUNT(*) < 4 "
-    );
-  };
+    return db.any('SELECT id,game_name,player_limit,p.player_count FROM "games" g '
+                  +'INNER JOIN (SELECT game_id, COUNT(*) AS player_count '
+                  +              'FROM "players" GROUP BY game_id) p '
+                  +'ON p.game_id = g.id '
+                  +'WHERE p.player_count < g.player_limit');
+  }
 
   gameFunctions.addPlayer = (gameId, userId, turnNum, currentTurn = "N") => {
     return db.one(
@@ -95,11 +72,14 @@ module.exports = db => {
     );
   };
 
-  gameFunctions.getPlayerCount = gameId => {
-    return db.one('SELECT COUNT(*) FROM "players" WHERE game_id = $1', [
-      gameId
-    ]);
-  };
+  gameFunctions.getPlayerCount = (gameId) => {
+      return db.one('SELECT player_limit, p.player_count '
+                +'FROM "games" INNER JOIN'
+                +   '(SELECT COUNT(*) AS player_count,game_id  FROM "players" '
+                +   ' GROUP BY game_id) p '
+                +'ON games.id = p.game_id '
+                +'WHERE game_id = $1', [gameId]);
+  }
 
   gameFunctions.addVertex = (vertexNumber, gameId, robber = false) => {
     return db.one(

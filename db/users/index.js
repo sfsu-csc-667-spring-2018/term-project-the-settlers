@@ -28,7 +28,7 @@ module.exports = function(db){
     userFunctions.findByUserId = (userid) => {
       return new Promise(
         function(resolve,reject){
-          db.one('SELECT username,email,profile_pic_path'
+          db.one('SELECT username,email,id'
                 +' FROM "users" WHERE id = $1',[userid])
           .then( data => resolve(data))
           .catch( error => reject(error))
