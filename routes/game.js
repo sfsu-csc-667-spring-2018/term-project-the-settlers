@@ -6,6 +6,9 @@ const db = require("../db");
 addPlayer = (userId,gameId) => {
   return db.games.getPlayerCount(gameId)
       .then( (players) => {
+        if(players === null){
+          return db.games.addPlayer(gameId,userId,1,'Y');
+        }
         const {player_count: count, player_limit} = players;
         console.log(count + ' ' + player_limit);
         if(count < player_limit){
@@ -17,25 +20,30 @@ addPlayer = (userId,gameId) => {
 router.use(authenticate);
 
 router.post("/", function(req, res, next) {
-  console.log("body is",req.body);
   const {lobby: gameName, playerLimit} = req.body;
   const{id:userId} = req.user;
+  if(gameName !== undefined && playerLimit !== undefined){
+    const gameCreationPromise = db.games.createGame(gameName,playerLimit);
+    const addPlayerPromise = gameCreationPromise
+    .then( ({id}) => {
+        return addPlayer(userId, id);
+    });
 
-  db.games
-    .createGame(gameName,playerLimit)
-    .then(({ id }) => {
-
-      res.redirect(`/game/${id}`);
+    Promise.all([gameCreationPromise,addPlayerPromise])
+    .then( ([gameCreation,addPlayer]) =>{
+        console.log(gameCreation, addPlayer);
+        res.redirect(`/game/${gameCreation.id}`);
     })
     .catch(error => console.log(error));
+  }
 });
 
-router.post("/join/:id",(request,response,next) => {
+router.post("/join/",(request,response,next) => {
   const {id: userId} = request.user;
   const {id: gameId} = request.params;
   addPlayer(userId,gameId)
   .then( () =>
-    response.redirect("/game/" + gameId)
+    response.redirect(`/game/${gameId}`)
   ).catch( error => console.log(error));
 });
 
