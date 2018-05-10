@@ -46,11 +46,12 @@ $("form.join").on("submit", event =>{
   const game_id = $("div.joinableGame.selected").attr("data");
   console.log(game_id);
   if(game_id !== undefined){
-    alert(game_id);
-    fetch("/game/join/" + game_id,{
+    fetch(`/game/join/${game_id}`,{
           method: "post",
           credentials: "include"
-    }).catch( error => console.log(error))
+    })
+  .then( () => window.location.replace(`/game/${game_id}`)) 
+  .catch( error => console.log(error))
   }else{
       alert("Please select a game!");
   }

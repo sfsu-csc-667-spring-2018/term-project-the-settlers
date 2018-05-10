@@ -98,7 +98,7 @@ module.exports = db => {
   };
 
   gameFunctions.getPlayerCount = (gameId) => {
-      return db.one('SELECT player_limit, p.player_count '
+      return db.oneOrNone('SELECT player_limit, p.player_count '
                 +'FROM "games" INNER JOIN'
                 +   '(SELECT COUNT(*) AS player_count,game_id  FROM "players" '
                 +   ' GROUP BY game_id) p '
