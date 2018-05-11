@@ -34,7 +34,10 @@ router.post("/", function(req, res, next) {
         console.log(gameCreation, addPlayer);
         res.redirect(`/game/${gameCreation.id}`);
     })
-    .catch(error => console.log(error));
+    .catch(error => {
+      console.log(error);
+      res.redirect('lobby');
+    });
   }
 });
 
