@@ -1,4 +1,5 @@
 const gameId = document.querySelector("#gameId").value;
+var socket = io('/game');
 
 document.querySelector("#display").addEventListener("click", event => {
   console.log(event.target.classList);
@@ -19,3 +20,33 @@ document.querySelector("#display").addEventListener("click", event => {
     console.log("TILE", event.target);
   }
 });
+
+$("form.message").on("submit", event => {
+  const message = $("#m").val();
+  if (message !== undefined) {
+    fetch(`/chat/game`, {
+      method: "post",
+      body: JSON.stringify({ message, gameId }),
+      credentials: "include",
+      headers: new Headers({ "Content-Type": "application/json" })
+    })
+    .catch(error => console.log(error));
+  }
+  event.preventDefault();
+  event.stopPropagation();
+  return false;
+})
+
+socket.on(`chat-game-${gameId}`, (data) =>{
+  if (data) {
+      var d = new Date()
+      var h = d.getHours()
+      var m = d.getMinutes()
+      var ampm = h < 12 ? 'AM' : 'PM';
+      h = h % 12;
+      h = h ? h : 12; // the hour '0' should be '12'
+      m = m < 10 ? '0'+m : m;
+      var strTime = h + ':' + m + ' ' + ampm;
+      $('#messages').append('<li>' + data.user.bold() + '(' + strTime +  '): ' + data.msg + '</li>');
+  }
+})

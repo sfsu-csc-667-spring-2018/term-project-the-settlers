@@ -17,8 +17,8 @@ body
     .col.col-2
       .row-5
         ul#messages
-        form(action='')
-          input#m.form-control(autocomplete='off', placeholder='Enter your message')  
+        form.message(method='post' action=`/chat/game`)
+          input#m.form-control(autocomplete='off', placeholder='Enter your message')
           input#user(type="hidden", name="postid", value=user)
       .row-5.actions
         ul#myTab.nav.nav-tabs(role='tablist')
@@ -54,7 +54,7 @@ body
             img(src='/images/resources/wheat.png')
             img(src='/images/resources/sheep.png')
 
-          #trade.tab-pane.fade.show(role='tabpanel', aria-labelledby='trade-tab') 
+          #trade.tab-pane.fade.show(role='tabpanel', aria-labelledby='trade-tab')
             ul#tradeTab.nav.nav-tabs(role='tablist')
               li.nav-item
                 a#build-tab.nav-link.active(data-toggle='tab', href='#interplayer', role='tab', aria-controls='interplayer', aria-selected='true') InterPlayer
@@ -69,7 +69,7 @@ body
                 each val in ["wood", "brick", "sheep", "wheat", "ore"]
                   input#image(type ='image',src='/images/resources/' + val+'.png')
                 button.btn.btn-primary.buildbtn Trade
-              #bank.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='bank-tab') 
+              #bank.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='bank-tab')
                 p Offering
                 each val in ["wood", "brick", "sheep", "wheat", "ore"]
                   img(src='/images/resources/' + val+ '.png')
@@ -83,15 +83,16 @@ body
           #gbord
             img.ocean(src='/images/tiles/ocean.png')
             #display
-              each tile, index in tiles 
+              each tile, index in tiles
                 span.tile(data-prob=tile.die_number, data-type=tile.resource_type)
+                
               each vertex in vertices 
                 span.vertex(data-x=vertex.x, data-y=vertex.y, data-owner=vertex.user_id, data-item=vertex.item)
     .col.col-2
       .row-sm-3
         -for(let i=0; i< 4; i ++){
           .row.playercards
-            h3 Player 
+            h3 Player
             .playerStats
               img(src='/images/devcards/victorypoint.png')
               img(src='/images/devcards/victorypoint.png')
