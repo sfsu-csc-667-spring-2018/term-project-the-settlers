@@ -85,8 +85,8 @@ body
             #display
               each tile, index in tiles
                 span.tile(data-prob=tile.die_number, data-type=tile.resource_type)
-
-              each vertex in vertices
+                
+              each vertex in vertices 
                 span.vertex(data-x=vertex.x, data-y=vertex.y, data-owner=vertex.user_id, data-item=vertex.item)
     .col.col-2
       .row-sm-3
