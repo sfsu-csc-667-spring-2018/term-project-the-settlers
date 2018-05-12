@@ -29,26 +29,6 @@ const init = (server, app) => {
       );
     });
   });
-
-  lobby.on("connection", function(socket) {
-    console.log("someone connected");
-    socket.on("lobby send message", function(data) {
-      lobby.emit("lobby receive message", {
-        msg: data.message,
-        user: data.username
-      });
-    });
-  });
-
-  game.on("connection", function(socket) {
-    console.log("someone connected");
-    socket.on("game send message", function(data) {
-      game.emit("game receive message", {
-        msg: data.message,
-        user: data.username
-      });
-    });
-  });
 };
 
 module.exports = { init };
