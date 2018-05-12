@@ -44,7 +44,11 @@ const db = require('../../db');
 // db.games.getVertices(1)
 // .then( data => console.log( data))
 // .catch( error => console.log('getVertices Error' + error));;;
+//
+// db.games.getRoads(1)
+// .then(data => console.log(data))
+// .catch( error => console.log('getRoads error' + error ));
 
-db.games.getRoads(1)
+db.games.createGame("zeeee", 4)
 .then(data => console.log(data))
-.catch( error => console.log('getRoads error' + error ));
+.catch( error => console.log(error));
