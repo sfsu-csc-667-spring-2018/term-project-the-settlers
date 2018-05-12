@@ -43,9 +43,9 @@ const insertGameTiles = db => ([game, tiles]) => {
       }
     )
   });
-  queries.push(insertDesertTile(db)(game.id,desertPlacementOrder));
   queries.push(insertGameVertices(db)(game.id));
   queries.push(game);
+  queries.push(insertDesertTile(db)(game.id,desertPlacementOrder));
 
   return Promise.all(queries);
 };
