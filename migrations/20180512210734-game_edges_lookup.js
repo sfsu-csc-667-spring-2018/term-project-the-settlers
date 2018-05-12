@@ -3,7 +3,7 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     queryInterface
-    .createTbale("game_edges_lookup", {
+    .createTable("game_edges_lookup", {
       x_start: {
         type: Sequelize.INTEGER,
         allowNull: false
