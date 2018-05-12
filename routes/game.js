@@ -3,7 +3,7 @@ const router = express.Router();
 const authenticate = require("../authentication/authenticated");
 const db = require("../db");
 
-addPlayer = (userId,gameId) => {
+const addPlayer = (userId,gameId) => {
   return db.games.getPlayerCount(gameId)
       .then( (players) => {
         if(players === null){
@@ -17,20 +17,22 @@ addPlayer = (userId,gameId) => {
       })
 };
 
+const createGame = (gameName,playerLimit,userId) => {
+  if(gameName !== undefined && playerLimit !== undefined){
+    const gameCreation = db.games.createGame(gameName,playerLimit);
+    const playerAddition = gameCreation
+                          .then( ({id}) => addPlayer(userId, id));
+    return Promise.all([gameCreation,playerAddition]);
+  }
+};
+
 router.use(authenticate);
 
 router.post("/", function(req, res, next) {
   const {lobby: gameName, playerLimit} = req.body;
   const{id:userId} = req.user;
-  if(gameName !== undefined && playerLimit !== undefined){
-    const gameCreationPromise = db.games.createGame(gameName,playerLimit);
-    const addPlayerPromise = gameCreationPromise
-    .then( ({id}) => {
-        return addPlayer(userId, id);
-    });
-
-    Promise.all([gameCreationPromise,addPlayerPromise])
-    .then( ([gameCreation,addPlayer]) =>{
+  createGame(gameName,playerLimit,userId)
+    .then( ([gameCreation,addPlayer]) => {
         console.log(gameCreation, addPlayer);
         res.redirect(`/game/${gameCreation.id}`);
     })
@@ -38,7 +40,6 @@ router.post("/", function(req, res, next) {
       console.log(error);
       res.redirect('lobby');
     });
-  }
 });
 
 router.post("/join/:id",(request,response,next) => {
