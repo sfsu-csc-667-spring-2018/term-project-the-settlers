@@ -6,13 +6,17 @@ router.use(authenticate);
 
 router.post("/:namespace", function(req, res, next) {
   const { namespace } = req.params;
-  const { message } = req.body;
+  const { message, gameId } = req.body;
   const io = req.app.get("io");
-
-  io
-    .of(namespace)
-    // TODO: Change this to be generic for all chat namespaces
-    .emit("lobby receive message", { msg: message, user: req.user.username });
+  if(gameId === undefined){
+    io
+      .of(namespace)
+      .emit(`chat-${namespace}`, { msg: message, user: req.user.username });
+  }else{
+    io
+      .of(namespace)
+      .emit(`chat-${namespace}-${gameId}`, {msg: message, user: req.user.username});
+  }
 
   res.sendStatus(200);
 });

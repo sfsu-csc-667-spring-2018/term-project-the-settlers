@@ -19,7 +19,7 @@ document.querySelector("form.chat").addEventListener("submit", event => {
 });
 
 // Receive from server
-socket.on("lobby receive message", function(data) {
+socket.on("chat-lobby", function(data) {
   if (data) {
     var d = new Date();
     var h = d.getHours();
@@ -50,7 +50,7 @@ $("form.join").on("submit", event =>{
           method: "post",
           credentials: "include"
     })
-  .then( () => window.location.replace(`/game/${game_id}`)) 
+  .then( () => window.location.replace(`/game/${game_id}`))
   .catch( error => console.log(error))
   }else{
       alert("Please select a game!");
