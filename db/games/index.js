@@ -26,27 +26,42 @@ const intializeGame = (db,gameName,playerLimit) =>
   Promise.all([
     db.one('INSERT INTO "games" (game_name,player_limit) VALUES($1,$2) RETURNING id',
             [gameName,playerLimit]),
-    db.many("SELECT * FROM tiles ORDER BY RANDOM()")
+    db.many("SELECT * FROM tiles WHERE id != 1 ORDER BY RANDOM()")
   ]);
 
 const insertGameTiles = db => ([game, tiles]) => {
-  const queries = shuffle(allProbs).map((probability, index) =>
-    db.none(
+  const desertPlacementOrder = Math.floor(Math.random() * 20);
+  const queries = shuffle(allProbs).map((probability, index) => {
+    let order = index >= desertPlacementOrder ? index+1 : index;
+    return db.none(
       "INSERT INTO game_tiles VALUES(${game_id}, ${tile_id}, ${probability}, ${order})",
       {
         game_id: game.id,
         tile_id: tiles[index].id,
         probability,
-        order: index
+        order
       }
     )
-  );
+  });
+  queries.push(insertDesertTile(db)(game.id,desertPlacementOrder));
   queries.push(insertGameVertices(db)(game.id));
   queries.push(game);
 
   return Promise.all(queries);
 };
 
+const insertDesertTile = db => (gameId,order) =>{
+  db.none(
+    "INSERT INTO game_tiles VALUES(${game_id}, ${tile_id}, ${probability}, ${order})"
+    ,
+    {
+      game_id: gameId,
+      tile_id: 1,
+      probability: 0,
+      order
+    }
+  )
+}
 const insertGameEdges = db => gameId => {};
 
 const insertGameVertices = db => gameId => {
