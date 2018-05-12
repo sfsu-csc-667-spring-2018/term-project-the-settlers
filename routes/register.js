@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const bcrypt = require('bcrypt');
 const db = require('../db');
 
 /* GET home page. */
@@ -11,17 +12,20 @@ router.post('/', function(request, response, next){
   const username = request.body['username'];
   const email = request.body['email'];
   const password = request.body['password'];
-  db.users.createUser(username,email,password, username+email)
-    .then( (successMsg) =>  {
-                              response.redirect("./");
-                              console.log(successMsg);
-                            }
+  bcrypt.hash(password, 10, (error,hashedPass) => {
+    db.users.createUser(username,email,hashedPass, username+email)
+      .then( (successMsg) =>  {
+                                response.redirect("./");
+                                console.log(successMsg);
+                              }
 
-    ).catch( (rejectMsg) => { 
-                              response.redirect("./register");
-                              console.log(rejectMsg);
-                            }
-    )
+      ).catch( (rejectMsg) => {
+                                response.redirect("./register");
+                                console.log(rejectMsg);
+                              }
+      )
+  })
+
 })
 
 module.exports = router;

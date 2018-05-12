@@ -13,6 +13,11 @@ module.exports = function(db){
           )
     }
 
+    userFunctions.findByUsername = (username) => {
+      return db.one('SELECT id,username,email,password'+
+              ' FROM "users" WHERE UPPER(username) = UPPER($1)',[username]);
+    }
+
     userFunctions.checkUser = (username, password) => {
         return new Promise(
         function(resolve,reject){
