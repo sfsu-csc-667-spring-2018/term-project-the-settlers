@@ -84,10 +84,12 @@ body
             img.ocean(src='/images/tiles/ocean.png')
             #display
               each tile, index in tiles
-                span.tile(data-prob=tile.die_number, data-type=tile.resource_type)
-                
+                span.tile(data-prob=tile.die_number, data-type=tile.resource_type)         
               each vertex in vertices 
                 span.vertex(data-x=vertex.x, data-y=vertex.y, data-owner=vertex.user_id, data-item=vertex.item)
+              .roads
+                each edge in edges
+                  span.edge(data-x=edge.x_start, data-y=edge.y_start, data-owner=edge.user_id, data-item=edge.road )
     .col.col-2
       .row-sm-3
         -for(let i=0; i< 4; i ++){

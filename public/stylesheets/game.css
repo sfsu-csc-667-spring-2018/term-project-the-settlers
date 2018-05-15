@@ -111,69 +111,6 @@ body{
   HOUSES AND CITIES
 
   **/
-  #spots {
-    position: absolute;
-    top: 0px;
-    left: 50%;
-    transform: translate(-50%, 0);
-  }
-  .chunk {
-    display: flex;
-    justify-content: space-between;
-    margin: 0 auto;
-  }
-  
-  .chunk:nth-of-type(1)  { width: 321px; }
-  .chunk:nth-of-type(2)  { width: 464px; }
-  .chunk:nth-of-type(3)  { width: 464px; }
-  .chunk:nth-of-type(4)  { width: 617px; }
-  .chunk:nth-of-type(5)  { width: 617px; }
-  .chunk:nth-of-type(6)  { width: 763px; }
-  .chunk:nth-of-type(7)  { width: 763px; }
-  .chunk:nth-of-type(8)  { width: 617px; }
-  .chunk:nth-of-type(9)  { width: 617px; }
-  .chunk:nth-of-type(10) { width: 464px; }
-  .chunk:nth-of-type(11) { width: 464px; }
-  .chunk:nth-of-type(12) { width: 321px; }
-  
-  .chunk:nth-of-type(2n) { padding-top: 19px; }
-  .chunk:nth-of-type(2n + 1) { padding-top: 71px; }
-  
-  .chunk span {
-      width: 20px;
-      height: 20px;
-      border-radius: 10px;
-      text-align: center;
-      opacity: 0.4;
-  
-      box-sizing: border-box;
-  }
-  
-  .chunk span.red, 
-  .chunk span.blue, 
-  .chunk span.yellow, 
-  .chunk span.white {
-      opacity: 1;
-      border-radius: 1px;
-      height: 30px;
-  
-      margin-top: -10px;
-  }
-  
-  .chunk span.red { background-color: red; }
-  .chunk span.blue { background-color: blue; }
-  .chunk span.yellow { background-color: yellow; }
-  .chunk span.white { background-color: white; }
-  
-  .chunk span.first {
-      border: 2px solid black;
-  }
-  
-  .chunk span.open {
-      background-color: white;
-      cursor: pointer;
-      animation: open-animation 3s infinite;
-  }
 
 .tile {
 	width: 152px;
@@ -309,43 +246,6 @@ ROADS
 
 **/
 
-#edges {
-    position: absolute;
-    top: 0px;
-    left: 50%;
-    transform: translate(-50%, 0);
-  }
-.road{
-    display:flex;
-    margin: 0 auto;
-    justify-content: space-between;
-
-}
-.road span {
-    width: 50px;
-    height: 5px;
-    background-color: white;
-    cursor: pointer;
-    animation: open-animation 3s infinite;
-    text-align: center;
-    box-sizing: border-box;
-}
-.upRoad{transform: rotate(-30deg);}
-.downRoad{transform:rotate(30deg);}
-.vertRoad{transform:rotate(90deg);}
-.road:nth-of-type(1)  { width: 425px; padding-top: 25px;  }
-.road:nth-of-type(2)  { width: 500px; padding-top:40px; height:50px;}
-.road:nth-of-type(3)  { width: 575px; padding-top:65px;}
-.road:nth-of-type(4)  { width: 650px; }
-.road:nth-of-type(5)  { width: 725px; padding-top:60px;}
-.road:nth-of-type(6)  { width: 800px; }
-.road:nth-of-type(7)  { width: 725px; padding-top:60px;}
-.road:nth-of-type(8)  { width: 650px; }
-.road:nth-of-type(9)  { width: 575px; padding-top:60px;}
-.road:nth-of-type(10) { width: 500px; }
-.road:nth-of-type(11) { width: 425px; padding-top:60px;}
-.road:nth-of-type(2n) {padding-top:60px;}
-.road:first-child { padding-top: 90px; }
     
 .tile[data-type='desert'] {
     background-image: url('/images/tiles/desert.png')
@@ -373,6 +273,28 @@ ROADS
 }
 #display .tile {
     position: absolute;
+
+}
+
+#display .tile[data-prob]:after {
+	display: block;
+	width: 50px;
+	height: 50px;
+	margin: 60px 0 0 50px;
+
+    content: attr(data-prob);
+	line-height: 10px;
+    padding-top: 13px;
+    padding-left: 13px;
+
+	background-color: #E9D49D;
+	border: 2px solid #AD9D75;
+	border-radius: 27px;
+	
+	font-size: 25px;
+	font-weight: bold;
+
+	white-space: pre;
 }
 
 #display .tile:nth-of-type(1) {
@@ -457,12 +379,15 @@ ROADS
     width: 32px;
     height:32px;
     background-repeat: no-repeat;
-     background-image: url('/images/buildings/blue-settlement.png'); 
+    background: white;
+    border-radius: 10px;
+    opacity: 0.4;
+    z-index: 10000;
     /* background: white; */
 }
 #display .vertex[data-x="0"]{
     left:110px;
-    z-index: 10000;
+    
 }
 #display .vertex[data-x="1"]{
     left: 188px;
@@ -542,4 +467,374 @@ ROADS
 #display .vertex[data-y="11"]{
     top: 735px;
     z-index: 10000;
+}
+#display .edge{
+    position:absolute;
+    width: 40px;
+    height:5px;
+    background:white;
+    opacity: 0.4;
+
+}
+
+.roads .edge:nth-of-type(1){
+    transform:rotate(-30deg);
+    top: 95px;
+    left:290px;
+}
+.roads .edge:nth-of-type(2){
+    transform:rotate(30deg);
+    top: 95px;
+    left:370px;
+}
+.roads .edge:nth-of-type(3){
+    transform:rotate(-30deg);
+    top: 95px;
+    left:440px;
+}
+.roads .edge:nth-of-type(4){
+    transform:rotate(30deg);
+    top: 95px;
+    left:520px;
+}
+.roads .edge:nth-of-type(5){
+    transform:rotate(-30deg);
+    top: 95px;
+    left:590px;
+}
+.roads .edge:nth-of-type(6){
+    transform:rotate(30deg);
+    top: 95px;
+    left:670px;
+}
+
+.roads .edge:nth-of-type(7){
+    transform:rotate(90deg);
+    top: 165px;
+    left: 255px;
+}
+.roads .edge:nth-of-type(8){
+    transform:rotate(90deg);
+    top: 165px;
+    left:405px;
+}
+.roads .edge:nth-of-type(9){
+    transform:rotate(90deg);
+    top: 165px;
+    left:555px;
+}
+.roads .edge:nth-of-type(10){
+    transform:rotate(90deg);
+    top: 165px;
+    left:705px;
+}
+.roads .edge:nth-of-type(11){
+    transform:rotate(-30deg);
+    top: 225px;
+    left:220px;
+}
+.roads .edge:nth-of-type(12){
+    transform:rotate(30deg);
+    top: 225px;
+    left:290px;
+}
+.roads .edge:nth-of-type(13){
+    transform:rotate(-30deg);
+    top: 225px;
+    left:370px;
+}
+.roads .edge:nth-of-type(14){
+    transform:rotate(30deg);
+    top: 225px;
+    left:440px;
+}
+.roads .edge:nth-of-type(15){
+    transform:rotate(-30deg);
+    top: 225px;
+    left:520px;
+}
+.roads .edge:nth-of-type(16){
+    transform:rotate(30deg);
+    top: 225px;
+    left:590px;
+}
+.roads .edge:nth-of-type(17){
+    transform:rotate(-30deg);
+    top: 225px;
+    left:670px;
+}
+.roads .edge:nth-of-type(18){
+    transform:rotate(30deg);
+    top: 225px;
+    left:750px;
+}
+.roads .edge:nth-of-type(19){
+    transform:rotate(90deg);
+    top: 285px;
+    left: 180px;
+}
+.roads .edge:nth-of-type(20){
+    transform:rotate(90deg);
+    top: 285px;
+    left:330px;
+}
+.roads .edge:nth-of-type(21){
+    transform:rotate(90deg);
+    top: 285px;
+    left:480px;
+}
+.roads .edge:nth-of-type(22){
+    transform:rotate(90deg);
+    top: 285px;
+    left:630px;
+}
+.roads .edge:nth-of-type(23){
+    transform:rotate(90deg);
+    top: 285px;
+    left: 780px;
+}
+.roads .edge:nth-of-type(24){
+    transform:rotate(-30deg);
+    top: 345px;
+    left:145px;
+}
+.roads .edge:nth-of-type(25){
+    transform:rotate(30deg);
+    top: 345px;
+    left:220px;
+}
+.roads .edge:nth-of-type(26){
+    transform:rotate(-30deg);
+    top: 345px;
+    left: 295px;
+}
+.roads .edge:nth-of-type(27){
+    transform:rotate(30deg);
+    top: 345px;
+    left:370px;
+}
+.roads .edge:nth-of-type(28){
+    transform:rotate(-30deg);
+    top: 345px;
+    left:440px;
+}
+.roads .edge:nth-of-type(29){
+    transform:rotate(30deg);
+    top: 345px;
+    left:520px;
+}
+.roads .edge:nth-of-type(30){
+    transform:rotate(-30deg);
+    top: 345px;
+    left:590px;
+}
+.roads .edge:nth-of-type(31){
+    transform:rotate(30deg);
+    top: 345px;
+    left:670px;
+}
+.roads .edge:nth-of-type(32){
+    transform:rotate(-30deg);
+    top: 345px;
+    left:750px;
+}
+.roads .edge:nth-of-type(33){
+    transform:rotate(30deg);
+    top: 345px;
+    left:820px;
+}
+.roads .edge:nth-of-type(34){
+    transform:rotate(90deg);
+    top: 405px;
+    left: 105px;
+}
+.roads .edge:nth-of-type(35){
+    transform:rotate(90deg);
+    top: 405px;
+    left: 255px;
+}
+.roads .edge:nth-of-type(36){
+    transform:rotate(90deg);
+    top: 405px;
+    left:405px;
+}
+.roads .edge:nth-of-type(37){
+    transform:rotate(90deg);
+    top: 405px;
+    left:555px;
+}
+.roads .edge:nth-of-type(38){
+    transform:rotate(90deg);
+    top: 405px;
+    left:705px;
+}
+.roads .edge:nth-of-type(39){
+    transform:rotate(90deg);
+    top: 405px;
+    left: 855px;
+}
+.roads .edge:nth-of-type(40){
+    transform:rotate(30deg);
+    top: 475px;
+    left:145px;
+}
+.roads .edge:nth-of-type(41){
+    transform:rotate(-30deg);
+    top: 475px;
+    left:220px;
+}
+.roads .edge:nth-of-type(42){
+    transform:rotate(30deg);
+    top: 475px;
+    left: 295px;
+}
+.roads .edge:nth-of-type(43){
+    transform:rotate(-30deg);
+    top: 475px;
+    left:370px;
+}
+.roads .edge:nth-of-type(44){
+    transform:rotate(30deg);
+    top: 475px;
+    left:440px;
+}
+.roads .edge:nth-of-type(45){
+    transform:rotate(-30deg);
+    top: 475px;
+    left:520px;
+}
+.roads .edge:nth-of-type(46){
+    transform:rotate(30deg);
+    top: 475px;
+    left:590px;
+}
+.roads .edge:nth-of-type(47){
+    transform:rotate(-30deg);
+    top: 475px;
+    left:670px;
+}
+.roads .edge:nth-of-type(48){
+    transform:rotate(30deg);
+    top: 475px;
+    left:750px;
+}
+.roads .edge:nth-of-type(49){
+    transform:rotate(-30deg);
+    top: 475px;
+    left:820px;
+}
+.roads .edge:nth-of-type(50){
+    transform:rotate(90deg);
+    top: 535px;
+    left: 180px;
+}
+.roads .edge:nth-of-type(51){
+    transform:rotate(90deg);
+    top: 535px;
+    left:330px;
+}
+.roads .edge:nth-of-type(52){
+    transform:rotate(90deg);
+    top: 535px;
+    left:480px;
+}
+.roads .edge:nth-of-type(53){
+    transform:rotate(90deg);
+    top: 535px;
+    left:630px;
+}
+.roads .edge:nth-of-type(54){
+    transform:rotate(90deg);
+    top: 535px;
+    left: 780px;
+}
+.roads .edge:nth-of-type(55){
+    transform:rotate(-30deg);
+    top: 605px;
+    left:290px;
+}
+.roads .edge:nth-of-type(56){
+    transform:rotate(30deg);
+    top: 605px;
+    left:370px;
+}
+.roads .edge:nth-of-type(57){
+    transform:rotate(-30deg);
+    top: 605px;
+    left:440px;
+}
+.roads .edge:nth-of-type(58){
+    transform:rotate(30deg);
+    top: 605px;
+    left:520px;
+}
+.roads .edge:nth-of-type(59){
+    transform:rotate(-30deg);
+    top: 605px;
+    left:590px;
+}
+.roads .edge:nth-of-type(60){
+    transform:rotate(30deg);
+    top: 605px;
+    left:670px;
+}
+.roads .edge:nth-of-type(61){
+    transform:rotate(-30deg);
+    top: 605px;
+    left:750px;
+}
+.roads .edge:nth-of-type(62){
+    transform:rotate(30deg);
+    top: 605px;
+    left:220px;
+}
+.roads .edge:nth-of-type(63){
+    transform:rotate(90deg);
+    top: 665px;
+    left: 255px;
+}
+.roads .edge:nth-of-type(64){
+    transform:rotate(90deg);
+    top: 665px;
+    left:405px;
+}
+.roads .edge:nth-of-type(65){
+    transform:rotate(90deg);
+    top: 665px;
+    left:555px;
+}
+.roads .edge:nth-of-type(66){
+    transform:rotate(90deg);
+    top: 665px;
+    left:705px;
+}
+.roads .edge:nth-of-type(67){
+    transform:rotate(30deg);
+    top: 725px;
+    left:290px;
+}
+.roads .edge:nth-of-type(68){
+    transform:rotate(-30deg);
+    top: 725px;
+    left:370px;
+}
+.roads .edge:nth-of-type(69){
+    transform:rotate(30deg);
+    top: 725px;
+    left:440px;
+}
+.roads .edge:nth-of-type(70){
+    transform:rotate(-30deg);
+    top: 725px;
+    left:520px;
+}
+.roads .edge:nth-of-type(71){
+    transform:rotate(30deg);
+    top: 725px;
+    left:590px;
+}
+.roads .edge:nth-of-type(72){
+    transform:rotate(-30deg);
+    top: 725px;
+    left:670px;
 }

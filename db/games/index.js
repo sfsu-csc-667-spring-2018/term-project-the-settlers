@@ -96,8 +96,8 @@ module.exports = db => {
         "SELECT * FROM game_tiles JOIN tiles ON id=tile_id WHERE game_id=$1 ORDER BY game_tiles.order",
         [id]
       ),
-      db.many("SELECT * FROM game_vertices WHERE game_id=$1", [id])
-      // db.many("SELECT * FROM game_edges WHERE game_id=$1", [id])
+      db.many("SELECT * FROM game_vertices WHERE game_id=$1", [id]),
+      db.many("SELECT * FROM game_edges WHERE game_id=$1", [id])
     ]).then(([game, tiles, vertices, edges]) => ({
       game,
       tiles,
