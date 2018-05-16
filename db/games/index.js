@@ -88,21 +88,30 @@ module.exports = db => {
       .then(insertGameEdges(db))
       .then(result => result[1]);
 
+  gameFunctions.getPlayerInfo = (gameId) => {
+    return db.any('SELECT username, turn_order,card_count FROM players'
+            +' INNER JOIN users ON users.id = players.user_id'
+            +' LEFT JOIN (SELECT COUNT(*) AS card_count,player_id'
+            +'             FROM dev_cards GROUP BY player_id) cards ON cards.player_id = players.id '
+            +' WHERE game_id = $1' , [gameId] );
+  }
+
   gameFunctions.getGame = id =>
     Promise.all([
       db.one("SELECT * FROM games WHERE id=$1", [id]),
       db.many(
-
         "SELECT * FROM game_tiles JOIN tiles ON id=tile_id WHERE game_id=$1 ORDER BY game_tiles.order",
         [id]
       ),
       db.many("SELECT * FROM game_vertices WHERE game_id=$1", [id]),
-      db.many("SELECT * FROM game_edges WHERE game_id=$1", [id])
-    ]).then(([game, tiles, vertices, edges]) => ({
+      db.many("SELECT * FROM game_edges WHERE game_id=$1", [id]),
+      gameFunctions.getPlayerInfo(id)
+    ]).then(([game, tiles, vertices, edges,playerInfo]) => ({
       game,
       tiles,
       vertices,
-      edges
+      edges,
+      playerInfo
     }));
 
   gameFunctions.getGames = () => {
