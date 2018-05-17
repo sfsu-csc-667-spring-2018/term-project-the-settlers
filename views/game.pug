@@ -92,14 +92,15 @@ body
                   span.edge(data-x=edge.x_start, data-y=edge.y_start, data-owner=edge.user_id, data-item=edge.road )
     .col.col-2
       .row-sm-3
-        -for(let i=0; i< 4; i ++){
+        each player in playerInfo
           .row.playercards
-            h3 Player
+            h3= player.username
             .playerStats
-              img(src='/images/devcards/victorypoint.png')
-              img(src='/images/devcards/victorypoint.png')
-              img(src='/images/devcards/victorypoint.png')
-        -}
+              img(src='/images/cards.png')
+              img(src='/images/devcards.png')
+              h6= player.cardCount
+              h6 Victory Points:
+
       .row-sm-3.cards
         h5 Resources
         - let playerResources = ["wood", "brick", "sheep", "wheat", "ore"];

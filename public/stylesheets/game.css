@@ -29,13 +29,13 @@ body{
     margin-top:5%;
 }
 .playercards h3{
-    margin-right:50px;
+    margin-right:100%;
 }
-.playerStats{
+.playerStats h6{
     display:inline;
 }
 .playerStats img{
-    max-width: 64px;
+    max-width: 32px;
 }
 .nav{
     background-color:#fff;
