@@ -72,10 +72,10 @@ body
               #bank.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='bank-tab')
                 p Offering
                 each val in ["wood", "brick", "sheep", "wheat", "ore"]
-                  img(src='/images/resources/' + val+ '.png')
+                  input#image(type ='image',src='/images/resources/' + val +'.png')
                 p Recieving
                 each val in  ["wood", "brick", "sheep", "wheat", "ore"]
-                  img(src='/images/resources/' + val + '.png')
+                  input#image(type ='image',src='/images/resources/' + val +'.png')
                 button.btn.btn-primary.buildbtn Trade
     .col.col-8
       .d-flex.flex-column
@@ -97,23 +97,21 @@ body
             h3= player.username
             .playerStats
               img(src='/images/cards.png')
+              h6= player.resource_count
               img(src='/images/devcards.png')
-              h6= player.cardCount
+              h6= player.card_count
               h6 Victory Points:
 
       .row-sm-3.cards
         h5 Resources
-        - let playerResources = ["wood", "brick", "sheep", "wheat", "ore"];
-        - for(let i =0; i < playerResources.length; i++){
+        each val in ["wood", "brick", "sheep", "wheat", "ore"]
             .resource
-              img(src='/images/resources/' + playerResources[i]+ '.png')
-        - }
+              img(src='/images/resources/' + val + '.png')
+
         h5 Development Cards
-        -let devCards = ["plenty", "monopoly", "knight", "roadbuilding", "victorypoint" ];
-        - for(let i =0; i < devCards.length; i++){
+        each val in ["plenty", "monopoly", "knight", "roadbuilding", "victorypoint" ]
             .resource
-              img(src='/images/devcards/' + devCards[i]+ '.png')
-        - }
+              img(src='/images/devcards/' + val + '.png')
       .row-sm-3
         script.
           function attack(result) {

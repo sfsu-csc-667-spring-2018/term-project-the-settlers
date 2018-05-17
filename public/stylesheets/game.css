@@ -2,6 +2,10 @@
     font-family:Nova;
     src: url(/fonts/nova.ttf);
 }
+@font-face{
+    font-family:Point;
+    src: url(/fonts/pointBold.ttf);
+}
 body{
     font-family:Nova;
     background: url(/images/background.jpg) no-repeat center center fixed;
@@ -10,6 +14,9 @@ body{
 }
 .row-5{
     margin-left: 5%;
+    padding-left:3px;
+    padding-right:5px;
+    margin-top:5%;
 }
 .container{
     margin:1%;
@@ -23,19 +30,21 @@ body{
 .col-8{
     padding-top:2%;
 }
-.row-5{
-    padding-left:3px;
-    padding-right:5px;
-    margin-top:5%;
-}
 .playercards h3{
     margin-right:100%;
+    padding-left: 5px;
+    font-family: Point;
 }
 .playerStats h6{
     display:inline;
+    padding-right: 10px;
+    padding-bottom:5px;
 }
 .playerStats img{
     max-width: 32px;
+    padding-left:5px;
+    padding-bottom:5px;
+    padding-right: 3px;
 }
 .nav{
     background-color:#fff;
@@ -65,7 +74,8 @@ body{
     width:10%;
 }
 #diceall{
-    display:inline;
+    padding-top:10px;
+    padding-bottom:10px;
 }
 .tab-content{
     background: #fff;
@@ -92,6 +102,10 @@ body{
     margin-top:3px;
     margin-bottom:3px;
 }
+.cards img{
+    padding-left:5px;
+    padding-bottom:5px;
+}
 .turnbutton{
     padding:3%;
     width:100%;
@@ -103,9 +117,30 @@ body{
 #image{
     max-width:32px;
     display:inline;
+    padding-left:3px;
+}
+#tradeTabContent input{
+    padding-left:3px;
+}
+#tradeTabContent p{
+    padding-left:5px;
 }
 
-
+.row-sm-3 input{
+   width:100%;
+   height:100px;
+   border-radius:5px;
+   padding-top:10px;
+   padding-bottom:10px;
+}
+.row-sm-3 {
+    padding-top:10px;
+    padding-bottom:10px;
+ }
+h5{
+    padding-left: 5px;
+    
+}
   /**
 
   HOUSES AND CITIES
@@ -151,76 +186,6 @@ padding-right:5px;
 display:inline;
 }
 /**
-
-SHIPS
-
-**/
-div[class^="ship-"] {
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    margin-top:60px;
-  }
-  
-  div[class^="ship-"] img {
-      max-width: 100%;
-      max-height: 100%;
-  }
-  
-  .ship-0 {
-    top: -40px;
-    left: calc(50% - 243px);
-
-  }
-  
-  .ship-1 {
-    top: -58px;
-    left: calc(50% + 23px);
-
-  }
-  
-  .ship-2 {
-    top: 183px;
-    left: calc(50% - 382px);
-
-  }
-  
-  .ship-3 {
-    top: 80px;
-    left: calc(50% + 261px);
-
-  }
-  
-  .ship-4 {
-    top: 459px;
-    left: calc(50% - 389px);
-
-  }
-  
-  .ship-5 {
-    top: 325px;
-    left: calc(50% + 396px);
-
-  }
-  
-  .ship-6 {
-    top: 689px;
-    left: calc(50% - 249px);
-
-  }
-  
-  .ship-7 {
-    top: 689px;
-    left: calc(50% + 34px);
-
-  }
-  
-  .ship-8 {
-    top: 553px;
-    left: calc(50% + 268px);
-
-  }
-  /**
 
 ROADS
 
