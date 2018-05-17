@@ -18,6 +18,10 @@ module.exports = {
       order: {
         type: Sequelize.INTEGER,
         allowNull: false
+      },
+      robber: {
+        type:Sequelize.BOOLEAN,
+        allowNull: false
       }
     });
   },
