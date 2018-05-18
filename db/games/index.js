@@ -82,7 +82,7 @@ const insertGameVertices = db => gameId => {
 };
 
 const getPlayerInfo = db => (gameId) => {
-  return db.any('SELECT username, turn_order,card_count,resource_count  FROM players'
+  return db.any('SELECT username, turn_order,card_count,resource_count,current_turn  FROM players'
           +' INNER JOIN users ON users.id = players.user_id'
           +' LEFT JOIN (SELECT COUNT(*) AS card_count,player_id'
           +'             FROM dev_cards GROUP BY player_id) cards ON cards.player_id = players.id '
@@ -194,14 +194,49 @@ module.exports = db => {
 
   gameFunctions.getPlayersRoads = (gameId) => {
     return db.any('SELECT x_start,y_start,x_end,y_end'
-      +' WHERE player_id != $1 AND game_id = $2 AND road = $3'
+      +' FROM game_edges WHERE player_id != $1 AND game_id = $2 AND road = $3'
       ,[0,gameId,true]);
   };
 
   gameFunctions.getDevCardTypeCount = (gameId,devCardType) => {
-    return db.any('SELECT player_id,COUNT(*) FROM dev_cards'
+    return db.any('SELECT player_id,COUNT(*) AS count FROM dev_cards '
       +'WHERE game_id = $1 AND UPPER(dev_card_type) = UPPER($2) GROUP BY player_id'
       ,[gameId,devCardType]);
   }
+
+  gameFunctions.getPlayerLimit = (gameId) => {
+    return db.one('SELECT player_limit FROM games WHERE id = $1', [gameId]);
+  }
+
+  gameFunctions.getCurrentPlayerTurn = (gameId) => {
+    return db.one('SELECT turn_order FROM players WHERE game_id = $1 AND current_turn = $2'
+            ,[gameId,true]);
+  }
+
+  gameFunctions.updatePlayerTurn = (gameId,turnOrder) => {
+    return db.tx("moveRobberTransaction", t => {
+      t
+        .none('UPDATE "players" SET current_turn = $1 ' + "WHERE game_id = $2", [
+          false,
+          gameId
+        ])
+        .then(() =>
+          t
+            .none(
+              'UPDATE "players" SET current_turn = $1 ' +
+                "WHERE turn_order = $2 AND game_id = $3",
+              [true, turnOrder, gameId]
+            )
+            .catch(error => error)
+        );
+    });
+
+  };
+
+  gameFunctions.getItemCount = (gameId) => {
+    return db.one('SELECT count(*) FROM game_vertices WHERE game_id = $1 AND item != $2'
+          ,[gameId,'empty'])
+  };
+
   return gameFunctions;
 };

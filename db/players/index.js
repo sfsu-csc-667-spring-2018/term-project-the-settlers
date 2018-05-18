@@ -65,23 +65,34 @@ module.exports = (db) => {
     )
   }
 
-  playerFunctions.buildRoad = (playerId,gameId,xStart,yStart,xEnd,yEnd) =>{
-    return db.none('UPDATE game_edges SET player_id = $1, road = $2'
+  playerFunctions.buildRoad = (userId,gameId,xStart,yStart,xEnd,yEnd) =>{
+    return playerFunctions.findPlayerId(userId)
+    .then( ({id}) => db.none('UPDATE game_edges SET player_id = $1, road = $2'
             +' WHERE game_id = $3 AND x_start = $4 AND y_start = $5 AND x_end = $6 AND y_end = $7'
-            , [playerId,true,xStart,yStart,xEnd,yEnd]);
+            , [playerId,true,xStart,yStart,xEnd,yEnd])
+    )
   }
 
-  playerFunctions.getOwnedRoads = (playerId,gameId) => {
-    return db.many('SELECT x_start,y_start,x_end,y_end'
+  playerFunctions.getOwnedRoads = (userId,gameId) => {
+    return playerFunctions.findPlayerId(userId)
+    .then( ({id}) => db.many('SELECT x_start,y_start,x_end,y_end'
         +'FROM game_edges WHERE player_id = $1 AND game_id = $2'
-        ,[playerId,gameId]);
+        ,[id,gameId])
+    )
   }
 
-  playerFunctions.getPorts = (playerId,gameId) => {
-    return db.any('SELECT resources_in_required,resources_out_required, UPPER(resource_in_type),UPPER(resource_out_type)'
+  playerFunctions.getPorts = (userId,gameId) => {
+    return playerFunctions.findPlayerId(userId)
+    .then( ({id}) => db.any('SELECT resources_in_required,resources_out_required, UPPER(resource_in_type),UPPER(resource_out_type)'
             +' FROM game_vertices INNER JOIN ports on ports.id = game_vertices.port_id'
-            +'WHERE game_id = $1 AND player_id = $2'
-            ,[gameId,playerId])
+            +' WHERE game_id = $1 AND player_id = $2'
+            ,[gameId,id])
+    )
+  }
+
+  playerFunctions.checkPlayerTurn = (userId,gameId) => {
+    return playerFunctions.findPlayerId(userId)
+    .then( ({id}) => db.one('SELECT * FROM players WHERE id = $1', [id]));
   }
 
   return playerFunctions;
