@@ -54,12 +54,17 @@ router.post("/join/:id",(request,response,next) => {
 router.get("/:id", (request, response, next) => {
   const { username, id: userId } = request.user;
   const { id: gameId } = request.params;
-
+  //
+  // Promise.all([db.games.getGame(gameId), db.games.getPlayerInfo(gameId)])
+  // .then(({gameInfo, playerInfo}) =>
+  //   response.render("game", Object.assign({}, gameInfo, playerInfo, { username, userId }))
+  // ).catch(error => console.log(error));
   db.games
     .getGame(gameId)
-    .then(result =>
-      response.render("game", Object.assign({}, result, { username, userId }))
-    )
+    .then(result =>{
+      console.log(result);
+      response.render("game", Object.assign({}, result, { username, userId }));
+    })
     .catch(error => console.log(error));
 });
 

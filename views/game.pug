@@ -1,6 +1,7 @@
 doctype html
 head
   title= 'Catan | Game'
+  link(rel='icon' type='image/png' href='/images/icon.png')
   link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css', integrity='sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4', crossorigin='anonymous')
   script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
   script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js", integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm", crossorigin="anonymous")
@@ -72,10 +73,10 @@ body
               #bank.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='bank-tab')
                 p Offering
                 each val in ["wood", "brick", "sheep", "wheat", "ore"]
-                  img(src='/images/resources/' + val+ '.png')
+                  input#image(type ='image',src='/images/resources/' + val +'.png')
                 p Recieving
                 each val in  ["wood", "brick", "sheep", "wheat", "ore"]
-                  img(src='/images/resources/' + val + '.png')
+                  input#image(type ='image',src='/images/resources/' + val +'.png')
                 button.btn.btn-primary.buildbtn Trade
     .col.col-8
       .d-flex.flex-column
@@ -84,33 +85,34 @@ body
             img.ocean(src='/images/tiles/ocean.png')
             #display
               each tile, index in tiles
-                span.tile(data-prob=tile.die_number, data-type=tile.resource_type)
-                
+                span.tile(data-prob=tile.die_number, data-type=tile.resource_type)         
               each vertex in vertices 
                 span.vertex(data-x=vertex.x, data-y=vertex.y, data-owner=vertex.user_id, data-item=vertex.item)
+              .roads
+                each edge in edges
+                  span.edge(data-x=edge.x_start, data-y=edge.y_start, data-owner=edge.user_id, data-item=edge.road )
     .col.col-2
       .row-sm-3
-        -for(let i=0; i< 4; i ++){
+        each player in playerInfo
           .row.playercards
-            h3 Player
+            h3= player.username
             .playerStats
-              img(src='/images/devcards/victorypoint.png')
-              img(src='/images/devcards/victorypoint.png')
-              img(src='/images/devcards/victorypoint.png')
-        -}
+              img(src='/images/cards.png')
+              h6= player.resource_count
+              img(src='/images/devcards.png')
+              h6= player.card_count
+              h6 Victory Points:
+
       .row-sm-3.cards
         h5 Resources
-        - let playerResources = ["wood", "brick", "sheep", "wheat", "ore"];
-        - for(let i =0; i < playerResources.length; i++){
+        each val in ["wood", "brick", "sheep", "wheat", "ore"]
             .resource
-              img(src='/images/resources/' + playerResources[i]+ '.png')
-        - }
+              img(src='/images/resources/' + val + '.png')
+
         h5 Development Cards
-        -let devCards = ["plenty", "monopoly", "knight", "roadbuilding", "victorypoint" ];
-        - for(let i =0; i < devCards.length; i++){
+        each val in ["plenty", "monopoly", "knight", "roadbuilding", "victorypoint" ]
             .resource
-              img(src='/images/devcards/' + devCards[i]+ '.png')
-        - }
+              img(src='/images/devcards/' + val + '.png')
       .row-sm-3
         script.
           function attack(result) {
@@ -118,7 +120,7 @@ body
           }
           D6.dice(2, attack);
 
-        button.btn.turnbutton End Turn
+        input(type='button', value='End Turn', onclick='D6.roll()')
 
   script(src="/scripts/game.js")
   

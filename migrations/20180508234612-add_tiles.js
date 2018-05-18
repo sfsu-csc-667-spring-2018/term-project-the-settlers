@@ -37,8 +37,7 @@ module.exports = {
             { resource_type: "wheat" },
             { resource_type: "wheat" },
             { resource_type: "wheat" }
-          ],
-          {}
+          ]
         );
       });
   },
