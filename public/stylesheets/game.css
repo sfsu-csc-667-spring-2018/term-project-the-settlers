@@ -84,8 +84,7 @@ body{
 }
 .tab-pane img{
     display:inline;
-    max-width:32px;
-    margin:3px;
+    max-width:40px;
 }
 .buildbtn{
     margin: 5px 100% 5px 5px;
@@ -124,6 +123,10 @@ body{
 }
 #tradeTabContent p{
     padding-left:5px;
+}
+#build img{
+    padding-bottom: 5px;
+    padding-left:3px;
 }
 
 .row-sm-3 input{
@@ -406,7 +409,7 @@ ROADS
     z-index: 10000;
 }
 #display .vertex[data-x="2"]{
-    left:266px;
+    left:260px;
 }
 #display .vertex[data-x="3"]{
     left:335px;
@@ -415,7 +418,7 @@ ROADS
     left:410px;
 }
 #display .vertex[data-x="5"]{
-    left:480px;
+    left:485px;
 }
 #display .vertex[data-x="6"]{
     left:560px;
@@ -427,7 +430,7 @@ ROADS
     left:710px;
 }
 #display .vertex[data-x="9"]{
-    left:790px;
+    left:785px;
 }
 #display .vertex[data-x="10"]{
     left:860px;
@@ -607,82 +610,82 @@ ROADS
 }
 .roads .edge:nth-of-type(24){
     transform:rotate(-30deg);
-    top: 345px;
+    top: 350px;
     left:145px;
 }
 .roads .edge:nth-of-type(25){
     transform:rotate(30deg);
-    top: 345px;
+    top: 350px;
     left:220px;
 }
 .roads .edge:nth-of-type(26){
     transform:rotate(-30deg);
-    top: 345px;
+    top: 350px;
     left: 295px;
 }
 .roads .edge:nth-of-type(27){
     transform:rotate(30deg);
-    top: 345px;
+    top: 350px;
     left:370px;
 }
 .roads .edge:nth-of-type(28){
     transform:rotate(-30deg);
-    top: 345px;
+    top: 350px;
     left:440px;
 }
 .roads .edge:nth-of-type(29){
     transform:rotate(30deg);
-    top: 345px;
+    top: 350px;
     left:520px;
 }
 .roads .edge:nth-of-type(30){
     transform:rotate(-30deg);
-    top: 345px;
+    top: 350px;
     left:590px;
 }
 .roads .edge:nth-of-type(31){
     transform:rotate(30deg);
-    top: 345px;
+    top: 350px;
     left:670px;
 }
 .roads .edge:nth-of-type(32){
     transform:rotate(-30deg);
-    top: 345px;
+    top: 350px;
     left:750px;
 }
 .roads .edge:nth-of-type(33){
     transform:rotate(30deg);
-    top: 345px;
+    top: 350px;
     left:820px;
 }
 .roads .edge:nth-of-type(34){
     transform:rotate(90deg);
-    top: 405px;
+    top: 415px;
     left: 105px;
 }
 .roads .edge:nth-of-type(35){
     transform:rotate(90deg);
-    top: 405px;
+    top: 415px;
     left: 255px;
 }
 .roads .edge:nth-of-type(36){
     transform:rotate(90deg);
-    top: 405px;
+    top: 415px;
     left:405px;
 }
 .roads .edge:nth-of-type(37){
     transform:rotate(90deg);
-    top: 405px;
+    top: 415px;
     left:555px;
 }
 .roads .edge:nth-of-type(38){
     transform:rotate(90deg);
-    top: 405px;
+    top: 415px;
     left:705px;
 }
 .roads .edge:nth-of-type(39){
     transform:rotate(90deg);
-    top: 405px;
+    top: 415px;
     left: 855px;
 }
 .roads .edge:nth-of-type(40){
@@ -822,31 +825,31 @@ ROADS
 }
 .roads .edge:nth-of-type(67){
     transform:rotate(30deg);
-    top: 725px;
+    top: 735px;
     left:290px;
 }
 .roads .edge:nth-of-type(68){
     transform:rotate(-30deg);
-    top: 725px;
+    top: 735px;
     left:370px;
 }
 .roads .edge:nth-of-type(69){
     transform:rotate(30deg);
-    top: 725px;
+    top: 735px;
     left:440px;
 }
 .roads .edge:nth-of-type(70){
     transform:rotate(-30deg);
-    top: 725px;
+    top: 735px;
     left:520px;
 }
 .roads .edge:nth-of-type(71){
     transform:rotate(30deg);
-    top: 725px;
+    top: 735px;
     left:590px;
 }
 .roads .edge:nth-of-type(72){
     transform:rotate(-30deg);
-    top: 725px;
+    top: 735px;
     left:670px;
 }
