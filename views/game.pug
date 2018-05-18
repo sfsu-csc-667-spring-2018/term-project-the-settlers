@@ -84,7 +84,7 @@ body
     .col.col-2
       .row-sm-3
         each player in playerInfo
-          .row.playercards
+          .row.playercards(turn= player.current_turn)
             h3= player.username
             .playerStats
               img(src='/images/cards.png')

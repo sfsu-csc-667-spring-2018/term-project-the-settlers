@@ -95,6 +95,9 @@ body{
     margin-top: 3px;
     padding-top: 5px;
 }
+.playercards[turn]{
+    background-color: yellow;
+}
 .cards{
     background: #fff;
     border-radius:5px;
