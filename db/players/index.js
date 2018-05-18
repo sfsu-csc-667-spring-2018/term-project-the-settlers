@@ -31,7 +31,7 @@ module.exports = (db) => {
     return playerFunctions.findPlayerId(userId)
       .then( ({id}) =>
         db.any('SELECT resource_type, count FROM "player_resources" '
-                  + 'WHERE player_id = $1 AND game_id = $2',[id,gameId])
+                  + 'WHERE player_id = $1 AND game_id = $2 ORDER BY resource_type',[id,gameId])
     )
   }
 
@@ -41,6 +41,7 @@ module.exports = (db) => {
         db.any('SELECT dev_card_type, COUNT(*) FROM dev_cards'
               +' WHERE game_id = $1 AND player_id = $2'
               +' GROUP BY dev_card_type'
+              +' ORDER BY dev_card_type'
               ,[gameId,id])
     )
   }
