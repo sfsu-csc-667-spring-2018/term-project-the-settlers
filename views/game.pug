@@ -114,31 +114,33 @@ body
               img(src='/images/devcards/' + val + '.png')
       .row-sm-3
         script.
+          var timer;
           function attack(result) {
-            $(document).ready(function(){
+            $(document).ready(function() {
               $("#Modal").modal('show');
               $("#Modal").find('.modal-title').text('Dice Roll');
-              $("#Modal").find('.modal-body').text('You rolled ' + result + '!');
-              setTimeout(function(){
+              $("#Modal").find('.modal-body').text('You rolled a ' + result + '!');
+              timer = setTimeout(function() {
                   $("#Modal").modal('hide');
               }, 3000);
             });
           }
           D6.dice(2, attack);
+          function stopModal() {
+            clearTimeout(timer);
+          }
 
         input(type='button', value='End Turn', onclick='D6.roll()')
-        // Modal
         #Modal.modal.fade(role='dialog')
           .modal-dialog
-            // Modal content
             .modal-content
               .modal-header
                 h4.modal-title Game Event
-                button.close(type='button', data-dismiss='modal') ×
+                button.close(type='button', data-dismiss='modal', onclick='stopModal()') ×
               .modal-body
                 p Catan messages goes here...
               .modal-footer
-                button.btn.btn-default(type='button', data-dismiss='modal') Close
+                button.btn.btn-default(type='button', data-dismiss='modal', onclick='stopModal()') Close
 
 
 
