@@ -198,7 +198,7 @@ module.exports = db => {
       ,[0,gameId,true]);
   };
 
-  gameFunction.getDevCardTypeCount(gameId,devCardType) => {
+  gameFunctions.getDevCardTypeCount = (gameId,devCardType) => {
     return db.any('SELECT player_id,COUNT(*) FROM dev_cards'
       +'WHERE game_id = $1 AND UPPER(dev_card_type) = UPPER($2) GROUP BY player_id'
       ,[gameId,devCardType]);

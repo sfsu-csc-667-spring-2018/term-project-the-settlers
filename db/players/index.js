@@ -65,14 +65,23 @@ module.exports = (db) => {
     )
   }
 
-  playerFunctions.buildRoad = (playerId,gameId,vertexStartId,vertexEndId) =>{
-    return db.one('INSERT into "connections" (vertex_start,vertex_end,player_id,game_id)'
-            +' VALUES ($1,$2,$3,$4) RETURNING connection_id', [vertexStartId,vertexEndId,playerId,gameId]);
+  playerFunctions.buildRoad = (playerId,gameId,xStart,yStart,xEnd,yEnd) =>{
+    return db.none('UPDATE game_edges SET player_id = $1, road = $2'
+            +' WHERE game_id = $3 AND x_start = $4 AND y_start = $5 AND x_end = $6 AND y_end = $7'
+            , [playerId,true,xStart,yStart,xEnd,yEnd]);
   }
 
   playerFunctions.getOwnedRoads = (playerId,gameId) => {
-    return db.many('SELECT * FROM "connections" WHERE player_id = $1 AND game_id = $2',
-                  [playerId,gameId]);
+    return db.many('SELECT x_start,y_start,x_end,y_end'
+        +'FROM game_edges WHERE player_id = $1 AND game_id = $2'
+        ,[playerId,gameId]);
+  }
+
+  playerFunctions.getPorts = (playerId,gameId) => {
+    return db.any('SELECT resources_in_required,resources_out_required, UPPER(resource_in_type),UPPER(resource_out_type)'
+            +' FROM game_vertices INNER JOIN ports on ports.id = game_vertices.port_id'
+            +'WHERE game_id = $1 AND player_id = $2'
+            ,[gameId,playerId])
   }
 
   return playerFunctions;
