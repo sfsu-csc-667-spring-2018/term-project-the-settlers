@@ -82,7 +82,7 @@ const insertGameVertices = db => gameId => {
 };
 
 const getPlayerInfo = db => (gameId) => {
-  return db.any('SELECT username, turn_order,card_count,resource_count,current_turn  FROM players'
+  return db.any('SELECT username, turn_order,COALESCE(cards.card_count,0) AS card_count,resource_count,current_turn  FROM players'
           +' INNER JOIN users ON users.id = players.user_id'
           +' LEFT JOIN (SELECT COUNT(*) AS card_count,player_id'
           +'             FROM dev_cards GROUP BY player_id) cards ON cards.player_id = players.id '
