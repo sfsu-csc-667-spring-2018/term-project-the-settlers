@@ -6,7 +6,6 @@ head
   script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
   script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js", integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm", crossorigin="anonymous")
   script(src='/socket.io/socket.io.js')
-  script(src='https://code.jquery.com/jquery-1.11.1.js')
   link(rel='stylesheet', href='/stylesheets/game.css')
   script(type='text/javascript', src='/scripts/d6.js')
   script(type='text/javascript', src='/scripts/board.js')
@@ -108,12 +107,36 @@ body
               img(src='/images/devcards/' + val + '.png')
       .row-sm-3
         script.
+          var timer;
           function attack(result) {
-          alert('You rolled ' + result + '!');
+            $(document).ready(function() {
+              $("#Modal").modal('show');
+              $("#Modal").find('.modal-title').text('Dice Roll');
+              $("#Modal").find('.modal-body').text('You rolled a ' + result + '!');
+              timer = setTimeout(function() {
+                  $("#Modal").modal('hide');
+              }, 3000);
+            });
           }
           D6.dice(2, attack);
+          function stopModal() {
+            clearTimeout(timer);
+          }
 
         input(type='button', value='End Turn', onclick='D6.roll()')
+        #Modal.modal.fade(role='dialog')
+          .modal-dialog
+            .modal-content
+              .modal-header
+                h4.modal-title Game Event
+                button.close(type='button', data-dismiss='modal', onclick='stopModal()') ×
+              .modal-body
+                p Catan messages goes here...
+              .modal-footer
+                button.btn.btn-default(type='button', data-dismiss='modal', onclick='stopModal()') Close
+
+
+
 
   script(src="/scripts/game.js")
   
