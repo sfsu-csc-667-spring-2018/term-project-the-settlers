@@ -116,11 +116,22 @@ body
       .row-sm-3
         script.
           function attack(result) {
-          alert('You rolled ' + result + '!');
+            console.log(result)
           }
           D6.dice(2, attack);
 
-        input(type='button', value='End Turn', onclick='D6.roll()')
+        input(type='button', value='End Turn', data-toggle='modal', data-target='#myModal' onclick='D6.roll()')
+        #myModal.modal.fade(role='dialog')
+          .modal-dialog
+            // Modal content
+            .modal-content
+              .modal-header
+                button.close(type='button', data-dismiss='modal') ×
+                h4.modal-title Modal Header
+              .modal-body
+                p Some text in the modal.
+              .modal-footer
+                button.btn.btn-default(type='button', data-dismiss='modal') Close
 
   script(src="/scripts/game.js")
   
