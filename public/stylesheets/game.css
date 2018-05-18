@@ -144,14 +144,12 @@ h5{
     padding-left: 5px;
     
 }
-.inc {
-   
-
+.count p{
+    display:inline;
+    margin-left:7.5%;
+    margin-right:7.5%;
 }
-.button {
-    
 
-  }
   /**
 
   HOUSES AND CITIES
