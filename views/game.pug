@@ -6,7 +6,6 @@ head
   script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
   script(src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js", integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm", crossorigin="anonymous")
   script(src='/socket.io/socket.io.js')
-  script(src='https://code.jquery.com/jquery-1.11.1.js')
   link(rel='stylesheet', href='/stylesheets/game.css')
   script(type='text/javascript', src='/scripts/d6.js')
   script(type='text/javascript', src='/scripts/board.js')
@@ -117,30 +116,32 @@ body
         script.
           function attack(result) {
             $(document).ready(function(){
-                $("#myBtn").click(function(){
-                    $("#myModal").modal();
-                });
+              $("#myBtn").click(function(){
+                $("#myModal").modal();
+              });
             });
           }
           D6.dice(2, attack);
 
-        input(type='button', value='End Turn', data-toggle='modal', data-target='#myModal' onclick='D6.roll()')
+        input(type='button', value='End Turn', onclick='D6.roll()')
         .container
-        h2 Activate Modal with JavaScript
-        // Trigger the modal with a button
-        button#myBtn.btn.btn-info.btn-lg(type='button') Open Modal
-        // Modal
-        #myModal.modal.fade(role='dialog')
-          .modal-dialog
-            // Modal content
-            .modal-content
-              .modal-header
-                button.close(type='button', data-dismiss='modal') ×
-                h4.modal-title Modal Header
-              .modal-body
-                p Some text in the modal.
-              .modal-footer
-                button.btn.btn-default(type='button', data-dismiss='modal') Close
+          h2 Activate Modal with JavaScript
+          // Trigger the modal with a button
+          button#myBtn.btn.btn-info.btn-lg(type='button') Open Modal
+          // Modal
+          #myModal.modal.fade(role='dialog')
+            .modal-dialog
+              // Modal content
+              .modal-content
+                .modal-header
+                  button.close(type='button', data-dismiss='modal') ×
+                  h4.modal-title Modal Header
+                .modal-body
+                  p Some text in the modal.
+                .modal-footer
+                  button.btn.btn-default(type='button', data-dismiss='modal') Close
+
+
 
 
   script(src="/scripts/game.js")
