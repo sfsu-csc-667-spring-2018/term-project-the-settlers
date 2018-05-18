@@ -4,13 +4,15 @@ document.querySelector("form.chat").addEventListener("submit", event => {
   const message = $("#m").val();
 
   console.log(message);
-  if (message !== undefined) {
+  if (message !== undefined && message !== "") {
     fetch("/chat/lobby", {
       method: "post",
       body: JSON.stringify({ message }),
       credentials: "include",
       headers: new Headers({ "Content-Type": "application/json" })
-    }).catch(error => console.log(error));
+    })
+    .then( () => $('#m').val(""))
+    .catch(error => console.log(error));
   }
 
   event.preventDefault();
