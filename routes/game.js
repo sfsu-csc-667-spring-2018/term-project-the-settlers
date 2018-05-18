@@ -7,16 +7,23 @@ const addPlayer = (userId,gameId) => {
   return db.games.getPlayerCount(gameId)
       .then( (players) => {
         if(players === null){
-          return db.games.addPlayer(gameId,userId,1,'Y');
+          return db.games.addPlayer(gameId,userId,1,'Y')
         }
         const {player_count: count, player_limit} = players;
-        console.log(count + ' ' + player_limit);
         if(count < player_limit){
           return db.games.addPlayer(gameId,userId,parseInt(count)+1)
         }
       })
 };
 
+const addDefaultResources = (userId,gameId) => {
+  return Promise.all([ db.players.addResource(userId, gameId, 'WHEAT', 0),
+                      db.players.addResource(userId, gameId, 'ORE', 0),
+                      db.players.addResource(userId, gameId, 'LUMBER', 0),
+                      db.players.addResource(userId, gameId, 'WOOL', 0),
+                      db.players.addResource(userId, gameId, 'BRICK', 0)
+                    ])
+}
 const createGame = (gameName,playerLimit,userId) => {
   if(gameName !== undefined && playerLimit !== undefined){
     const gameCreation = db.games.createGame(gameName,playerLimit);
@@ -32,9 +39,9 @@ router.post("/", function(req, res, next) {
   const {lobby: gameName, playerLimit} = req.body;
   const{id:userId} = req.user;
   createGame(gameName,playerLimit,userId)
-    .then( ([gameCreation,addPlayer]) => {
-        console.log(gameCreation, addPlayer);
-        res.redirect(`/game/${gameCreation.id}`);
+    .then( ([game,addPlayer]) => {
+        addDefaultResources(userId,game.id)
+        .then( () => res.redirect(`/game/${game.id}`))
     })
     .catch(error => {
       console.log(error);
@@ -45,27 +52,26 @@ router.post("/", function(req, res, next) {
 router.post("/join/:id",(request,response,next) => {
   const {id: userId} = request.user;
   const {id: gameId} = request.params;
-  addPlayer(userId,gameId)
-  .then( () =>
-    response.redirect(`/game/${gameId}`)
-  ).catch( error => console.log(error));
+  const playerAddition = addPlayer(userId,gameId);
+  const addResources = playerAddition
+                      .then( () => addDefaultResources(userId,gameId));
+
+  Promise.all([playerAddition,addResources])
+  .then( () => response.redirect(`/game/${gameId}`))
+  .catch( (error) => console.log(error));
 });
 
 router.get("/:id", (request, response, next) => {
   const { username, id: userId } = request.user;
   const { id: gameId } = request.params;
-  //
-  // Promise.all([db.games.getGame(gameId), db.games.getPlayerInfo(gameId)])
-  // .then(({gameInfo, playerInfo}) =>
-  //   response.render("game", Object.assign({}, gameInfo, playerInfo, { username, userId }))
-  // ).catch(error => console.log(error));
-  db.games
-    .getGame(gameId)
-    .then(result =>{
-      console.log(result);
-      response.render("game", Object.assign({}, result, { username, userId }));
-    })
-    .catch(error => console.log(error));
+
+  Promise.all([db.games.getGame(gameId),
+              db.players.getDevCards(userId,gameId),
+              db.players.getResources(userId,gameId)])
+  .then(([gameInfo, playerDevCard,playerResources]) => {
+    console.log(Object.assign({}, gameInfo, {playerDevCard},{playerResources}));
+    response.render("game", Object.assign({}, gameInfo, {playerDevCard},{playerResources}, { username, userId }));
+  }).catch(error => console.log(error));
 });
 
 router.post("/:id/vertex", (request, response, next) => {

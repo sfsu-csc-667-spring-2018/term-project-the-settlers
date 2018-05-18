@@ -82,7 +82,7 @@ const insertGameVertices = db => gameId => {
 };
 
 const getPlayerInfo = db => (gameId) => {
-  return db.any('SELECT username, turn_order,card_count,resource_count FROM players'
+  return db.any('SELECT username, turn_order,card_count,resource_count  FROM players'
           +' INNER JOIN users ON users.id = players.user_id'
           +' LEFT JOIN (SELECT COUNT(*) AS card_count,player_id'
           +'             FROM dev_cards GROUP BY player_id) cards ON cards.player_id = players.id '
@@ -116,7 +116,7 @@ module.exports = db => {
       db.many("SELECT * FROM game_edges WHERE game_id=$1", [id]),
       getPlayerInfo(db)(id),
 
-    ]).then(([game, tiles, vertices, edges,playerInfo]) => ({
+    ]).then(([game, tiles, vertices, edges, playerInfo]) => ({
       game,
       tiles,
       vertices,
@@ -149,15 +149,7 @@ module.exports = db => {
                 +'WHERE game_id = $1', [gameId]);
   }
 
-  gameFunctions.addVertex = (vertexNumber, gameId, robber = false) => {
-    return db.one(
-      'INSERT INTO "vertices" (vertex_number,game_id,robber)' +
-        " VALUES ($1,$2,$3) RETURNING id",
-      [vertexNumber, gameId, robber]
-    );
-  };
-
-
+  
   gameFunctions.moveRobber = (gameTileOrder, gameId) => {
     return db.tx("moveRobberTransaction", t => {
       t
