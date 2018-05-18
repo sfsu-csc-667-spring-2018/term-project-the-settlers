@@ -149,7 +149,7 @@ module.exports = db => {
                 +'WHERE game_id = $1', [gameId]);
   }
 
-  
+
   gameFunctions.moveRobber = (gameTileOrder, gameId) => {
     return db.tx("moveRobberTransaction", t => {
       t
@@ -169,5 +169,39 @@ module.exports = db => {
     });
   };
 
+  gameFunctions.getEdgeOwner = (xStart,yStart,xEnd,yEnd,gameId) => {
+    return db.one('SELECT user_id FROM game_edges'
+      +' WHERE x_start = $1 AND y_start = $2 AND x_end = $3 AND y_end =$4 AND game_id = $5'
+        ,[xStart,yStart,xEnd,yEnd,gameId]);
+  };
+
+  gameFunctions.getVertexOwner = (x,y,gameId) => {
+    return db.one('SELECT player_id FROM game_vertices WHERE x = $1 AND y = $2 AND game_id = $3'
+                  ,[x,y,gameId]);
+  };
+
+  gameFunctions.getPlayersSettlementsPoints = (gameId) => {
+    return db.any('SELECT player_id,COUNT(*) AS count FROM game_vertices WHERE game_id = $1 AND player_id != $2 '
+                  +' AND UPPER(item) = UPPER($3) GROUP BY player_id'
+                  ,[gameId,0,'SETTLEMENT']);
+  };
+
+  gameFunctions.getPlayersCityPoints = (gameId) => {
+    return db.any('SELECT player_id,(2 * COUNT(*)) AS count FROM game_vertices WHERE game_id = $1 AND player_id != $2 '
+                  +' AND UPPER(item) = UPPER($3) GROUP BY player_id'
+                  ,[gameId,0,'CITY']);
+  };
+
+  gameFunctions.getPlayersRoads = (gameId) => {
+    return db.any('SELECT x_start,y_start,x_end,y_end'
+      +' WHERE player_id != $1 AND game_id = $2 AND road = $3'
+      ,[0,gameId,true]);
+  };
+
+  gameFunction.getDevCardTypeCount(gameId,devCardType) => {
+    return db.any('SELECT player_id,COUNT(*) FROM dev_cards'
+      +'WHERE game_id = $1 AND UPPER(dev_card_type) = UPPER($2) GROUP BY player_id'
+      ,[gameId,devCardType]);
+  }
   return gameFunctions;
 };
