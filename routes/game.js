@@ -79,4 +79,44 @@ router.post("/:id/vertex", (request, response, next) => {
   response.sendStatus(200);
 });
 
+router.post("/:id/road", (request,response,next) => {
+  response.sendStatus(200);
+});
+
+router.post("/:id/building", (request,response,next) => {
+  response.sendStatus(200);
+});
+
+router.post("/:id/dice", (request,response,next) => {
+  response.sendStatus(200);
+});
+
+router.post("/:id/buy-devcard", (request,response,next) => {
+  response.sendStatus(200);
+});
+
+router.post("/:id/play-devcard", (request,response,next) => {
+  response.sendStatus(200);
+});
+
+router.post("/:id/trade-offer", (request,response,next) => {
+  response.sendStatus(200);
+});
+
+router.post("/:id/trade-reply", (request,response,next) => {
+  response.sendStatus(200);
+});
+
+router.post("/:id/trade", (request,response,next) => {
+  response.sendStatus(200);
+});
+
+router.post("/:id/move-robber", (request,response,next) => {
+  response.sendStatus(200);
+});
+
+router.post("/:id/endturn", (request,response,next) => {
+  response.sendStatus(200);
+});
+
 module.exports = router;
