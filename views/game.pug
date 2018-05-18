@@ -30,30 +30,20 @@ body
         #myTabContent.tab-content
           #build.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='build-tab')
             button.btn.btn-primary.buildbtn Build Road
-
-            img(src='/images/resources/wood.png')
-            img(src='/images/resources/brick.png')
+            each val in ["wood", "brick"]
+              img(src='/images/resources/' + val + '.png')
 
             button.btn.btn-primary.buildbtn Build Settlement
-
-            img(src='/images/resources/wood.png')
-            img(src='/images/resources/brick.png')
-            img(src='/images/resources/sheep.png')
-            img(src='/images/resources/wheat.png')
+            each val in ["wood", "brick", "sheep", "wheat"]
+              img(src='/images/resources/' + val + '.png')
 
             button.btn.btn-primary.buildbtn Build City
-
-            img(src='/images/resources/wheat.png')
-            img(src='/images/resources/wheat.png')
-            img(src='/images/resources/ore.png')
-            img(src='/images/resources/ore.png')
-            img(src='/images/resources/ore.png')
+            each val in ["wheat", "wheat", "ore", "ore", "ore"]
+              img(src='/images/resources/' + val + '.png')
 
             button.btn.btn-primary.buildbtn Build Development Card
-
-            img(src='/images/resources/ore.png')
-            img(src='/images/resources/wheat.png')
-            img(src='/images/resources/sheep.png')
+            each val in ["sheep", "wheat",  "ore"]
+              img(src='/images/resources/' + val + '.png')
 
           #trade.tab-pane.fade.show(role='tabpanel', aria-labelledby='trade-tab')
             ul#tradeTab.nav.nav-tabs(role='tablist')
@@ -65,18 +55,18 @@ body
               #interplayer.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='interplayer-tab')
                 p Offering
                 each val in  ["wood", "brick", "sheep", "wheat", "ore"]
-                  input#image(type ='image',src='/images/resources/' + val +'.png')
+                  input#image(class="inc button", type ="image" ,src="/images/resources/" + val +".png", value="0")
                 p Recieving
                 each val in ["wood", "brick", "sheep", "wheat", "ore"]
-                  input#image(type ='image',src='/images/resources/' + val+'.png')
+                  input#image(class="inc button", type ="image" ,src="/images/resources/" + val +".png", value="0")
                 button.btn.btn-primary.buildbtn Trade
               #bank.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='bank-tab')
                 p Offering
                 each val in ["wood", "brick", "sheep", "wheat", "ore"]
-                  input#image(type ='image',src='/images/resources/' + val +'.png')
+                  input#image(class="inc button", type ="image" ,src="/images/resources/" + val +".png", value="0")
                 p Recieving
                 each val in  ["wood", "brick", "sheep", "wheat", "ore"]
-                  input#image(type ='image',src='/images/resources/' + val +'.png')
+                  input#image(class="inc button", type ="image" ,src="/images/resources/" + val +".png", value="0")
                 button.btn.btn-primary.buildbtn Trade
     .col.col-8
       .d-flex.flex-column

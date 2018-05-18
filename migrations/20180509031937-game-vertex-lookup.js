@@ -21,8 +21,8 @@ module.exports = {
         return queryInterface.bulkInsert("game_vertex_lookup", [
           { x: 0, y: 5, port_id: 0 },
           { x: 0, y: 6, port_id: 0 },
-          { x: 1, y: 3, port_id: 0 },
-          { x: 1, y: 4, port_id: 0 },
+          { x: 1, y: 3, port_id: 9 },
+          { x: 1, y: 4, port_id: 9 },
           { x: 1, y: 7, port_id: 0 },
           { x: 1, y: 8, port_id: 8 },
           { x: 2, y: 1, port_id: 1 },
