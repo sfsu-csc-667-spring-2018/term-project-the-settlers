@@ -144,6 +144,14 @@ h5{
     padding-left: 5px;
     
 }
+.inc {
+   
+
+}
+.button {
+    
+
+  }
   /**
 
   HOUSES AND CITIES
@@ -400,9 +408,13 @@ ROADS
     z-index: 10000;
     /* background: white; */
 }
+#display .vertex:hover{
+    background-color:yellow;
+    opacity:100%;
+    cursor: pointer;
+}
 #display .vertex[data-x="0"]{
     left:110px;
-    
 }
 #display .vertex[data-x="1"]{
     left: 188px;
@@ -491,7 +503,11 @@ ROADS
     opacity: 0.4;
 
 }
-
+#display .roads .edge:hover{
+    background-color:yellow;
+    opacity: 100%;
+    cursor: pointer;
+}
 .roads .edge:nth-of-type(1){
     transform:rotate(-30deg);
     top: 95px;

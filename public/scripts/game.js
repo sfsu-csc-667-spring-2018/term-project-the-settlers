@@ -21,6 +21,18 @@ document.querySelector("#display").addEventListener("click", event => {
   }
 });
 
+$(".button").on("click", function() {
+
+  var $button = $(this);
+  var oldValue = $button.parent().find("input").val();
+
+	var newVal = parseFloat(oldValue) + 1;
+	
+
+  $button.parent().find("input").val(newVal);
+
+});
+
 $("form.message").on("submit", event => {
   const message = $("#m").val();
   if (message !== undefined) {
