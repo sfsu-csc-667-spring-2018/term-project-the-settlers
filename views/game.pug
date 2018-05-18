@@ -95,12 +95,15 @@ body
 
       .row-sm-3.cards
         h5 Resources
-        each val in ["wood", "brick", "sheep", "wheat", "ore"]
+        each val in ["brick", "wood",  "ore","wheat", "sheep" ]
             .resource
               img(src='/images/resources/' + val + '.png')
+        .count
+          each resource in playerResources
+            p= resource.count    
 
         h5 Development Cards
-        each val in ["plenty", "monopoly", "knight", "roadbuilding", "victorypoint" ]
+        each val in ["knight",  "monopoly", "plenty",  "roadbuilding", "victorypoint" ]
             .resource
               img(src='/images/devcards/' + val + '.png')
       .row-sm-3
