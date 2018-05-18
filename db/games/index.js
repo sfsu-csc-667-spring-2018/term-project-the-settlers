@@ -82,7 +82,7 @@ const insertGameVertices = db => gameId => {
 };
 
 const getPlayerInfo = db => (gameId) => {
-  return db.any('SELECT username, turn_order,card_count,resource_count FROM players'
+  return db.any('SELECT username, turn_order,card_count,resource_count,current_turn  FROM players'
           +' INNER JOIN users ON users.id = players.user_id'
           +' LEFT JOIN (SELECT COUNT(*) AS card_count,player_id'
           +'             FROM dev_cards GROUP BY player_id) cards ON cards.player_id = players.id '
@@ -116,7 +116,7 @@ module.exports = db => {
       db.many("SELECT * FROM game_edges WHERE game_id=$1", [id]),
       getPlayerInfo(db)(id),
 
-    ]).then(([game, tiles, vertices, edges,playerInfo]) => ({
+    ]).then(([game, tiles, vertices, edges, playerInfo]) => ({
       game,
       tiles,
       vertices,
@@ -149,14 +149,6 @@ module.exports = db => {
                 +'WHERE game_id = $1', [gameId]);
   }
 
-  gameFunctions.addVertex = (vertexNumber, gameId, robber = false) => {
-    return db.one(
-      'INSERT INTO "vertices" (vertex_number,game_id,robber)' +
-        " VALUES ($1,$2,$3) RETURNING id",
-      [vertexNumber, gameId, robber]
-    );
-  };
-
 
   gameFunctions.moveRobber = (gameTileOrder, gameId) => {
     return db.tx("moveRobberTransaction", t => {
@@ -175,6 +167,75 @@ module.exports = db => {
             .catch(error => error)
         );
     });
+  };
+
+  gameFunctions.getEdgeOwner = (xStart,yStart,xEnd,yEnd,gameId) => {
+    return db.one('SELECT user_id FROM game_edges'
+      +' WHERE x_start = $1 AND y_start = $2 AND x_end = $3 AND y_end =$4 AND game_id = $5'
+        ,[xStart,yStart,xEnd,yEnd,gameId]);
+  };
+
+  gameFunctions.getVertexOwner = (x,y,gameId) => {
+    return db.one('SELECT player_id FROM game_vertices WHERE x = $1 AND y = $2 AND game_id = $3'
+                  ,[x,y,gameId]);
+  };
+
+  gameFunctions.getPlayersSettlementsPoints = (gameId) => {
+    return db.any('SELECT player_id,COUNT(*) AS count FROM game_vertices WHERE game_id = $1 AND player_id != $2 '
+                  +' AND UPPER(item) = UPPER($3) GROUP BY player_id'
+                  ,[gameId,0,'SETTLEMENT']);
+  };
+
+  gameFunctions.getPlayersCityPoints = (gameId) => {
+    return db.any('SELECT player_id,(2 * COUNT(*)) AS count FROM game_vertices WHERE game_id = $1 AND player_id != $2 '
+                  +' AND UPPER(item) = UPPER($3) GROUP BY player_id'
+                  ,[gameId,0,'CITY']);
+  };
+
+  gameFunctions.getPlayersRoads = (gameId) => {
+    return db.any('SELECT x_start,y_start,x_end,y_end'
+      +' FROM game_edges WHERE player_id != $1 AND game_id = $2 AND road = $3'
+      ,[0,gameId,true]);
+  };
+
+  gameFunctions.getDevCardTypeCount = (gameId,devCardType) => {
+    return db.any('SELECT player_id,COUNT(*) AS count FROM dev_cards '
+      +'WHERE game_id = $1 AND UPPER(dev_card_type) = UPPER($2) GROUP BY player_id'
+      ,[gameId,devCardType]);
+  }
+
+  gameFunctions.getPlayerLimit = (gameId) => {
+    return db.one('SELECT player_limit FROM games WHERE id = $1', [gameId]);
+  }
+
+  gameFunctions.getCurrentPlayerTurn = (gameId) => {
+    return db.one('SELECT turn_order FROM players WHERE game_id = $1 AND current_turn = $2'
+            ,[gameId,true]);
+  }
+
+  gameFunctions.updatePlayerTurn = (gameId,turnOrder) => {
+    return db.tx("moveRobberTransaction", t => {
+      t
+        .none('UPDATE "players" SET current_turn = $1 ' + "WHERE game_id = $2", [
+          false,
+          gameId
+        ])
+        .then(() =>
+          t
+            .none(
+              'UPDATE "players" SET current_turn = $1 ' +
+                "WHERE turn_order = $2 AND game_id = $3",
+              [true, turnOrder, gameId]
+            )
+            .catch(error => error)
+        );
+    });
+
+  };
+
+  gameFunctions.getItemCount = (gameId) => {
+    return db.one('SELECT count(*) FROM game_vertices WHERE game_id = $1 AND item != $2'
+          ,[gameId,'empty'])
   };
 
   return gameFunctions;
