@@ -116,29 +116,28 @@ body
         script.
           function attack(result) {
             $(document).ready(function(){
-              $("#myModal").modal();
+              $("#myModal").modal('show');
               $("#myModal").find('.modal-body').text('You rolled ' + result + '!');
+              setTimeout(function(){
+                  $("#myModal").modal('hide');
+              }, 3000);
             });
           }
           D6.dice(2, attack);
 
         input(type='button', value='End Turn', onclick='D6.roll()')
-        .container
-          h2 Activate Modal with JavaScript
-          // Trigger the modal with a button
-          button#myBtn.btn.btn-info.btn-lg(type='button') Open Modal
-          // Modal
-          #myModal.modal.fade(role='dialog')
-            .modal-dialog
-              // Modal content
-              .modal-content
-                .modal-header
-                  h4.modal-title Dice Roll
-                  button.close(type='button', data-dismiss='modal') ×
-                .modal-body
-                  p Catan messages goes here...
-                .modal-footer
-                  button.btn.btn-default(type='button', data-dismiss='modal') Close
+        // Modal
+        #myModal.modal.fade(role='dialog')
+          .modal-dialog
+            // Modal content
+            .modal-content
+              .modal-header
+                h4.modal-title Dice Roll
+                button.close(type='button', data-dismiss='modal') ×
+              .modal-body
+                p Catan messages goes here...
+              .modal-footer
+                button.btn.btn-default(type='button', data-dismiss='modal') Close
 
 
 
