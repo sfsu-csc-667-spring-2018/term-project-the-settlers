@@ -117,7 +117,7 @@ body
           function attack(result) {
             $(document).ready(function(){
               $("#myModal").modal();
-              $("#myModal").find('.modal-body').text(result);
+              $("#myModal").find('.modal-body').text('You rolled ' + result + '!');
             });
           }
           D6.dice(2, attack);
@@ -133,10 +133,10 @@ body
               // Modal content
               .modal-content
                 .modal-header
+                  h4.modal-title Dice Roll
                   button.close(type='button', data-dismiss='modal') ×
-                  h4.modal-title Modal Header
                 .modal-body
-                  p Some text in the modal.
+                  p Catan messages goes here...
                 .modal-footer
                   button.btn.btn-default(type='button', data-dismiss='modal') Close
 
