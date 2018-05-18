@@ -116,10 +116,11 @@ body
         script.
           function attack(result) {
             $(document).ready(function(){
-              $("#myModal").modal('show');
-              $("#myModal").find('.modal-body').text('You rolled ' + result + '!');
+              $("#Modal").modal('show');
+              $("#Modal").find('.modal-title').text('Dice Roll');
+              $("#Modal").find('.modal-body').text('You rolled ' + result + '!');
               setTimeout(function(){
-                  $("#myModal").modal('hide');
+                  $("#Modal").modal('hide');
               }, 3000);
             });
           }
@@ -127,12 +128,12 @@ body
 
         input(type='button', value='End Turn', onclick='D6.roll()')
         // Modal
-        #myModal.modal.fade(role='dialog')
+        #Modal.modal.fade(role='dialog')
           .modal-dialog
             // Modal content
             .modal-content
               .modal-header
-                h4.modal-title Dice Roll
+                h4.modal-title Game Event
                 button.close(type='button', data-dismiss='modal') ×
               .modal-body
                 p Catan messages goes here...
