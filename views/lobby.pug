@@ -13,9 +13,9 @@ body
                     h2 Create Game
                     form#createGame(method='POST', action='/game')
                         .form-group
-                            label(for='lobbyName') Lobby Name
+                            label(for='lobbyName') Game Name
                             input#lobbyName.form-control(type='text', placeholder='Lobby', name='lobby',required)
-                            label(for='numplayers') No. of Players
+                            label(for='numplayers') Number of Players
                             select.form-control(name="playerLimit")
                                 option(value=2) 2
                                 option(value=3) 3
