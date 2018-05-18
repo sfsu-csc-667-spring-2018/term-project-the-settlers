@@ -27,7 +27,7 @@ $(".button").on("click", function() {
   var oldValue = $button.parent().find("input").val();
 
 	var newVal = parseFloat(oldValue) + 1;
-	
+
 
   $button.parent().find("input").val(newVal);
 
@@ -35,13 +35,14 @@ $(".button").on("click", function() {
 
 $("form.message").on("submit", event => {
   const message = $("#m").val();
-  if (message !== undefined) {
+  if (message !== undefined && message !== "") {
     fetch(`/chat/game`, {
       method: "post",
       body: JSON.stringify({ message, gameId }),
       credentials: "include",
       headers: new Headers({ "Content-Type": "application/json" })
     })
+    .then( () => $('#m').val(""))
     .catch(error => console.log(error));
   }
   event.preventDefault();
