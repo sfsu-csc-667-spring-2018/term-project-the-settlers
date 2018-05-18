@@ -116,9 +116,8 @@ body
         script.
           function attack(result) {
             $(document).ready(function(){
-              $("#myBtn").click(function(){
-                $("#myModal").modal();
-              });
+              $("#myModal").modal();
+              $("#myModal").find('.modal-body').text(result);
             });
           }
           D6.dice(2, attack);
