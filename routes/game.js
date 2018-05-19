@@ -77,44 +77,64 @@ router.get("/:id", (request, response, next) => {
   }).catch(error => console.log(error));
 });
 
-router.post("/:id/vertex", gameReady, (request, response, next) => {
+router.post("/:id/vertex",
+      gameReady,  isCurrentPlayer, (request, response, next) => {
   console.log(request.body);
   response.sendStatus(200);
 });
 
-router.post("/:id/road", gameReady, (request,response,next) => {
+router.post("/:id/road",
+      gameReady,  isCurrentPlayer, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/building", gameReady, (request,response,next) => {
+router.post("/:id/building",
+      gameReady,  isCurrentPlayer, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/buy-devcard", gameReady, (request,response,next) => {
+router.post("/:id/dice",
+    gameReady,
+    isCurrentPlayer,
+    (request,response,next) => {
+      const{id: gameId} = request.params;
+      gameLogic.dice.rollDice(gameId)
+      .then( () => response.sendStatus(200))
+      .catch( () => response.sendStatus(401));
+})
+
+router.post("/:id/buy-devcard",
+      gameReady,  isCurrentPlayer,(request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/play-devcard", gameReady, (request,response,next) => {
+router.post("/:id/play-devcard",
+      gameReady,  isCurrentPlayer, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/trade-offer", gameReady, (request,response,next) => {
+router.post("/:id/trade-offer",
+      gameReady,  isCurrentPlayer, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/trade-reply", gameReady, (request,response,next) => {
+router.post("/:id/trade-reply",
+      gameReady,  isCurrentPlayer, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/trade", gameReady, (request,response,next) => {
+router.post("/:id/trade",
+      gameReady,  isCurrentPlayer, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/move-robber", gameReady, (request,response,next) => {
+router.post("/:id/move-robber",
+      gameReady, isCurrentPlayer, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/endturn", gameReady, isCurrentPlayer, (request,response,next) => {
+router.post("/:id/endturn",
+      gameReady, isCurrentPlayer, (request,response,next) => {
   const { id: userId} = request.user;
   const {id: gameId} = request.params;
   gameLogic.turn.updatePlayerTurn(gameId)
