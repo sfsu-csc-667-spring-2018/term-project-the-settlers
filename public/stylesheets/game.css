@@ -123,6 +123,8 @@ body{
 }
 #tradeTabContent input{
     padding-left:3px;
+    display:inline;
+    max-width:32px;
 }
 #tradeTabContent p{
     padding-left:5px;
@@ -152,6 +154,8 @@ h5{
     margin-left:7.5%;
     margin-right:7.5%;
 }
+
+
 
   /**
 
@@ -406,7 +410,6 @@ ROADS
     background: white;
     border-radius: 10px;
     opacity: 0.4;
-    z-index: 10000;
     /* background: white; */
 }
 #display .vertex:hover{
