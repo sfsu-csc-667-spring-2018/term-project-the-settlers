@@ -70,7 +70,6 @@ $("form.message").on("submit", event => {
 $("#diceVal").on("submit", event => {
   const message = $("#diceVal").val();
   if (message !== undefined) {
-    console.log(message)
     fetch(`/chat/game`, {
       method: "post",
       body: JSON.stringify({ message, gameId }),
