@@ -79,4 +79,8 @@ router.post("/:id/vertex", (request, response, next) => {
   response.sendStatus(200);
 });
 
+router.post("/:id/edge", (request, response, next) => {
+  console.log(request.body);
+  response.sendStatus(200);
+});
 module.exports = router;

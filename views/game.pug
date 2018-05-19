@@ -79,7 +79,7 @@ body
                 span.vertex(data-x=vertex.x, data-y=vertex.y, data-owner=vertex.user_id, data-item=vertex.item)
               .roads
                 each edge in edges
-                  span.edge(data-x=edge.x_start, data-y=edge.y_start, data-owner=edge.user_id, data-item=edge.road )
+                  span.edge(data-x_start=edge.x_start, data-y_start=edge.y_start, data-x_end=edge.x_end, data-y_end=edge.y_end, data-owner=edge.user_id, data-item=edge.road )
     .col.col-2
       .row-sm-3
         each player in playerInfo
