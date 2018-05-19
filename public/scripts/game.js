@@ -1,12 +1,6 @@
 const gameId = document.querySelector("#gameId").value;
 var socket = io('/game');
 
-fetch(`/game/${gameId}/endturn`,{
-  method: "post",
-  credentials: "include",
-})
-.then( () => console.log("called"));
-
 document.querySelector("#display").addEventListener("click", event => {
   console.log(event.target.classList);
 
