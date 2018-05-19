@@ -1,12 +1,6 @@
 module.exports = db => {
   const turnFunctions = {};
 
-  turnFunctions.isUserTurn = (userId,gameId) => {
-    return db.players.checkPlayerTurn(userId,gameId)
-    .then( () => true)
-    .catch( () => false);
-  };
-
   turnFunctions.updatePlayerTurn = (gameId) => {
     return Promise.all([db.games.getCurrentPlayerTurn(gameId),db.games.getPlayerLimit(gameId)])
     .then(([playerTurn, game]) => {
