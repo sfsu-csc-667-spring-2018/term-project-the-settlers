@@ -6,6 +6,7 @@ module.exports = db => {
   // gameLogic.resourceAllocation = require("./resource_allocation")(db);
   // gameLogic.robber = require("./robber")(db);
   // gameLogic.trade = require("./trade")(db);
+  // gameLogic.dice = require("./dice")(db);
   gameLogic.turn = require("./turn")(db);
 
   return gameLogic;

@@ -90,10 +90,6 @@ router.post("/:id/building", gameReady, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/dice", gameReady, (request,response,next) => {
-  response.sendStatus(200);
-});
-
 router.post("/:id/buy-devcard", gameReady, (request,response,next) => {
   response.sendStatus(200);
 });
