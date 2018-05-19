@@ -89,7 +89,8 @@ const getPlayerInfo = db => (gameId) => {
           +' LEFT JOIN (SELECT SUM(count) AS resource_count, player_id'
           + '           FROM player_resources GROUP BY player_id) resources'
           +' ON resources.player_id = players.id'
-          +' WHERE game_id = $1' , [gameId] );
+          +' WHERE game_id = $1'
+          +' ORDER by turn_order', [gameId] );
 };
 
 const getPlayerResources = db => (gameId) => {

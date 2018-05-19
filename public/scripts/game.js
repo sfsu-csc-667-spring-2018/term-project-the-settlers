@@ -21,28 +21,45 @@ document.querySelector("#display").addEventListener("click", event => {
   }
 });
 
-$(".button").on("click", function() {
-
-  var $button = $(this);
-  var oldValue = $button.parent().find("input").val();
-
-	var newVal = parseFloat(oldValue) + 1;
-	
-
-  $button.parent().find("input").val(newVal);
-
+$(".offerplayer").on("click", function() {
+  const id = $(this).attr("id")
+  $(".offerplayer:not(#"+ id + ")").toggle("dim", function(){
+    $(".offerplayer:not(#"+ id + ")");
+  });
+  $("#" + id).toggleClass("selected");
 });
+
+$(".recieveplayer").on("click", function() {
+  const id = $(this).attr("id")
+  $(".recieveplayer:not(#"+ id + ")").toggle("dim", function(){
+    $(".recieveplayer:not(#"+ id + ")");
+    $("#" + id).toggleClass("selected");
+  });
+});
+// $(".offerbank").on("click", function() {
+//   const id = $(this).attr("id")
+//   $(".offerbank:not(#"+ id + ")").toggle("dim", function(){
+//     $(".offerplayer:not(#"+ id + ")");
+
+//   });
+// });
+// $(".recievebank").on("click", function() {
+//   const id = $(this).attr("id")
+//   $(".offerplayer:not(#"+ id + ")").toggle("dim", function(){
+//     $(".offerplayer:not(#"+ id + ")");
+//   });
+// });
 
 $("form.message").on("submit", event => {
   const message = $("#m").val();
-  
-  if (message !== undefined) {
+  if (message !== undefined && message !== "") {
     fetch(`/chat/game`, {
       method: "post",
       body: JSON.stringify({ message, gameId }),
       credentials: "include",
       headers: new Headers({ "Content-Type": "application/json" })
     })
+    .then( () => $('#m').val(""))
     .catch(error => console.log(error));
   }
   event.preventDefault();
