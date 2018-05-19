@@ -67,8 +67,24 @@ $("form.message").on("submit", event => {
   return false;
 })
 
-socket.on(`chat-game-${gameId}`, (data) =>{
-  if (data) {
+$("#diceVal").on("submit", event => {
+  const message = $("#diceVal").val();
+  if (message !== undefined) {
+    fetch(`/chat/game`, {
+      method: "post",
+      body: JSON.stringify({ message, gameId }),
+      credentials: "include",
+      headers: new Headers({ "Content-Type": "application/json" })
+    })
+    .catch(error => console.log(error));
+  }
+  event.preventDefault();
+  event.stopPropagation();
+  return false;
+});
+
+socket.on(`chat-game-${gameId}`, (data) => {
+  if (data && isNaN(data.msg)) {
       var d = new Date()
       var h = d.getHours()
       var m = d.getMinutes()
@@ -78,5 +94,7 @@ socket.on(`chat-game-${gameId}`, (data) =>{
       m = m < 10 ? '0'+m : m;
       var strTime = h + ':' + m + ' ' + ampm;
       $('#messages').append('<li>' + data.user.bold() + '(' + strTime +  '): ' + data.msg + '</li>');
+  } else if (data && !isNaN(data.msg)) {
+    $('#messages').append('<li>' + data.user.bold() + ' rolled a ' +  data.msg  +' !</li>');
   }
 })
