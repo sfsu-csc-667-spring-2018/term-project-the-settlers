@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const authenticate = require("../authentication/authenticated");
 const db = require("../db");
+const gameLogic = require("../game_logic")(db);
 
 const addPlayer = (userId,gameId) => {
   return db.games.getPlayerCount(gameId)
@@ -116,7 +117,25 @@ router.post("/:id/move-robber", (request,response,next) => {
 });
 
 router.post("/:id/endturn", (request,response,next) => {
-  response.sendStatus(200);
+  const { id: userId} = request.user;
+  const {id: gameId} = request.params;
+  gameLogic.turn.isUserTurn(userId,gameId)
+  .then( userTurn => {
+        console.log('here!');
+        if(userTurn){
+          return gameLogic.turn.updatePlayerTurn(gameId)
+        }
+        return [];
+  })
+  .then( () => {
+    //TODO add socket event
+    response.sendStatus(200);
+  })
+  .catch( (error) => {
+    console.log(error);
+    response.sendStatus(401);
+  })
+
 });
 
 module.exports = router;
