@@ -93,7 +93,7 @@ module.exports = (db) => {
 
   playerFunctions.checkPlayerTurn = (userId,gameId) => {
     return playerFunctions.findPlayerId(userId)
-    .then( ({id}) => db.one('SELECT * FROM players WHERE id = $1', [id]));
+    .then( ({id}) => db.one('SELECT * FROM players WHERE id = $1 AND current_turn = $2', [id,true]));
   }
 
   return playerFunctions;

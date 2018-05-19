@@ -71,7 +71,7 @@ router.get("/:id", (request, response, next) => {
               db.players.getDevCards(userId,gameId),
               db.players.getResources(userId,gameId)])
   .then(([gameInfo, playerDevCard,playerResources]) => {
-    console.log(Object.assign({}, gameInfo, {playerDevCard},{playerResources}));
+    //console.log(Object.assign({}, gameInfo, {playerDevCard},{playerResources}));
     response.render("game", Object.assign({}, gameInfo, {playerDevCard},{playerResources}, { username, userId }));
   }).catch(error => console.log(error));
 });
@@ -117,11 +117,12 @@ router.post("/:id/move-robber", gameReady, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/endturn", gameReady, (request,response,next) => {
+router.post("/:id/endturn", gameReady,gameReady, (request,response,next) => {
   const { id: userId} = request.user;
   const {id: gameId} = request.params;
   gameLogic.turn.isUserTurn(userId,gameId)
   .then( userTurn => {
+        console.log(userTurn);
         if(userTurn){
           return gameLogic.turn.updatePlayerTurn(gameId)
         }
