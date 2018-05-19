@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const authenticate = require("../authentication/authenticated");
 const db = require("../db");
+const gameReady = require("../game_logic/game_ready")(db);
 const gameLogic = require("../game_logic")(db);
 
 const addPlayer = (userId,gameId) => {
@@ -75,53 +76,52 @@ router.get("/:id", (request, response, next) => {
   }).catch(error => console.log(error));
 });
 
-router.post("/:id/vertex", (request, response, next) => {
+router.post("/:id/vertex", gameReady, (request, response, next) => {
   console.log(request.body);
   response.sendStatus(200);
 });
 
-router.post("/:id/road", (request,response,next) => {
+router.post("/:id/road", gameReady, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/building", (request,response,next) => {
+router.post("/:id/building", gameReady, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/dice", (request,response,next) => {
+router.post("/:id/dice", gameReady, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/buy-devcard", (request,response,next) => {
+router.post("/:id/buy-devcard", gameReady, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/play-devcard", (request,response,next) => {
+router.post("/:id/play-devcard", gameReady, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/trade-offer", (request,response,next) => {
+router.post("/:id/trade-offer", gameReady, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/trade-reply", (request,response,next) => {
+router.post("/:id/trade-reply", gameReady, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/trade", (request,response,next) => {
+router.post("/:id/trade", gameReady, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/move-robber", (request,response,next) => {
+router.post("/:id/move-robber", gameReady, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/endturn", (request,response,next) => {
+router.post("/:id/endturn", gameReady, (request,response,next) => {
   const { id: userId} = request.user;
   const {id: gameId} = request.params;
   gameLogic.turn.isUserTurn(userId,gameId)
   .then( userTurn => {
-        console.log('here!');
         if(userTurn){
           return gameLogic.turn.updatePlayerTurn(gameId)
         }
