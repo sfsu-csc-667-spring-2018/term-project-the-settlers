@@ -9,7 +9,7 @@ $(".vertex").on("click", event => {
  // console.log(event.target.classList);
   if (event.target.classList.contains("vertex")) {
     const { x, y , item } = event.target.dataset;
-  //  console.log(x, y);
+    // console.log(x, y);
 
     fetch(`/game/${gameId}/vertex`, {
       method: "post",

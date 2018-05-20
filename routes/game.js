@@ -134,6 +134,7 @@ router.post("/:id/trade-offer",
 
 router.post("/:id/trade-reply",
       gameReady,  isCurrentPlayer, (request,response,next) => {
+
   response.sendStatus(200);
 });
 
