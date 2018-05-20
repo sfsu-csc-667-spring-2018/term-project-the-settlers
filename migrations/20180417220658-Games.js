@@ -16,10 +16,6 @@ module.exports = {
       player_limit:{
           type: Sequelize.INTEGER,
           allowNull: false
-      },
-      dice_roll: {
-        type:Sequelize.INTEGER,
-        defaultValue: 0
       }
     })
   },

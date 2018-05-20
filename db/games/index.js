@@ -69,8 +69,8 @@ const insertDesertTile = db => (gameId,order) =>{
 
 const insertGameEdges = db => result => {
   const game = result[allProbs.length + 1];
-  const query = db.none(`INSERT INTO game_edges (x_start,y_start,x_end,y_end,game_id) SELECT edge.x_start, edge.y_start, edge.x_end,edge.y_end,${game.id}`
-                  +" FROM game_edges_lookup edge");
+  const query = db.none(`INSERT INTO game_edges (x_start,y_start,x_end,y_end,game_id,"order") SELECT edge.x_start, edge.y_start, edge.x_end,edge.y_end,${game.id},edge.order`
+                  +" FROM game_edges_lookup edge ORDER by edge.order");
   return Promise.all([query,game]);
 };
 
@@ -114,7 +114,7 @@ module.exports = db => {
         [id]
       ),
       db.many("SELECT * FROM game_vertices WHERE game_id=$1", [id]),
-      db.many("SELECT * FROM game_edges WHERE game_id=$1", [id]),
+      db.many("SELECT * FROM game_edges WHERE game_id=$1 ORDER BY game_edges.order", [id]),
       getPlayerInfo(db)(id),
 
     ]).then(([game, tiles, vertices, edges, playerInfo]) => ({

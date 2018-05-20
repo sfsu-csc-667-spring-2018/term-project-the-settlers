@@ -37,6 +37,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         defaultValue: 0
+      },
+      order: {
+        type:Sequelize.INTEGER,
+        allowNull:false
       }
     });
   },
