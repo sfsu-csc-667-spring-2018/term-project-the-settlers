@@ -89,13 +89,30 @@ router.post("/:id/vertex",
            item: buildingType} = request.body;
   gameLogic.building.buildStructure(userId, gameId, x, y , buildingType)
   .then( () => response.sendStatus(200))
-  .catch( (error) => console.log(error));
+  .catch( (error) => {
+      console.log(error);
+      response.sendStatus(401);
+  });
 
 });
 
 router.post("/:id/edge",
-      gameReady,  isCurrentPlayer, (request,response,next) => {
-  response.sendStatus(200);
+      //gameReady,
+      //isCurrentPlayer,
+      (request,response,next) => {
+  const{id: userId} = request.user;
+  const{id: gameId} = request.params;
+  console.log(request.body);
+  const {  x_start: xStart,
+           y_start: yStart,
+           x_end: xEnd,
+           y_end: yEnd } = request.body;
+  gameLogic.building.buildRoad(userId,gameId,xStart,yStart,xEnd,yEnd)
+  .then( () => response.sendStatus(200))
+  .catch( (error) => {
+    console.log(error);
+    response.sendStatus(401);
+  });
 });
 
 router.post("/:id/dice",

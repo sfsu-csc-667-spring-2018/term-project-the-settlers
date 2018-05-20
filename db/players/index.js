@@ -29,7 +29,7 @@ module.exports = (db) => {
   playerFunctions.getResources = (userId,gameId) => {
     return playerFunctions.findPlayerId(userId)
       .then( ({id}) =>
-        db.any('SELECT resource_type count FROM "player_resources" '
+        db.any('SELECT resource_type, count FROM "player_resources" '
                   + 'WHERE player_id = $1 AND game_id = $2 ORDER BY resource_type',[id,gameId])
     )
   }
@@ -75,9 +75,9 @@ module.exports = (db) => {
 
   playerFunctions.buildRoad = (userId,gameId,xStart,yStart,xEnd,yEnd) =>{
     return playerFunctions.findPlayerId(userId)
-    .then( ({id}) => db.none('UPDATE game_edges SET player_id = $1, road = $2'
+    .then( ({id}) => db.none('UPDATE game_edges SET user_id = $1, road = $2'
             +' WHERE game_id = $3 AND x_start = $4 AND y_start = $5 AND x_end = $6 AND y_end = $7'
-            , [id,true,xStart,yStart,xEnd,yEnd])
+            , [id,true,gameId,xStart,yStart,xEnd,yEnd])
     )
   }
 

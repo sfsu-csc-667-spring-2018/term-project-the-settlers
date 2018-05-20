@@ -31,23 +31,23 @@ socket.on("chat-lobby", function(data) {
     h = h ? h : 12; // the hour '0' should be '12'
     m = m < 10 ? "0" + m : m;
     var strTime = h + ":" + m + " " + ampm;
-    $("#messages").append(
-      "<li><b>" + data.user + "</b> (" + strTime + "): " + data.msg + "</li>"
+    $('#messages').append(
+      '<li>' + data.user.bold() + ' (' + strTime +  '): ' + data.msg + '</li>'
     );
   }
 });
 
-$("div.joinableGame").each((index,element) =>{
+$("div.joinableGame").each((index,element) => {
     $(element).on("click", () => {
       $("div.joinableGame").removeClass("selected");
       $(element).addClass("selected");
     })
 })
 
-$("form.join").on("submit", event =>{
+$("form.join").on("submit", event => {
   const game_id = $("div.joinableGame.selected").attr("data");
   console.log(game_id);
-  if(game_id !== undefined){
+  if (game_id !== undefined) {
     fetch(`/game/join/${game_id}`,{
           method: "post",
           credentials: "include"

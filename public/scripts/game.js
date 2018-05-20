@@ -1,37 +1,108 @@
 const gameId = document.querySelector("#gameId").value;
 var socket = io('/game');
 
-document.querySelector("#display").addEventListener("click", event => {
-  console.log(event.target.classList);
+$(".vertex[data-item='empty']").toggle();
+$(".edge[data-owner='0']").toggle();
 
+
+action => $(".vertex").on("click", event => {
+ // console.log(event.target.classList);
   if (event.target.classList.contains("vertex")) {
-    const { x, y } = event.target.dataset;
-    console.log(x, y);
+    const { x, y , item } = event.target.dataset;
+  //  console.log(x, y);
 
     fetch(`/game/${gameId}/vertex`, {
       method: "post",
       credentials: "include",
-      body: JSON.stringify({ x, y }),
+      body: JSON.stringify({ x, y, item:action}),
       headers: new Headers({ "Content-Type": "application/json" })
     });
   }
+  if (event.target.classList.contains("tile")) {
+    //console.log("TILE", event.target);
+  }
+});
 
+const edge = road => $(".roads").on("click", event => {
+  if (event.target.classList.contains("edge")) {
+    const { x_start, y_start, x_end, y_end} = event.target.dataset;
+
+    fetch(`/game/${gameId}/edge`, {
+      method: "post",
+      credentials: "include",
+      body: JSON.stringify({ x_start, y_start, x_end, y_end, road }),
+      headers: new Headers({ "Content-Type": "application/json" })
+    });
+  }
   if (event.target.classList.contains("tile")) {
     console.log("TILE", event.target);
   }
 });
 
-$(".button").on("click", function() {
+document.querySelector("#roll").addEventListener("click", event => {
+  if (event.target.classList.contains(" ")) {
+    const {  } = event.target.dataset;
+    
+    fetch(`/game/${gameId}/`, {
+      method: "post",
+      credentials: "include",
+      body: JSON.stringify({  }),
+      headers: new Headers({ "Content-Type": "application/json" })
+    });
+  }
+  if (event.target.classList.contains("tile")) {
+    console.log("TILE", event.target);
+  }
+});
 
-  var $button = $(this);
-  var oldValue = $button.parent().find("input").val();
+$(".buildroad").on("click", function() {
+  const road = "true";
+  $(".edge[data-owner='0']").toggle();
+  edge(road);
+  
+});
+$(".buildsettlement").on("click", function() {
+  const action = "settlement";
+  $(".vertex[data-item='empty']").toggle();
 
-	var newVal = parseFloat(oldValue) + 1;
+  
+});
 
-
-  $button.parent().find("input").val(newVal);
+$(".buildcity").on("click", function() {
+  const action = "city";
+  $(".vertex[data-item='empty']").toggle();
 
 });
+
+$(".offerplayer").on("click", function() {
+  const id = $(this).attr("id")
+  $(".offerplayer:not(#"+ id + ")").toggle("dim", function(){
+    $(".offerplayer:not(#"+ id + ")");
+  });
+  $("#" + id).toggleClass("selected");
+});
+
+$(".recieveplayer").on("click", function() {
+  const id = $(this).attr("id")
+  $(".recieveplayer:not(#"+ id + ")").toggle("dim", function(){
+    $(".recieveplayer:not(#"+ id + ")");
+    $("#" + id).toggleClass("selected");
+  });
+});
+
+// $(".offerbank").on("click", function() {
+//   const id = $(this).attr("id")
+//   $(".offerbank:not(#"+ id + ")").toggle("dim", function(){
+//     $(".offerplayer:not(#"+ id + ")");
+
+//   });
+// });
+// $(".recievebank").on("click", function() {
+//   const id = $(this).attr("id")
+//   $(".offerplayer:not(#"+ id + ")").toggle("dim", function(){
+//     $(".offerplayer:not(#"+ id + ")");
+//   });
+// });
 
 $("form.message").on("submit", event => {
   const message = $("#m").val();
@@ -50,8 +121,30 @@ $("form.message").on("submit", event => {
   return false;
 })
 
-socket.on(`chat-game-${gameId}`, (data) =>{
-  if (data) {
+$("#diceVal").on("submit", event => {
+  const message = $("#diceVal").val();
+  if (message !== undefined) {
+    fetch(`/chat/game`, {
+      method: "post",
+      body: JSON.stringify({ message, gameId }),
+      credentials: "include",
+      headers: new Headers({ "Content-Type": "application/json" })
+    }),
+    fetch(`/game/${gameId}/droll`, {
+      method: "post",
+      body: JSON.stringify({ dice_rolled: message }),
+      credentials: "include",
+      headers: new Headers({ "Content-Type": "application/json" })
+    })
+    .catch(error => console.log(error));
+  }
+  event.preventDefault();
+  event.stopPropagation();
+  return false;
+});
+
+socket.on(`chat-game-${gameId}`, (data) => {
+  if (data && isNaN(data.msg)) {
       var d = new Date()
       var h = d.getHours()
       var m = d.getMinutes()
@@ -61,5 +154,7 @@ socket.on(`chat-game-${gameId}`, (data) =>{
       m = m < 10 ? '0'+m : m;
       var strTime = h + ':' + m + ' ' + ampm;
       $('#messages').append('<li>' + data.user.bold() + '(' + strTime +  '): ' + data.msg + '</li>');
+  } else if (data && !isNaN(data.msg)) {
+    $('#messages').append('<li>' + data.user.bold() + ' rolled a ' +  data.msg  +' !</li>');
   }
 })

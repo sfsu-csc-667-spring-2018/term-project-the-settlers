@@ -13,9 +13,10 @@ body
                     h2 Create Game
                     form#createGame(method='POST', action='/game')
                         .form-group
-                            label(for='lobbyName') Lobby Name
+                            label(for='lobbyName') Game Name
                             input#lobbyName.form-control(type='text', placeholder='Lobby', name='lobby',required)
-                            label(for='numplayers') No. of Players
+                            br
+                            label(for='numplayers') Number of Players
                             select.form-control(name="playerLimit")
                                 option(value=2) 2
                                 option(value=3) 3
@@ -25,6 +26,7 @@ body
 
                 .row-7
                     form.join(method = 'post', action='/game/join')
+                      br
                       h2 Join Game
                       each game in games
                         .joinableGame(data=game.id)
@@ -38,6 +40,7 @@ body
                 .text
                     ul#messages
                     form.chat(action='/chat/lobby', method='post')
+                        br
                         input#m.form-control(autocomplete='off', placeholder='Enter your message')
                         .send
                             input.btn.float-right.btn-info(type='submit', value='send')

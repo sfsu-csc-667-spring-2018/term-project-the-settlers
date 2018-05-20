@@ -25,18 +25,25 @@ module.exports = db => {
 
     buildingFunctions.buildStructure = (userId,gameId,x,y,buildingType) => {
       //TODO finish validation;
-      return db.players.buildBuilding(userId,gameId,x,y,buildingType)
-      .then( () => Promise.all([subtractResource(userId,gameId,'BRICK',1)
-                                ,subtractResource(userId,gameId,'LUMBER',1)
-                                ,subtractResource(userId,gameId,'WOOL',1)
-                                ,subtractResource(userId,gameId,'WHEAT',1)]))
+      if(buildingType.toUpperCase() === "SETTLEMENT"){
+        return db.players.buildBuilding(userId,gameId,x,y,buildingType)
+        .then( () => Promise.all([subtractResource(userId,gameId,'BRICK',1)
+                                  ,subtractResource(userId,gameId,'LUMBER',1)
+                                  ,subtractResource(userId,gameId,'WOOL',1)
+                                  ,subtractResource(userId,gameId,'WHEAT',1)]))
+      }else{
+        return db.players.buildBuilding(userId,gameId,x,y,buildingType)
+        .then( () => Promise.all([subtractResource(userId,gameId,'ORE',3)
+                                  ,subtractResource(userId,gameId,'WHEAT',2)]))
+      }
     };
 
     buildingFunctions.buildRoad = (userId,gameId,xStart,yStart,xEnd,yEnd) => {
       //TODO finish validation
-      return db.player.buildRoad(userId,gameId,xStart,yStart,xEnd,yEnd)
+      return db.players.buildRoad(userId,gameId,xStart,yStart,xEnd,yEnd)
         .then( () => Promise.all([subtractResource(userId,gameId,'BRICK',1)
-                                  ,subtractResource(userId,gameId,'LUMBER',1)]));
-    }
+                                  ,subtractResource(userId,gameId,'LUMBER',1)]))
+    };
+
     return buildingFunctions;
 }
