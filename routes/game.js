@@ -69,7 +69,7 @@ router.get("/:id", (request, response, next) => {
   const { id: gameId } = request.params;
 
   Promise.all([db.games.getGame(gameId),
-              db.players.getDevCards(userId,gameId),
+              db.players.getDevCards(userId ,gameId),
               db.players.getResources(userId,gameId)])
   .then(([gameInfo, playerDevCard,playerResources]) => {
     //console.log(Object.assign({}, gameInfo, {playerDevCard},{playerResources}));
@@ -78,17 +78,22 @@ router.get("/:id", (request, response, next) => {
 });
 
 router.post("/:id/vertex",
-      gameReady,  isCurrentPlayer, (request, response, next) => {
+      //gameReady,
+      //isCurrentPlayer,
+      (request, response, next) => {
+  const{id: userId} = request.user;
+  const{id: gameId} = request.params;
   console.log(request.body);
-  response.sendStatus(200);
+  const {  x: x,
+           y: y,
+           item: buildingType} = request.body;
+  gameLogic.building.buildStructure(userId, gameId, x, y , buildingType)
+  .then( () => response.sendStatus(200))
+  .catch( (error) => console.log(error));
+
 });
 
-router.post("/:id/road",
-      gameReady,  isCurrentPlayer, (request,response,next) => {
-  response.sendStatus(200);
-});
-
-router.post("/:id/building",
+router.post("/:id/edge",
       gameReady,  isCurrentPlayer, (request,response,next) => {
   response.sendStatus(200);
 });
@@ -99,13 +104,22 @@ router.post("/:id/dice",
     (request,response,next) => {
       const{id: gameId} = request.params;
       gameLogic.dice.rollDice(gameId)
-      .then( () => response.sendStatus(200))
+      .then( () => {
+          //TODO add socket event
+          response.sendStatus(200)
+        })
       .catch( () => response.sendStatus(401));
 })
 
 router.post("/:id/buy-devcard",
-      gameReady,  isCurrentPlayer,(request,response,next) => {
-  response.sendStatus(200);
+      //gameReady,
+      //isCurrentPlayer,
+      (request,response,next) => {
+  const{id: gameId} = request.params;
+  const{id: userId} = request.user;
+  gameLogic.devCard.buyDevCard(userId,gameId)
+  .then( () => response.sendStatus(200))
+  .catch( () => response.sendStatus(401));
 });
 
 router.post("/:id/play-devcard",
