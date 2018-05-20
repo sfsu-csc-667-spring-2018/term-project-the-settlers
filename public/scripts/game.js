@@ -1,17 +1,20 @@
 const gameId = document.querySelector("#gameId").value;
 var socket = io('/game');
 
-document.querySelector("#display").addEventListener("click", event => {
- // console.log(event.target.classList);
+$(".vertex[data-item='empty']").toggle();
+$(".edge[data-owner='0']").toggle();
 
+
+action => $(".vertex").on("click", event => {
+ // console.log(event.target.classList);
   if (event.target.classList.contains("vertex")) {
-    const { x, y , item} = event.target.dataset;
+    const { x, y} = event.target.dataset;
   //  console.log(x, y);
 
     fetch(`/game/${gameId}/vertex`, {
       method: "post",
       credentials: "include",
-      body: JSON.stringify({ x, y, item}),
+      body: JSON.stringify({ x, y, item:action}),
       headers: new Headers({ "Content-Type": "application/json" })
     });
   }
@@ -20,14 +23,14 @@ document.querySelector("#display").addEventListener("click", event => {
   }
 });
 
-document.querySelector(".roads").addEventListener("click", event => {
+const edge = road => $(".roads").on("click", event => {
   if (event.target.classList.contains("edge")) {
-    const { x_start, y_start, x_end, y_end } = event.target.dataset;
+    const { x_start, y_start, x_end, y_end} = event.target.dataset;
 
     fetch(`/game/${gameId}/edge`, {
       method: "post",
       credentials: "include",
-      body: JSON.stringify({ x_start, y_start, x_end, y_end }),
+      body: JSON.stringify({ x_start, y_start, x_end, y_end, road }),
       headers: new Headers({ "Content-Type": "application/json" })
     });
   }
@@ -53,6 +56,26 @@ document.querySelector("#roll").addEventListener("click", event => {
   }
 });
 
+$(".buildroad").on("click", function() {
+  const road = "true";
+  $(".edge[data-owner='0']").toggle();
+  edge(road);
+  
+});
+$(".buildsettlement").on("click", function() {
+  const action = "settlement";
+  $(".vertex[data-item='empty']").toggle();
+
+  
+});
+
+$(".buildcity").on("click", function() {
+  const action = "city";
+  $(".vertex[data-item='empty']").toggle();
+
+});
+
+
 $(".offerplayer").on("click", function() {
   const id = $(this).attr("id")
   $(".offerplayer:not(#"+ id + ")").toggle("dim", function(){
@@ -68,6 +91,7 @@ $(".recieveplayer").on("click", function() {
     $("#" + id).toggleClass("selected");
   });
 });
+
 // $(".offerbank").on("click", function() {
 //   const id = $(this).attr("id")
 //   $(".offerbank:not(#"+ id + ")").toggle("dim", function(){
