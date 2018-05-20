@@ -76,16 +76,21 @@ router.get("/:id", (request, response, next) => {
 
 router.post("/:id/vertex", (request, response, next) => {
   console.log(request.body);
+  // console.log('X: ' + request.body.x)
+  // { x: '8', y: '9', item: 'empty' }
+  
   response.sendStatus(200);
 });
 
 router.post("/:id/edge", (request, response, next) => {
   console.log(request.body);
+  // { x_start: '6', y_start: '9', x_end: '7', y_end: '8' }
   response.sendStatus(200);
 });
 
 router.post("/:id/droll", (request, response, next) => {
   console.log(request.body);
+  // { dice_rolled: '7' }
   response.sendStatus(200);
 });
 module.exports = router;
