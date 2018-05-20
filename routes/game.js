@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const authenticate = require("../authentication/authenticated");
 const db = require("../db");
+const gameReady = require("../game_logic/game_ready")(db);
+const isCurrentPlayer = require("../game_logic/current_player")(db);
+const gameLogic = require("../game_logic")(db);
 
 const addPlayer = (userId,gameId) => {
   return db.games.getPlayerCount(gameId)
@@ -66,26 +69,98 @@ router.get("/:id", (request, response, next) => {
   const { id: gameId } = request.params;
 
   Promise.all([db.games.getGame(gameId),
-              db.players.getDevCards(userId,gameId),
+              db.players.getDevCards(userId ,gameId),
               db.players.getResources(userId,gameId)])
   .then(([gameInfo, playerDevCard,playerResources]) => {
-    console.log(Object.assign({}, gameInfo, {playerDevCard},{playerResources}));
+    //console.log(Object.assign({}, gameInfo, {playerDevCard},{playerResources}));
     response.render("game", Object.assign({}, gameInfo, {playerDevCard},{playerResources}, { username, userId }));
   }).catch(error => console.log(error));
 });
 
-router.post("/:id/vertex", (request, response, next) => {
+router.post("/:id/vertex",
+      //gameReady,
+      //isCurrentPlayer,
+      (request, response, next) => {
+  const{id: userId} = request.user;
+  const{id: gameId} = request.params;
   console.log(request.body);
+  const {  x: x,
+           y: y,
+           item: buildingType} = request.body;
+  gameLogic.building.buildStructure(userId, gameId, x, y , buildingType)
+  .then( () => response.sendStatus(200))
+  .catch( (error) => console.log(error));
+
+});
+
+router.post("/:id/edge",
+      gameReady,  isCurrentPlayer, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/edge", (request, response, next) => {
-  console.log(request.body);
+router.post("/:id/dice",
+    gameReady,
+    isCurrentPlayer,
+    (request,response,next) => {
+      const{id: gameId} = request.params;
+      gameLogic.dice.rollDice(gameId)
+      .then( () => {
+          //TODO add socket event
+          response.sendStatus(200)
+        })
+      .catch( () => response.sendStatus(401));
+})
+
+router.post("/:id/buy-devcard",
+      //gameReady,
+      //isCurrentPlayer,
+      (request,response,next) => {
+  const{id: gameId} = request.params;
+  const{id: userId} = request.user;
+  gameLogic.devCard.buyDevCard(userId,gameId)
+  .then( () => response.sendStatus(200))
+  .catch( () => response.sendStatus(401));
+});
+
+router.post("/:id/play-devcard",
+      gameReady,  isCurrentPlayer, (request,response,next) => {
   response.sendStatus(200);
 });
 
-router.post("/:id/droll", (request, response, next) => {
-  console.log(request.body);
+router.post("/:id/trade-offer",
+      gameReady,  isCurrentPlayer, (request,response,next) => {
   response.sendStatus(200);
 });
+
+router.post("/:id/trade-reply",
+      gameReady,  isCurrentPlayer, (request,response,next) => {
+  response.sendStatus(200);
+});
+
+router.post("/:id/trade",
+      gameReady,  isCurrentPlayer, (request,response,next) => {
+  response.sendStatus(200);
+});
+
+router.post("/:id/move-robber",
+      gameReady, isCurrentPlayer, (request,response,next) => {
+  response.sendStatus(200);
+});
+
+router.post("/:id/endturn",
+      gameReady, isCurrentPlayer, (request,response,next) => {
+  const { id: userId} = request.user;
+  const {id: gameId} = request.params;
+  gameLogic.turn.updatePlayerTurn(gameId)
+  .then( () => {
+    //TODO add socket event
+    response.sendStatus(200);
+  })
+  .catch( (error) => {
+    console.log(error);
+    response.sendStatus(401);
+  })
+
+});
+
 module.exports = router;
