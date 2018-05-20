@@ -8,7 +8,7 @@ $(".edge[data-owner='0']").toggle();
 action => $(".vertex").on("click", event => {
  // console.log(event.target.classList);
   if (event.target.classList.contains("vertex")) {
-    const { x, y} = event.target.dataset;
+    const { x, y , item } = event.target.dataset;
   //  console.log(x, y);
 
     fetch(`/game/${gameId}/vertex`, {
@@ -39,7 +39,6 @@ const edge = road => $(".roads").on("click", event => {
   }
 });
 
-//MAKE THIS WORK JAMES :3
 document.querySelector("#roll").addEventListener("click", event => {
   if (event.target.classList.contains(" ")) {
     const {  } = event.target.dataset;
@@ -74,7 +73,6 @@ $(".buildcity").on("click", function() {
   $(".vertex[data-item='empty']").toggle();
 
 });
-
 
 $(".offerplayer").on("click", function() {
   const id = $(this).attr("id")
@@ -129,6 +127,12 @@ $("#diceVal").on("submit", event => {
     fetch(`/chat/game`, {
       method: "post",
       body: JSON.stringify({ message, gameId }),
+      credentials: "include",
+      headers: new Headers({ "Content-Type": "application/json" })
+    }),
+    fetch(`/game/${gameId}/droll`, {
+      method: "post",
+      body: JSON.stringify({ dice_rolled: message }),
       credentials: "include",
       headers: new Headers({ "Content-Type": "application/json" })
     })
