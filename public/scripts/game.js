@@ -5,7 +5,7 @@ document.querySelector("#display").addEventListener("click", event => {
  // console.log(event.target.classList);
 
   if (event.target.classList.contains("vertex")) {
-    const { x, y , item} = event.target.dataset;
+    const { x, y , item } = event.target.dataset;
   //  console.log(x, y);
 
     fetch(`/game/${gameId}/vertex`, {
@@ -28,23 +28,6 @@ document.querySelector(".roads").addEventListener("click", event => {
       method: "post",
       credentials: "include",
       body: JSON.stringify({ x_start, y_start, x_end, y_end }),
-      headers: new Headers({ "Content-Type": "application/json" })
-    });
-  }
-  if (event.target.classList.contains("tile")) {
-    console.log("TILE", event.target);
-  }
-});
-
-//MAKE THIS WORK JAMES :3
-document.querySelector("#roll").addEventListener("click", event => {
-  if (event.target.classList.contains(" ")) {
-    const {  } = event.target.dataset;
-    
-    fetch(`/game/${gameId}/`, {
-      method: "post",
-      credentials: "include",
-      body: JSON.stringify({  }),
       headers: new Headers({ "Content-Type": "application/json" })
     });
   }
@@ -98,6 +81,22 @@ $("form.message").on("submit", event => {
   event.stopPropagation();
   return false;
 })
+
+$("#diceVal").on("submit", event => {
+  const dice_rolled = $("#diceVal").val();
+  if (dice_rolled !== undefined) {
+    fetch(`/game/${gameId}/droll`, {
+      method: "post",
+      body: JSON.stringify({ dice_rolled }),
+      credentials: "include",
+      headers: new Headers({ "Content-Type": "application/json" })
+    })
+    .catch(error => console.log(error));
+  }
+  event.preventDefault();
+  event.stopPropagation();
+  return false;
+});
 
 $("#diceVal").on("submit", event => {
   const message = $("#diceVal").val();
