@@ -1,15 +1,15 @@
 const gameId = document.querySelector("#gameId").value;
 var socket = io('/game');
-
+let action = "";
 $(".vertex[data-item='empty']").toggle();
 $(".edge[data-owner='0']").toggle();
 
 
-action => $(".vertex").on("click", event => {
+$(".vertex").on("click", event => {
  // console.log(event.target.classList);
   if (event.target.classList.contains("vertex")) {
     const { x, y , item } = event.target.dataset;
-  //  console.log(x, y);
+    // console.log(x, y);
 
     fetch(`/game/${gameId}/vertex`, {
       method: "post",
@@ -17,20 +17,22 @@ action => $(".vertex").on("click", event => {
       body: JSON.stringify({ x, y, item:action}),
       headers: new Headers({ "Content-Type": "application/json" })
     });
+    location.reload();
+
   }
   if (event.target.classList.contains("tile")) {
     //console.log("TILE", event.target);
   }
 });
 
-const edge = road => $(".roads").on("click", event => {
+$(".roads").on("click", event => {
   if (event.target.classList.contains("edge")) {
     const { x_start, y_start, x_end, y_end} = event.target.dataset;
 
     fetch(`/game/${gameId}/edge`, {
       method: "post",
       credentials: "include",
-      body: JSON.stringify({ x_start, y_start, x_end, y_end, road }),
+      body: JSON.stringify({ x_start, y_start, x_end, y_end }),
       headers: new Headers({ "Content-Type": "application/json" })
     });
   }
@@ -58,20 +60,16 @@ document.querySelector("#roll").addEventListener("click", event => {
 $(".buildroad").on("click", function() {
   const road = "true";
   $(".edge[data-owner='0']").toggle();
-  edge(road);
   
 });
 $(".buildsettlement").on("click", function() {
-  const action = "settlement";
+  action = "settlement";
   $(".vertex[data-item='empty']").toggle();
-
-  
 });
 
 $(".buildcity").on("click", function() {
-  const action = "city";
+  action = "city";
   $(".vertex[data-item='empty']").toggle();
-
 });
 
 $(".offerplayer").on("click", function() {
