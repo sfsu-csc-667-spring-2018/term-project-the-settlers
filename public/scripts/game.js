@@ -83,27 +83,17 @@ $("form.message").on("submit", event => {
 })
 
 $("#diceVal").on("submit", event => {
-  const dice_rolled = $("#diceVal").val();
-  if (dice_rolled !== undefined) {
-    fetch(`/game/${gameId}/droll`, {
-      method: "post",
-      body: JSON.stringify({ dice_rolled }),
-      credentials: "include",
-      headers: new Headers({ "Content-Type": "application/json" })
-    })
-    .catch(error => console.log(error));
-  }
-  event.preventDefault();
-  event.stopPropagation();
-  return false;
-});
-
-$("#diceVal").on("submit", event => {
   const message = $("#diceVal").val();
   if (message !== undefined) {
     fetch(`/chat/game`, {
       method: "post",
       body: JSON.stringify({ message, gameId }),
+      credentials: "include",
+      headers: new Headers({ "Content-Type": "application/json" })
+    }),
+    fetch(`/game/${gameId}/droll`, {
+      method: "post",
+      body: JSON.stringify({ dice_rolled: message }),
       credentials: "include",
       headers: new Headers({ "Content-Type": "application/json" })
     })
