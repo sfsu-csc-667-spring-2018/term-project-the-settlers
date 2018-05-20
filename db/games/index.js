@@ -30,7 +30,7 @@ const intializeGame = (db,gameName,playerLimit) =>
   ]);
 
 const insertGameTiles = db => ([game, tiles]) => {
-  const desertPlacementOrder = Math.floor(Math.random() * 20);
+  const desertPlacementOrder = Math.floor(Math.random() * 19);
   const queries = shuffle(allProbs).map((probability, index) => {
     let order = index >= desertPlacementOrder ? index+1 : index;
     return db.none(
