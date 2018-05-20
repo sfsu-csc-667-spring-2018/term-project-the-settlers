@@ -54,18 +54,18 @@ body
               #interplayer.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='interplayer-tab')
                 p Offering
                 each val in  ["wood", "brick", "sheep", "wheat", "ore"]
-                  input#image(class="inc button", type ="image" ,src="/images/resources/" + val +".png", value="0")
+                  input(id=val, class="offerplayer", type ="image" ,src="/images/resources/" + val +".png")
                 p Recieving
                 each val in ["wood", "brick", "sheep", "wheat", "ore"]
-                  input#image(class="inc button", type ="image" ,src="/images/resources/" + val +".png", value="0")
+                  input(id=val, class="recieveplayer", type ="image" ,src="/images/resources/" + val +".png")
                 button.btn.btn-primary.buildbtn Trade
               #bank.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='bank-tab')
                 p Offering
                 each val in ["wood", "brick", "sheep", "wheat", "ore"]
-                  input#image(class="inc button", type ="image" ,src="/images/resources/" + val +".png", value="0")
+                  input(id=val, class="offerbank", type ="image" ,src="/images/resources/" + val +".png")
                 p Recieving
                 each val in  ["wood", "brick", "sheep", "wheat", "ore"]
-                  input#image(class="inc button", type ="image" ,src="/images/resources/" + val +".png", value="0")
+                  input(id=val, class="recievebank", type ="image" ,src="/images/resources/" + val +".png")
                 button.btn.btn-primary.buildbtn Trade
     .col.col-8
       .d-flex.flex-column
@@ -76,10 +76,10 @@ body
               each tile, index in tiles
                 span.tile(data-prob=tile.die_number, data-type=tile.resource_type)         
               each vertex in vertices 
-                span.vertex(data-x=vertex.x, data-y=vertex.y, data-owner=vertex.user_id, data-item=vertex.item)
+                span.vertex(data-x=vertex.x, data-y=vertex.y, data-owner="0" data-item="empty")
               .roads
                 each edge in edges
-                  span.edge(data-x=edge.x_start, data-y=edge.y_start, data-owner=edge.user_id, data-item=edge.road )
+                  span.edge(data-x_start=edge.x_start, data-y_start=edge.y_start, data-x_end=edge.x_end, data-y_end=edge.y_end, data-owner=edge.user_id, data-item=edge.road )
     .col.col-2
       .row-sm-3
         each player in playerInfo
