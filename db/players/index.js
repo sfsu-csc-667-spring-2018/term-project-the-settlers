@@ -24,17 +24,24 @@ module.exports = (db) => {
         db.one('INSERT INTO "player_resources" (player_id,game_id,resource_type,count) '
                   + 'VALUES ($1,$2,$3,$4) RETURNING id', [id,gameId,type,count])
       )
-
   }
 
   playerFunctions.getResources = (userId,gameId) => {
     return playerFunctions.findPlayerId(userId)
       .then( ({id}) =>
-        db.any('SELECT resource_type, count FROM "player_resources" '
+        db.any('SELECT resource_type count FROM "player_resources" '
                   + 'WHERE player_id = $1 AND game_id = $2 ORDER BY resource_type',[id,gameId])
     )
   }
 
+  playerFunctions.getResourceCount = (userId,gameId,type) => {
+    return playerFunctions.findPlayerId(userId)
+      .then( ({id}) =>
+        db.one('SELECT count FROM "player_resources" '
+                  + 'WHERE player_id = $1 AND game_id = $2 AND UPPER(resource_type) = UPPER($3)'
+                  +' ORDER BY resource_type',[id,gameId,type])
+    )
+  }
   playerFunctions.getDevCards = (userId,gameId) => {
     return playerFunctions.findPlayerId(userId)
       .then( ({id}) =>
@@ -57,7 +64,7 @@ module.exports = (db) => {
     )
   }
 
-  playerFunctions.buildBuilding = (playerId,gameId,x_cord,y_cord,buildingType) => {
+  playerFunctions.buildBuilding = (userId,gameId,x_cord,y_cord,buildingType) => {
     return playerFunctions.findPlayerId(userId)
     .then( ({id}) =>
       db.none('UPDATE game_vertices SET user_id = $1, item = $2'
@@ -70,7 +77,7 @@ module.exports = (db) => {
     return playerFunctions.findPlayerId(userId)
     .then( ({id}) => db.none('UPDATE game_edges SET player_id = $1, road = $2'
             +' WHERE game_id = $3 AND x_start = $4 AND y_start = $5 AND x_end = $6 AND y_end = $7'
-            , [playerId,true,xStart,yStart,xEnd,yEnd])
+            , [id,true,xStart,yStart,xEnd,yEnd])
     )
   }
 
@@ -93,7 +100,7 @@ module.exports = (db) => {
 
   playerFunctions.checkPlayerTurn = (userId,gameId) => {
     return playerFunctions.findPlayerId(userId)
-    .then( ({id}) => db.one('SELECT * FROM players WHERE id = $1', [id]));
+    .then( ({id}) => db.one('SELECT * FROM players WHERE id = $1 AND current_turn = $2', [id,true]));
   }
 
   return playerFunctions;
