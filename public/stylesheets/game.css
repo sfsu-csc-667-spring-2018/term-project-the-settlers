@@ -123,6 +123,8 @@ body{
 }
 #tradeTabContent input{
     padding-left:3px;
+    display:inline;
+    max-width:32px;
 }
 #tradeTabContent p{
     padding-left:5px;
@@ -152,6 +154,8 @@ h5{
     margin-left:7.5%;
     margin-right:7.5%;
 }
+
+
 
   /**
 
@@ -402,24 +406,72 @@ ROADS
     position: absolute;
     width: 32px;
     height:32px;
-    background-repeat: no-repeat;
-    background: white;
-    border-radius: 10px;
-    opacity: 0.4;
-    z-index: 10000;
-    /* background: white; */
 }
-#display .vertex:hover{
+#display .vertex[data-owner="0"][data-item="empty"]{
+    background: white;
+    border-radius: 15px;
+    opacity: 0.4;
+}
+#display .vertex[data-owner="0"][data-item="empty"]:hover{
     background-color:yellow;
     opacity:100%;
     cursor: pointer;
 }
+
+#display .vertex[data-owner="1"][data-item="settlement"]{
+    background-image: url('/images/buildings/blue-settlement.png');
+    background-repeat:no-repeat;
+    opacity:100%;
+
+}
+#display .vertex[data-owner="2"][data-item="settlement"]{
+    background-image: url('/images/buildings/red-settlement.png');
+    background-repeat:no-repeat;
+    opacity:100%;
+
+}
+#display .vertex[data-owner="3"][data-item="settlement"]{
+    background-image: url('/images/buildings/orange-settlement.png');
+    background-repeat:no-repeat;
+    opacity:100%;
+
+}
+#display .vertex[data-owner="4"][data-item="settlement"]{
+    background-image: url('/images/buildings/grey-settlement.png');
+    background-repeat:no-repeat;
+    opacity:100%;
+
+}
+#display .vertex[data-owner="1"][data-item="city"]{
+    background-image: url('/images/buildings/blue-city.png');
+    background-repeat:no-repeat;
+    opacity:100%;
+
+}
+#display .vertex[data-owner="2"][data-item="city"]{
+    background-image: url('/images/buildings/red-settlement.png');
+    background-repeat:no-repeat;
+    opacity:100%;
+
+}
+#display .vertex[data-owner="3"][data-item="city"]{
+    background-image: url('/images/buildings/orange-city.png');
+    background-repeat:no-repeat;
+    opacity:100%;
+
+}
+#display .vertex[data-owner="4"][data-item="city"]{
+    background-image: url('/images/buildings/grey-city.png');
+    background-repeat:no-repeat;
+    opacity:100%;
+
+}
+
 #display .vertex[data-x="0"]{
     left:110px;
 }
 #display .vertex[data-x="1"]{
     left: 188px;
-    z-index: 10000;
 }
 #display .vertex[data-x="2"]{
     left:260px;
@@ -450,51 +502,48 @@ ROADS
 }
 #display .vertex[data-y="0"]{
     top: 60px;
-    z-index: 10000;
 }
 #display .vertex[data-y="1"]{
     top: 100px;
-    z-index: 10000;
+
 }
 #display .vertex[data-y="2"]{
     top: 200px;
-    z-index: 10000;
+
 }
 #display .vertex[data-y="3"]{
     top: 225px;
-    z-index: 10000;
+
 }
 #display .vertex[data-y="4"]{
     top: 325px;
-    z-index: 10000;
+
 }
 #display .vertex[data-y="5"]{
     top: 350px;
-    z-index: 10000;
+
 }
 #display .vertex[data-y="6"]{
     top: 450px;
-    z-index: 10000;
+
 }
 #display .vertex[data-y="7"]{
     top: 475px;
-    z-index: 10000;
 }
 #display .vertex[data-y="8"]{
     top: 575px;
-    z-index: 10000;
+
 }
 #display .vertex[data-y="9"]{
     top: 600px;
-    z-index: 10000;
+
 }
 #display .vertex[data-y="10"]{
     top: 700px;
-    z-index: 10000;
+  
 }
 #display .vertex[data-y="11"]{
     top: 735px;
-    z-index: 10000;
 }
 #display .edge{
     position:absolute;

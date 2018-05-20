@@ -8,14 +8,14 @@ router.post("/:namespace", function(req, res, next) {
   const { namespace } = req.params;
   const { message, gameId } = req.body;
   const io = req.app.get("io");
-  if(gameId === undefined){
+  if (gameId === undefined) {
     io
       .of(namespace)
       .emit(`chat-${namespace}`, { msg: message, user: req.user.username });
-  }else{
+  } else {
     io
       .of(namespace)
-      .emit(`chat-${namespace}-${gameId}`, {msg: message, user: req.user.username});
+      .emit(`chat-${namespace}-${gameId}`, { msg: message, user: req.user.username });
   }
 
   res.sendStatus(200);
