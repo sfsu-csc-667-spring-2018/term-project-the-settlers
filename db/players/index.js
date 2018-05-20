@@ -64,6 +64,12 @@ module.exports = (db) => {
     )
   }
 
+  playerFunctions.updateAllResources = (queries) => {
+    return db.task( t => {
+      return t.batch(queries);
+    });
+  };
+
   playerFunctions.buildBuilding = (userId,gameId,x_cord,y_cord,buildingType) => {
     return playerFunctions.findPlayerId(userId)
     .then( ({id}) =>
@@ -101,6 +107,15 @@ module.exports = (db) => {
   playerFunctions.checkPlayerTurn = (userId,gameId) => {
     return playerFunctions.findPlayerId(userId)
     .then( ({id}) => db.one('SELECT * FROM players WHERE id = $1 AND current_turn = $2', [id,true]));
+  }
+
+  playerFunctions.getUpdateableVertices = (gameId,diceRoll) => {
+    return db.any('SELECT resource_type,user_id,item FROM game_vertices '
+     + 'INNER JOIN  tile_vertex_lookup ON x=affected_x_pos AND y= affected_y_pos '
+     + 'INNER JOIN game_tiles ON game_tile_order = game_tiles.order '
+     + 'INNER JOIN tiles ON tiles.id = game_tiles.tile_id '
+     + 'WHERE die_number = $1 AND item != $2 AND user_id != $3 AND game_vertices.game_id = $4'
+    , [diceRoll,'empty', 0, gameId])
   }
 
   return playerFunctions;
