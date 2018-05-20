@@ -29,7 +29,7 @@ module.exports = (db) => {
   playerFunctions.getResources = (userId,gameId) => {
     return playerFunctions.findPlayerId(userId)
       .then( ({id}) =>
-        db.any('SELECT resource_type count FROM "player_resources" '
+        db.any('SELECT resource_type, count FROM "player_resources" '
                   + 'WHERE player_id = $1 AND game_id = $2 ORDER BY resource_type',[id,gameId])
     )
   }

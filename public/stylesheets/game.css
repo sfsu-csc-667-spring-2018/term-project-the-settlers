@@ -549,14 +549,28 @@ ROADS
     position:absolute;
     width: 40px;
     height:10px;
-    background:white;
-    opacity: 0.4;
 
 }
 #display .roads .edge:hover{
     background-color:yellow;
     opacity: 100%;
     cursor: pointer;
+}
+#display .roads .edge[data-owner='0']{
+    background-color: white;
+    opacity: 0.4;
+}
+#display .roads .edge[data-owner='1']{
+    background-color: #006df0;
+}
+#display .roads .edge[data-owner='2']{
+    background-color: #d80027;
+}
+#display .roads .edge[data-owner='3']{
+    background-color: #fca400;
+}
+#display .roads .edge[data-owner='4']{
+    background-color: #d6d6d6;
 }
 .roads .edge:nth-of-type(1){
     transform:rotate(-30deg);

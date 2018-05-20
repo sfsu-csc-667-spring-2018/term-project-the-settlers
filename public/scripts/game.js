@@ -17,6 +17,8 @@ $(".vertex").on("click", event => {
       body: JSON.stringify({ x, y, item:action}),
       headers: new Headers({ "Content-Type": "application/json" })
     });
+    location.reload();
+
   }
   if (event.target.classList.contains("tile")) {
     //console.log("TILE", event.target);
