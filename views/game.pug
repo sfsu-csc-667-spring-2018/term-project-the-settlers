@@ -28,19 +28,19 @@ body
             a#trade-tab.nav-link(data-toggle='tab', href='#trade', role='tab', aria-controls='trade', aria-selected='false') Trade
         #myTabContent.tab-content
           #build.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='build-tab')
-            button.btn.btn-primary.buildbtn Build Road
+            button.buildroad.btn.btn-primary.buildbtn Build Road
             each val in ["wood", "brick"]
               img(src='/images/resources/' + val + '.png')
 
-            button.btn.btn-primary.buildbtn Build Settlement
+            button.buildsettlement.btn.btn-primary.buildbtn Build Settlement
             each val in ["wood", "brick", "sheep", "wheat"]
               img(src='/images/resources/' + val + '.png')
 
-            button.btn.btn-primary.buildbtn Build City
+            button.buildcity.btn.btn-primary.buildbtn Build City
             each val in ["wheat", "wheat", "ore", "ore", "ore"]
               img(src='/images/resources/' + val + '.png')
 
-            button.btn.btn-primary.buildbtn Build Development Card
+            button.buildcard.btn.btn-primary.buildbtn Build Development Card
             each val in ["sheep", "wheat",  "ore"]
               img(src='/images/resources/' + val + '.png')
 
