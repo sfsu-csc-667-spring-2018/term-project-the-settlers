@@ -89,7 +89,11 @@ router.post("/:id/vertex",
            item: buildingType} = request.body;
   gameLogic.building.buildStructure(userId, gameId, x, y , buildingType)
   // io.in(`gameId`).emit(location.reload())
-  .then( () => response.sendStatus(200))
+  .then( () => {
+    response.sendStatus(200);
+    const io = request.app.get("io");
+    io.of('game').emit(`refresh-${gameId}`);
+  })
   .catch( (error) => {
       console.log(error);
       response.sendStatus(401);
@@ -110,14 +114,17 @@ router.post("/:id/edge",
            x_end: xEnd,
            y_end: yEnd } = request.body;
   gameLogic.building.buildRoad(userId,gameId,xStart,yStart,xEnd,yEnd)
-  .then( () => response.sendStatus(200))
+  .then( () => {
+    response.sendStatus(200);
+    const io = request.app.get("io");
+    io.of('game').emit(`refresh-${gameId}`);
+  })
   .catch( (error) => {
     console.log(error);
     response.sendStatus(401);
   });
   console.log( "bro: " + request.params);
-  const io = request.app.get("io");
-  io.of('game').emit(`refresh-${gameId}`);
+
 });
 
 router.post("/:id/dice",

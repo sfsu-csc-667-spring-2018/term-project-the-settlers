@@ -67,13 +67,12 @@ $(".buildsettlement").on("click", function() {
 
 $(".buildcity").on("click", function() {
   action = "city";
-  $(".vertex[data-item='empty']").toggle();
 });
 
 $(".offerplayer").on("click", function() {
   const id = $(this).attr("id")
   $(".offerplayer:not(#"+ id + ")").toggle("dim", function(){
-    $(".offerplayer:not(#"+ id + ")");
+    //$(".offerplayer:not(#"+ id + ")");
   });
   $("#" + id).toggleClass("selected");
 });
@@ -156,6 +155,5 @@ socket.on(`chat-game-${gameId}`, (data) => {
 });
 
 socket.on(`refresh-${gameId}`, () => {
-  console.log("reloaded!");
-  location.reload();
+ location.reload();
 });
