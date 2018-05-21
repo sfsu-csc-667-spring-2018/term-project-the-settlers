@@ -30,7 +30,7 @@ const intializeGame = (db,gameName,playerLimit) =>
   ]);
 
 const insertGameTiles = db => ([game, tiles]) => {
-  const desertPlacementOrder = Math.floor(Math.random() * 20);
+  const desertPlacementOrder = Math.floor(Math.random() * 19);
   const queries = shuffle(allProbs).map((probability, index) => {
     let order = index >= desertPlacementOrder ? index+1 : index;
     return db.none(
@@ -69,8 +69,8 @@ const insertDesertTile = db => (gameId,order) =>{
 
 const insertGameEdges = db => result => {
   const game = result[allProbs.length + 1];
-  const query = db.none(`INSERT INTO game_edges (x_start,y_start,x_end,y_end,game_id) SELECT edge.x_start, edge.y_start, edge.x_end,edge.y_end,${game.id}`
-                  +" FROM game_edges_lookup edge");
+  const query = db.none(`INSERT INTO game_edges (x_start,y_start,x_end,y_end,game_id,"order") SELECT edge.x_start, edge.y_start, edge.x_end,edge.y_end,${game.id},edge.order`
+                  +" FROM game_edges_lookup edge ORDER by edge.order");
   return Promise.all([query,game]);
 };
 
@@ -114,7 +114,7 @@ module.exports = db => {
         [id]
       ),
       db.many("SELECT * FROM game_vertices WHERE game_id=$1", [id]),
-      db.many("SELECT * FROM game_edges WHERE game_id=$1", [id]),
+      db.many("SELECT * FROM game_edges WHERE game_id=$1 ORDER BY game_edges.order", [id]),
       getPlayerInfo(db)(id),
 
     ]).then(([game, tiles, vertices, edges, playerInfo]) => ({
@@ -199,20 +199,25 @@ module.exports = db => {
       ,[0,gameId,true]);
   };
 
+  gameFunctions.getRoadCount = (gameId) => {
+    return db.one('SELECT COUNT(*) AS count FROM game_edges WHERE road = $1 AND game_id = $2'
+      ,[true,gameId]);
+  };
+
   gameFunctions.getDevCardTypeCount = (gameId,devCardType) => {
     return db.any('SELECT player_id,COUNT(*) AS count FROM dev_cards '
       +'WHERE game_id = $1 AND UPPER(dev_card_type) = UPPER($2) GROUP BY player_id'
       ,[gameId,devCardType]);
-  }
+  };
 
   gameFunctions.getPlayerLimit = (gameId) => {
     return db.one('SELECT player_limit FROM games WHERE id = $1', [gameId]);
-  }
+  };
 
   gameFunctions.getCurrentPlayerTurn = (gameId) => {
     return db.one('SELECT turn_order FROM players WHERE game_id = $1 AND current_turn = $2'
             ,[gameId,true]);
-  }
+  };
 
   gameFunctions.updatePlayerTurn = (gameId,turnOrder) => {
     return db.tx("moveRobberTransaction", t => {
@@ -245,7 +250,8 @@ module.exports = db => {
 
   gameFunctions.rollDice = (gameId,diceRoll) => {
     return db.none('UPDATE games SET dice_roll = $1 WHERE id = $2', [diceRoll,gameId]);
-  }
+  };
+
 
   return gameFunctions;
 };

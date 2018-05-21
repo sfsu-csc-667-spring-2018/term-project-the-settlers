@@ -23,26 +23,71 @@ module.exports = db => {
         })
     };
 
-    buildingFunctions.buildStructure = (userId,gameId,x,y,buildingType) => {
-      //TODO finish validation;
-      if(buildingType.toUpperCase() === "SETTLEMENT"){
+    const firstPhaseBuilding = (gameId) => {
+      return Promise.all([db.games.getItemCount(gameId),db.games.getPlayerLimit(gameId)])
+      .then(([items,players]) => {
+        const {count: itemCount} = items;
+        const {player_limit: playerLimit} = players;
+        if(itemCount >= (playerLimit * 2)){
+          return false;
+        }else{
+          return true;
+        }
+      }).catch( (error) => console.log(error));
+    };
+
+    const firstPhaseRoadBuilding = (gameId) => {
+      return Promise.all([db.games.getRoadCount(gameId), db.games.getPlayerLimit(gameId)])
+        .then(([roads,players]) => {
+          const {player_limit: playerLimit} = players;
+          const {count: roadCount} = roads;
+          if(roadCount >= (playerLimit *2)){
+            return false;
+          }else{
+            return true;
+          }
+        }).catch( (error) => console.log(error));
+    };
+
+    const buildSettlement = (userId,gameId,x,y,buildingType,firstPhase) => {
+      if (firstPhase){
         return db.players.buildBuilding(userId,gameId,x,y,buildingType)
-        .then( () => Promise.all([subtractResource(userId,gameId,'BRICK',1)
-                                  ,subtractResource(userId,gameId,'LUMBER',1)
-                                  ,subtractResource(userId,gameId,'WOOL',1)
-                                  ,subtractResource(userId,gameId,'WHEAT',1)]))
       }else{
-        return db.players.buildBuilding(userId,gameId,x,y,buildingType)
-        .then( () => Promise.all([subtractResource(userId,gameId,'ORE',3)
-                                  ,subtractResource(userId,gameId,'WHEAT',2)]))
+        return Promise.all([subtractResource(userId,gameId,'BRICK',1)
+                                ,subtractResource(userId,gameId,'LUMBER',1)
+                                ,subtractResource(userId,gameId,'WOOL',1)
+                                ,subtractResource(userId,gameId,'WHEAT',1)])
+      .then( () => db.players.buildBuilding(userId,gameId,x,y,buildingType))
+      }
+    }
+
+    const buildCity = (userId,gameId,x,y,buildingType) => {
+      return Promise.all([subtractResource(userId,gameId,'ORE',3)
+                                ,subtractResource(userId,gameId,'WHEAT',2)])
+      .then( () => db.players.buildBuilding(userId,gameId,x,y,buildingType))
+    }
+
+    buildingFunctions.buildStructure = (userId,gameId,x,y,buildingType) => {
+      if(buildingType.toUpperCase() === "SETTLEMENT"){
+        return firstPhaseBuilding(gameId)
+                .then( isFirstPhase => buildSettlement(userId,gameId,x,y,buildingType,isFirstPhase))
+      }else{
+        return buildCity(userId,gameId,x,y,buildingType);
       }
     };
 
     buildingFunctions.buildRoad = (userId,gameId,xStart,yStart,xEnd,yEnd) => {
       //TODO finish validation
-      return db.players.buildRoad(userId,gameId,xStart,yStart,xEnd,yEnd)
-        .then( () => Promise.all([subtractResource(userId,gameId,'BRICK',1)
-                                  ,subtractResource(userId,gameId,'LUMBER',1)]))
+      return firstPhaseRoadBuilding(gameId)
+        .then( (isFirstPhase) => {
+          if( isFirstPhase ){
+              return db.players.buildRoad(userId,gameId,xStart,yStart,xEnd,yEnd)
+          }else{
+            return Promise.all([subtractResource(userId,gameId,'BRICK',1)
+                                  ,subtractResource(userId,gameId,'LUMBER',1)])
+            .then( () => db.players.buildRoad(userId,gameId,xStart,yStart,xEnd,yEnd))
+          }
+        })
     };
 
     return buildingFunctions;

@@ -121,16 +121,19 @@ router.post("/:id/edge",
 });
 
 router.post("/:id/dice",
-    gameReady,
-    isCurrentPlayer,
-    (request,response,next) => {
-      const{id: gameId} = request.params;
-      gameLogic.dice.rollDice(gameId)
-      .then( () => {
-          //TODO add socket event
-          response.sendStatus(200)
-        })
-      .catch( () => response.sendStatus(401));
+      //gameReady,
+      //isCurrentPlayer,
+      (request,response,next) => {
+  const{id: gameId} = request.params;
+  gameLogic.dice.rollDice(gameId)
+  .then( () => {
+      gameLogic.resourceAllocation.updateResources(gameId);
+  })
+  .then( () => response.sendStatus(200))
+  .catch( (error) => {
+    console.log(error);
+    response.sendStatus(401);
+  });
 })
 
 router.post("/:id/buy-devcard",
