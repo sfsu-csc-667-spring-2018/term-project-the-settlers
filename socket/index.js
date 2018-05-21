@@ -1,6 +1,7 @@
 const socketIo = require("socket.io");
 const db = require("../db");
 const lobby = require("../routes/lobby");
+const game = require("../routes/game");
 
 users = [];
 connections = [];
