@@ -239,11 +239,6 @@ module.exports = db => {
 
   };
 
-  gameFunctions.getItemCount = (gameId) => {
-    return db.one('SELECT count(*) AS count FROM game_vertices WHERE game_id = $1 AND item != $2'
-          ,[gameId,'empty'])
-  };
-
   gameFunctions.getDiceRoll = (gameId) => {
     return db.one('SELECT dice_roll FROM games WHERE id = $1' , [gameId])
   };
@@ -251,6 +246,11 @@ module.exports = db => {
   gameFunctions.rollDice = (gameId,diceRoll) => {
     return db.one('UPDATE games SET dice_roll = $1 WHERE id = $2 RETURNING dice_roll', [diceRoll,gameId]);
   };
+
+  gameFunctions.getItemCount = (gameId) => {
+   return db.one('SELECT count(*) AS count FROM game_vertices WHERE game_id = $1 AND item != $2'
+         ,[gameId,'empty'])
+ };
 
 
   return gameFunctions;
