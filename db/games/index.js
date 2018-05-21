@@ -249,7 +249,7 @@ module.exports = db => {
   };
 
   gameFunctions.rollDice = (gameId,diceRoll) => {
-    return db.none('UPDATE games SET dice_roll = $1 WHERE id = $2', [diceRoll,gameId]);
+    return db.one('UPDATE games SET dice_roll = $1 WHERE id = $2 RETURNING dice_roll', [diceRoll,gameId]);
   };
 
 

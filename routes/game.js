@@ -43,7 +43,7 @@ router.post("/", function(req, res, next) {
   const{id:userId} = req.user;
   createGame(gameName,playerLimit,userId)
     .then( ([game,addPlayer]) => {
-        addDefaultResources(userId,game.id)
+        return addDefaultResources(userId,game.id)
         .then( () => res.redirect(`/game/${game.id}`))
     })
     .catch(error => {
@@ -53,14 +53,18 @@ router.post("/", function(req, res, next) {
 });
 
 router.post("/join/:id",(request,response,next) => {
-  const {id: userId} = request.user;
+  const {id: userId, username } = request.user;
   const {id: gameId} = request.params;
   const playerAddition = addPlayer(userId,gameId);
   const addResources = playerAddition
                       .then( () => addDefaultResources(userId,gameId));
 
   Promise.all([playerAddition,addResources])
-  .then( () => response.redirect(`/game/${gameId}`))
+  .then( () => {
+    const io = request.app.get("io");
+    io.of('game').emit(`message-${gameId}`, {message: `${username} has joined!`});
+    response.redirect(`/game/${gameId}`);
+  })
   .catch( (error) => console.log(error));
 });
 
@@ -78,8 +82,8 @@ router.get("/:id", (request, response, next) => {
 });
 
 router.post("/:id/vertex",
-      //gameReady,
-      //isCurrentPlayer,
+      gameReady,
+      isCurrentPlayer,
       (request, response, next) => {
   const{id: userId} = request.user;
   const{id: gameId} = request.params;
@@ -88,36 +92,38 @@ router.post("/:id/vertex",
            y: y,
            item: buildingType} = request.body;
   gameLogic.building.buildStructure(userId, gameId, x, y , buildingType)
-  // io.in(`gameId`).emit(location.reload())
-  .then( () => response.sendStatus(200))
+  .then( () => {
+      const io = request.app.get("io");
+      io.of('game').emit(`refresh-${gameId}`);
+      response.sendStatus(200);
+    })
   .catch( (error) => {
       console.log(error);
       response.sendStatus(401);
   });
-  const io = request.app.get("io");
-  io.of('game').emit(`refresh-${gameId}`);
+
 });
 
 router.post("/:id/edge",
-      //gameReady,
-      //isCurrentPlayer,
+      gameReady,
+      isCurrentPlayer,
       (request,response,next) => {
-  const{id: userId} = request.user;
-  const{id: gameId} = request.params;
-
+  const {id: userId} = request.user;
+  const {id: gameId} = request.params;
   const {  x_start: xStart,
            y_start: yStart,
            x_end: xEnd,
            y_end: yEnd } = request.body;
   gameLogic.building.buildRoad(userId,gameId,xStart,yStart,xEnd,yEnd)
-  .then( () => response.sendStatus(200))
+  .then( () => {
+    const io = request.app.get("io");
+    io.of('game').emit(`refresh-${gameId}`);
+    response.sendStatus(200);
+  })
   .catch( (error) => {
     console.log(error);
     response.sendStatus(401);
   });
-  console.log( "bro: " + request.params);
-  const io = request.app.get("io");
-  io.of('game').emit(`refresh-${gameId}`);
 });
 
 router.post("/:id/dice",
@@ -126,7 +132,10 @@ router.post("/:id/dice",
       (request,response,next) => {
   const{id: gameId} = request.params;
   gameLogic.dice.rollDice(gameId)
-  .then( () => {
+  .then( (dice) => {
+      const io = request.app.get("io");
+      io.of('game').emit(`refresh-${gameId}`);
+      io.of('game').emit(`message-${gameId}`, {message: `${dice.dice_roll} was rolled`});
       gameLogic.resourceAllocation.updateResources(gameId);
   })
   .then( () => response.sendStatus(200))
@@ -137,8 +146,8 @@ router.post("/:id/dice",
 })
 
 router.post("/:id/buy-devcard",
-      //gameReady,
-      //isCurrentPlayer,
+      gameReady,
+      isCurrentPlayer,
       (request,response,next) => {
   const{id: gameId} = request.params;
   const{id: userId} = request.user;
@@ -174,12 +183,14 @@ router.post("/:id/move-robber",
 });
 
 router.post("/:id/endturn",
-      gameReady, isCurrentPlayer, (request,response,next) => {
+      gameReady,
+      isCurrentPlayer,
+      (request,response,next) => {
   const { id: userId} = request.user;
   const {id: gameId} = request.params;
   gameLogic.turn.updatePlayerTurn(gameId)
   .then( () => {
-    //TODO add socket event
+    io.of('game').emit(`message-${gameId}`, {message: `${username} has ended his turn!`});
     response.sendStatus(200);
   })
   .catch( (error) => {
