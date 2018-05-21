@@ -81,6 +81,7 @@ router.get("/:id", (request, response, next) => {
   }).catch(error => console.log(error));
 });
 
+
 router.post("/:id/vertex",
       gameReady,
       isCurrentPlayer,

@@ -5,7 +5,7 @@ $(".vertex[data-item='empty']").toggle();
 $(".edge[data-owner='0']").toggle();
 
 
-$(".vertex").on("click", event => {
+$("body").on("click",".vertex", event => {
  // console.log(event.target.classList);
   if (event.target.classList.contains("vertex")) {
     const { x, y , item } = event.target.dataset;
@@ -23,7 +23,7 @@ $(".vertex").on("click", event => {
   }
 });
 
-$(".roads").on("click", event => {
+$("body").on("click", ".roads", event => {
   if (event.target.classList.contains("edge")) {
     const { x_start, y_start, x_end, y_end} = event.target.dataset;
 
@@ -165,8 +165,20 @@ socket.on(`chat-game-${gameId}`, (data) => {
 });
 
 socket.on(`refresh-${gameId}`, () => {
-  console.log("reloaded!");
-  location.reload(true);
+  fetch(document.URL,{
+    method: "get",
+    credentials: "include"
+  }).then((response) => {
+    return response.text();
+  }).then( (html) => {
+    const updatedBoard = $(html).find("#display").html();
+    const updatedResources = $(html).find("#game_info").html();
+    console.log(updatedResources);
+    $("#display").html(updatedBoard);
+    $("#game_info").html(updatedResources);
+
+  }).catch( (error) => { console.log(error)})
+
 });
 
 socket.on(`message-${gameId}`, (event) => {
