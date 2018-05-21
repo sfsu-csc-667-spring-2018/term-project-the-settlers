@@ -34,6 +34,14 @@ module.exports = (db) => {
     )
   }
 
+  playerFunctions.getResourcesRandom = (userId,gameId) => {
+    return playerFunctions.findPlayerId(userId)
+      .then( ({id}) =>
+        db.any('SELECT resource_type, count FROM "player_resources" '
+                  + 'WHERE player_id = $1 AND game_id = $2 ORDER BY random()',[id,gameId])
+    )
+  }
+
   playerFunctions.getResourceCount = (userId,gameId,type) => {
     return playerFunctions.findPlayerId(userId)
       .then( ({id}) =>
@@ -131,5 +139,12 @@ module.exports = (db) => {
             ,[gameId,true,id]))
   };
 
+  playerFunctions.getUserTotalResources = (gameId) => {
+    return db.any('SELECT user_id,pr.count FROM players INNER JOIN '
+       +'         (SELECT SUM(count) AS count,player_id FROM player_resources '
+       +'           WHERE game_id = $1 GROUP BY player_id) pr'
+       +' ON players.id = pr.player_id '
+            ,[gameId]);
+  }
   return playerFunctions;
 }
