@@ -199,20 +199,25 @@ module.exports = db => {
       ,[0,gameId,true]);
   };
 
+  gameFunctions.getRoadCount = (gameId) => {
+    return db.one('SELECT COUNT(*) AS count FROM game_edges WHERE road = $1 AND game_id = $2'
+      ,[true,gameId]);
+  };
+
   gameFunctions.getDevCardTypeCount = (gameId,devCardType) => {
     return db.any('SELECT player_id,COUNT(*) AS count FROM dev_cards '
       +'WHERE game_id = $1 AND UPPER(dev_card_type) = UPPER($2) GROUP BY player_id'
       ,[gameId,devCardType]);
-  }
+  };
 
   gameFunctions.getPlayerLimit = (gameId) => {
     return db.one('SELECT player_limit FROM games WHERE id = $1', [gameId]);
-  }
+  };
 
   gameFunctions.getCurrentPlayerTurn = (gameId) => {
     return db.one('SELECT turn_order FROM players WHERE game_id = $1 AND current_turn = $2'
             ,[gameId,true]);
-  }
+  };
 
   gameFunctions.updatePlayerTurn = (gameId,turnOrder) => {
     return db.tx("moveRobberTransaction", t => {
@@ -245,7 +250,8 @@ module.exports = db => {
 
   gameFunctions.rollDice = (gameId,diceRoll) => {
     return db.none('UPDATE games SET dice_roll = $1 WHERE id = $2', [diceRoll,gameId]);
-  }
+  };
+
 
   return gameFunctions;
 };
