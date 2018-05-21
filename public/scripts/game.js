@@ -17,8 +17,6 @@ $(".vertex").on("click", event => {
       body: JSON.stringify({ x, y, item:action}),
       headers: new Headers({ "Content-Type": "application/json" })
     });
-    location.reload();
-
   }
   if (event.target.classList.contains("tile")) {
     //console.log("TILE", event.target);
@@ -155,4 +153,9 @@ socket.on(`chat-game-${gameId}`, (data) => {
   } else if (data && !isNaN(data.msg)) {
     $('#messages').append('<li>' + data.user.bold() + ' rolled a ' +  data.msg  +' !</li>');
   }
-})
+});
+
+socket.on(`refresh-${gameId}`, () => {
+  console.log("reloaded!");
+  location.reload();
+});

@@ -13,6 +13,7 @@ router.post("/:namespace", function(req, res, next) {
       .of(namespace)
       .emit(`chat-${namespace}`, { msg: message, user: req.user.username });
   } else {
+    console.log(namespace);
     io
       .of(namespace)
       .emit(`chat-${namespace}-${gameId}`, { msg: message, user: req.user.username });
@@ -20,5 +21,6 @@ router.post("/:namespace", function(req, res, next) {
 
   res.sendStatus(200);
 });
+
 
 module.exports = router;
