@@ -114,8 +114,9 @@ module.exports = (db) => {
      + 'INNER JOIN  tile_vertex_lookup ON x=affected_x_pos AND y= affected_y_pos '
      + 'INNER JOIN game_tiles ON game_tile_order = game_tiles.order '
      + 'INNER JOIN tiles ON tiles.id = game_tiles.tile_id '
-     + 'WHERE die_number = $1 AND item != $2 AND user_id != $3 AND game_vertices.game_id = $4'
-    , [diceRoll,'empty', 0, gameId])
+     + 'WHERE die_number = $1 AND item != $2 AND user_id != $3 AND game_vertices.game_id = $4 '
+     + 'AND robber = $5'
+    , [diceRoll,'empty', 0, gameId, false])
   }
 
   playerFunctions.getSettlementCount = (userId,gameId) => {

@@ -166,7 +166,7 @@ socket.on(`chat-game-${gameId}`, (data) => {
 
 socket.on(`refresh-${gameId}`, () => {
   console.log("reloaded!");
-  location.reload();
+  location.reload(true);
 });
 
 socket.on(`message-${gameId}`, (event) => {

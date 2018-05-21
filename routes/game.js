@@ -136,6 +136,9 @@ router.post("/:id/dice",
       const io = request.app.get("io");
       io.of('game').emit(`refresh-${gameId}`);
       io.of('game').emit(`message-${gameId}`, {message: `${dice.dice_roll} was rolled`});
+      if(dice.dice_roll == 7){
+        io.of('game').emit(`robber-${gameId}`);
+      }
       gameLogic.resourceAllocation.updateResources(gameId);
   })
   .then( () => response.sendStatus(200))
