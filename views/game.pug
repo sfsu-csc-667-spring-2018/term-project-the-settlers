@@ -74,8 +74,8 @@ body
             img.ocean(src='/images/tiles/ocean.png')
             #display
               each tile, index in tiles
-                span.tile(data-prob=tile.die_number, data-type=tile.resource_type)         
-              each vertex in vertices 
+                span.tile(data-prob=tile.die_number, data-type=tile.resource_type)
+              each vertex in vertices
                 span.vertex(data-x=vertex.x, data-y=vertex.y, data-owner= vertex.user_id data-item=vertex.item)
               .roads
                 each edge in edges
@@ -99,7 +99,7 @@ body
               img(src='/images/resources/' + val + '.png')
         .count
           each resource in playerResources
-            p= resource.count    
+            p= resource.count
 
         h5 Development Cards
         each val in ["knight",  "monopoly", "plenty",  "roadbuilding", "victorypoint" ]
@@ -128,20 +128,7 @@ body
             clearTimeout(timer);
           }
 
-          function endTurn(result) {
-            $(document).ready(function() {
-              $("#roll").show();
-              $("#end").hide();
-              $("#Modal").modal('show');
-              $("#Modal").find('.modal-title').text('End Turn');
-              $("#Modal").find('.modal-body').text('You ended your turn.');
-              timer = setTimeout(function() {
-                  $("#Modal").modal('hide');
-              }, 2000);
-            });
-          }
-
-        input#roll(type='button', value='Roll Dice', onclick='D6.roll()')
+        input#roll(type='button', value='Roll Dice')
         input#end(type='button', value='End Turn', onclick='endTurn()',style='display: none')
         input#diceVal(type="hidden", value=dice)
         #Modal.modal.fade(role='dialog')
@@ -156,4 +143,3 @@ body
                 button.btn.btn-default(type='button', data-dismiss='modal', onclick='stopModal()') Close
 
   script(src="/scripts/game.js")
-  

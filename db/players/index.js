@@ -118,5 +118,17 @@ module.exports = (db) => {
     , [diceRoll,'empty', 0, gameId])
   }
 
+  playerFunctions.getSettlementCount = (userId,gameId) => {
+    return playerFunctions.findPlayerId(userId)
+    .then( ({id}) => db.one('SELECT count(*) AS count FROM game_vertices WHERE game_id = $1 AND item != $2 AND user_id = $3'
+            ,[gameId,'empty',id]))
+  };
+
+  playerFunctions.getRoadCount = (userId,gameId) => {
+    return playerFunctions.findPlayerId(userId)
+    .then( ({id}) => db.one('SELECT count(*) AS count FROM game_edges WHERE game_id = $1 AND road = $2 AND user_id = $3'
+            ,[gameId,true,id]))
+  };
+
   return playerFunctions;
 }
