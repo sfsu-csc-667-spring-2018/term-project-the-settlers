@@ -136,6 +136,9 @@ router.post("/:id/dice",
       const io = request.app.get("io");
       io.of('game').emit(`refresh-${gameId}`);
       io.of('game').emit(`message-${gameId}`, {message: `${dice.dice_roll} was rolled`});
+      if(dice.dice_roll == 7){
+        io.of('game').emit(`robber-${gameId}`);
+      }
       gameLogic.resourceAllocation.updateResources(gameId);
   })
   .then( () => response.sendStatus(200))
@@ -178,8 +181,20 @@ router.post("/:id/trade",
 });
 
 router.post("/:id/move-robber",
-      gameReady, isCurrentPlayer, (request,response,next) => {
-  response.sendStatus(200);
+    //gameReady,
+    //isCurrentPlayer,
+    (request,response,next) => {
+  const {id: gameId} = request.params;
+  //const {tile_order : tileOrder} = request.body;
+  const tileOrder = 5;
+  gameLogic.robber.moveRobber(gameId,tileOrder)
+  .then( () => {
+    response.sendStatus(200)
+  })
+  .catch( (error) => {
+    console.log(error);
+    response.sendStatus(401);
+  })
 });
 
 router.post("/:id/endturn",

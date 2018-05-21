@@ -27,7 +27,6 @@ module.exports = db => {
                           db.games.getPlayerLimit(gameId),
                           db.players.getSettlementCount(userId,gameId)])
       .then(([items,players,settlement]) => {
-        console.log("hmmm",items,players,settlement);
         const {count: itemCount} = items;
         const {player_limit: playerLimit} = players;
         const {count: settlementCount} = settlement;
@@ -47,7 +46,6 @@ module.exports = db => {
           const {player_limit: playerLimit} = players;
           const {count: playerRoadCount} = playerRoads;
           const {count: roadCount} = roads;
-          console.log(roadCount, playerRoadCount,playerLimit, playerRoadCount >= 2);
           if(roadCount >= (playerLimit *2) || playerRoadCount >= 2){
             return false;
           }else{
