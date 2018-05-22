@@ -11,6 +11,7 @@ $("body").on("click",".vertex", event => {
   if (event.target.classList.contains("vertex")) {
     const { x, y , item } = event.target.dataset;
     // console.log(x, y);
+    buildModal(action);
 
     fetch(`/game/${gameId}/vertex`, {
       method: "post",
@@ -43,7 +44,7 @@ $("body").on("click", ".robber", event => {
 $("body").on("click", ".roads", event => {
   if (event.target.classList.contains("edge")) {
     const { x_start, y_start, x_end, y_end} = event.target.dataset;
-
+    buildModal("road");
     fetch(`/game/${gameId}/edge`, {
       method: "post",
       credentials: "include",
@@ -134,7 +135,8 @@ $("form.message").on("submit", event => {
 })
 
 $("#roll").on("click", () => {
-  //D6.roll();
+  // D6.roll();
+  console.log('ROlled')
   fetch(`/game/${gameId}/dice`, {
     method: "post",
     credentials: "include",
@@ -174,7 +176,7 @@ socket.on(`chat-game-${gameId}`, (data) => {
       h = h ? h : 12; // the hour '0' should be '12'
       m = m < 10 ? '0'+m : m;
       var strTime = h + ':' + m + ' ' + ampm;
-      $('#messages').append('<li>' + data.user.bold() + '(' + strTime +  '): ' + data.msg + '</li>');
+      $('#messages').append('<li>' + data.user.bold() + ' (' + strTime +  '): ' + data.msg + '</li>');
   } else if (data && !isNaN(data.msg)) {
     $('#messages').append('<li>' + data.user.bold() + ' rolled a ' +  data.msg  +' !</li>');
   }
@@ -200,9 +202,51 @@ socket.on(`refresh-${gameId}`, () => {
 
 });
 
+
+socket.on(`message-${gameId}`, (data) => {
+  $('#messages').append('<li><em>' + data.user.bold() + data.message  + '</em></li>');
+});
+
 socket.on(`robber-${gameId}`, ()=>{
   $(".robber:not([data-robber])").toggle();
 });
-socket.on(`message-${gameId}`, (event) => {
-  alert(event.message);
-})
+
+var timer;
+
+function attack(result) {
+  $("#roll").hide();
+  $("#end").show();
+  $(document).ready(function() {
+    buildModal(result, "dice-roll")
+  });
+}
+D6.dice(2, attack);
+function stopModal() {
+  clearTimeout(timer);
+}
+
+function buildModal(item, event) {
+  $("#Modal").modal('show');
+  if (event == "dice-roll") {
+    $("#Modal").find('.modal-title').text('Dice Roll');
+    $("#Modal").find('.modal-body').text('You rolled a ' + item + '!');
+    $("#diceVal").val(item);
+    $("#diceVal").submit();
+  } else if (event == "end-turn") {
+    $("#Modal").find('.modal-title').text('End Turn');
+    $("#Modal").find('.modal-body').text('You ended your turn!');
+  } else {
+    $("#Modal").find('.modal-title').text(item.charAt(0).toUpperCase() + item.slice(1) + ' Placed');
+    $("#Modal").find('.modal-body').text('You placed a ' + item + '!');
+  }
+  timer = setTimeout(function() {
+    $("#Modal").modal('hide');
+  }, 2000);
+}
+
+function endTurn() {
+  $("#diceall").hide();
+  $("#end").hide();
+  $("#roll").show();
+  buildModal(null, "end-turn");
+}

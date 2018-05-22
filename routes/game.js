@@ -89,10 +89,10 @@ router.get("/:id", (request, response, next) => {
 
 
 router.post("/:id/vertex",
-      gameReady,
-      isCurrentPlayer,
+      // gameReady,
+      // isCurrentPlayer,
       (request, response, next) => {
-  const{id: userId} = request.user;
+  const{id: userId, username} = request.user;
   const{id: gameId} = request.params;
   console.log(request.body);
   const {  x: x,
@@ -102,6 +102,7 @@ router.post("/:id/vertex",
   .then( () => {
       const io = request.app.get("io");
       io.of('game').emit(`refresh-${gameId}`);
+      io.of('game').emit(`message-${gameId}`, {user: username, message: ` placed a ${buildingType}.`});
       response.sendStatus(200);
     })
   .catch( (error) => {
@@ -115,7 +116,7 @@ router.post("/:id/edge",
       gameReady,
       isCurrentPlayer,
       (request,response,next) => {
-  const {id: userId} = request.user;
+  const {id: userId, username} = request.user;
   const {id: gameId} = request.params;
   const {  x_start: xStart,
            y_start: yStart,
@@ -125,6 +126,7 @@ router.post("/:id/edge",
   .then( () => {
     const io = request.app.get("io");
     io.of('game').emit(`refresh-${gameId}`);
+    io.of('game').emit(`message-${gameId}`, {user: username, message: ` placed a road.`});
     response.sendStatus(200);
   })
   .catch( (error) => {
@@ -137,12 +139,12 @@ router.post("/:id/dice",
       //gameReady,
       //isCurrentPlayer,
       (request,response,next) => {
-  const{id: gameId} = request.params;
+  const{id: gameId, username} = request.params;
   gameLogic.dice.rollDice(gameId)
   .then( (dice) => {
       const io = request.app.get("io");
       io.of('game').emit(`refresh-${gameId}`);
-      io.of('game').emit(`message-${gameId}`, {message: `${dice.dice_roll} was rolled`});
+      io.of('game').emit(`message-${gameId}`, {user: username, message: `rolled a ${dice.dice_roll}.`});
       if(dice.dice_roll == 7){
         io.of('game').emit(`robber-${gameId}`);
       }
@@ -167,17 +169,17 @@ router.post("/:id/buy-devcard",
 });
 
 router.post("/:id/play-devcard",
-      gameReady,  isCurrentPlayer, (request,response,next) => {
+      gameReady, isCurrentPlayer, (request,response,next) => {
   response.sendStatus(200);
 });
 
 router.post("/:id/trade-offer",
-      gameReady,  isCurrentPlayer, (request,response,next) => {
+      gameReady, isCurrentPlayer, (request,response,next) => {
   response.sendStatus(200);
 });
 
 router.post("/:id/trade-reply",
-      gameReady,  isCurrentPlayer, (request,response,next) => {
+      gameReady, isCurrentPlayer, (request,response,next) => {
 
   response.sendStatus(200);
 });
