@@ -10,7 +10,8 @@ $(".vertex").on("click", event => {
   if (event.target.classList.contains("vertex")) {
     const { x, y , item } = event.target.dataset;
     // console.log(x, y);
-
+    showModal(action);
+    
     fetch(`/game/${gameId}/vertex`, {
       method: "post",
       credentials: "include",
@@ -22,6 +23,18 @@ $(".vertex").on("click", event => {
     //console.log("TILE", event.target);
   }
 });
+
+ function showModal(item) {
+   $("#Modal").modal('show');
+   $("#Modal").find('.modal-title').text(item.charAt(0).toUpperCase() + item.slice(1) + ' Placed');
+   console.log(item.charAt(0).toUpperCase() + item.slice(1) + 'Placed');
+   console.log('You placed a ' + item + '!')
+   $("#Modal").find('.modal-body').text('You placed a ' + item + '!');
+   $("#diceVal").submit();
+   timer = setTimeout(function() {
+       $("#Modal").modal('hide');
+   }, 2000);
+ }
 
 $(".roads").on("click", event => {
   if (event.target.classList.contains("edge")) {
