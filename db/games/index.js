@@ -103,26 +103,31 @@ module.exports = db => {
       ),
       db.many("SELECT * FROM game_vertices WHERE game_id=$1", [id]),
       db.many("SELECT * FROM game_edges WHERE game_id=$1 ORDER BY game_edges.order", [id]),
-      gameFunctions.getPlayerInfo(db)(id),
+      gameFunctions.getPlayerInfo(id),
 
-    ]).then(([game, tiles, vertices, edges, playerInfo]) => ({
+    ]).then(([game, tiles, vertices, edges]) => ({
       game,
       tiles,
       vertices,
-      edges,
-      playerInfo
+      edges
     }));
 
-    gameFunctions.getPlayerInfo = db => (gameId) => {
-      return db.any('SELECT username, turn_order,COALESCE(cards.card_count,0) AS card_count,resource_count,current_turn  FROM players'
+    gameFunctions.getPlayerInfo =  (gameId) => {
+      return db.any('SELECT username, turn_order,COALESCE(cards.card_count,0) AS card_count,resource_count,current_turn,'
+              +' COALESCE(sp.settlement_points,0) AS settlment_points, COALESCE(cp.city_points,0) AS city_points'
+              +' FROM players'
               +' INNER JOIN users ON users.id = players.user_id'
               +' LEFT JOIN (SELECT COUNT(*) AS card_count,player_id'
               +'             FROM dev_cards GROUP BY player_id) cards ON cards.player_id = players.id '
               +' LEFT JOIN (SELECT SUM(count) AS resource_count, player_id'
               + '           FROM player_resources GROUP BY player_id) resources'
               +' ON resources.player_id = players.id'
+              +' LEFT JOIN (SELECT COUNT(*) AS settlement_points,user_id FROM game_vertices WHERE UPPER(item) = UPPER($2)'
+              +'             GROUP by user_id ) sp ON sp.user_id = players.id'
+              +' LEFT JOIN (SELECT (COUNT(*) * 2) AS city_points,user_id FROM game_vertices WHERE UPPER(item) = UPPER($3)'
+              +             'GROUP by user_id) CP on cp.user_id = players.id'
               +' WHERE game_id = $1'
-              +' ORDER by turn_order', [gameId] );
+              +' ORDER by turn_order', [gameId,'SETTLEMENT','CITY'] );
     };
 
   gameFunctions.getGames = () => {
@@ -181,27 +186,18 @@ module.exports = db => {
                   ,[x,y,gameId]);
   };
 
-  gameFunctions.getPlayersSettlementsPoints = (gameId) => {
-    return db.any('SELECT player_id,COUNT(*) AS count FROM game_vertices WHERE game_id = $1 AND player_id != $2 '
-                  +' AND UPPER(item) = UPPER($3) GROUP BY player_id'
-                  ,[gameId,0,'SETTLEMENT']);
-  };
-
-  gameFunctions.getPlayersCityPoints = (gameId) => {
-    return db.any('SELECT player_id,(2 * COUNT(*)) AS count FROM game_vertices WHERE game_id = $1 AND player_id != $2 '
-                  +' AND UPPER(item) = UPPER($3) GROUP BY player_id'
-                  ,[gameId,0,'CITY']);
-  };
-
   gameFunctions.getPlayersRoads = (gameId) => {
     return db.any('SELECT x_start,y_start,x_end,y_end'
       +' FROM game_edges WHERE player_id != $1 AND game_id = $2 AND road = $3'
       ,[0,gameId,true]);
   };
 
-  gameFunctions.getRoadCount = (gameId) => {
-    return db.one('SELECT COUNT(*) AS count FROM game_edges WHERE road = $1 AND game_id = $2'
-      ,[true,gameId]);
+  gameFunctions.getHighestRoadCount = (gameId) => {
+    return db.any('SELECT turn_order FROM players INNER JOIN'
+            + '(SELECT user_id FROM game_edges WHERE road = $1 AND game_id = $2'
+            +' GROUP BY user_id  HAVING COUNT(*) > $3 ORDER BY COUNT(*) DESC LIMIT 1) maxPlayer'
+            +' ON players.id = maxPlayer.user_id '
+      ,[true,gameId, 5]);
   };
 
   gameFunctions.getDevCardTypeCount = (gameId,devCardType) => {

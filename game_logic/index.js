@@ -8,6 +8,7 @@ module.exports = db => {
   // gameLogic.trade = require("./trade")(db);
   gameLogic.dice = require("./dice")(db);
   gameLogic.turn = require("./turn")(db);
+  gameLogic.stats = require("./player_stats")(db);
 
   return gameLogic;
 }
