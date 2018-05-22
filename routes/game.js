@@ -62,8 +62,8 @@ router.post("/join/:id",(request,response,next) => {
   Promise.all([playerAddition,addResources])
   .then( () => {
     const io = request.app.get("io");
+    response.redirect(200,`/game/${gameId}`);
     io.of('game').emit(`message-${gameId}`, {message: `${username} has joined!`});
-    response.redirect(`/game/${gameId}`);
   })
   .catch( (error) => console.log(error));
 });

@@ -11,13 +11,19 @@ $("body").on("click",".vertex", event => {
   if (event.target.classList.contains("vertex")) {
     const { x, y , item } = event.target.dataset;
     // console.log(x, y);
-    buildModal(action);
 
     fetch(`/game/${gameId}/vertex`, {
       method: "post",
       credentials: "include",
       body: JSON.stringify({ x, y, item:action}),
       headers: new Headers({ "Content-Type": "application/json" })
+    })
+    .then( (response) => {
+        if( response.status === 200){
+          buildModal("road");
+        }else{
+          alert("Can't do that");
+        }
     });
   }
   if (event.target.classList.contains("tile")) {
@@ -44,12 +50,18 @@ $("body").on("click", ".robber", event => {
 $("body").on("click", ".roads", event => {
   if (event.target.classList.contains("edge")) {
     const { x_start, y_start, x_end, y_end} = event.target.dataset;
-    buildModal("road");
     fetch(`/game/${gameId}/edge`, {
       method: "post",
       credentials: "include",
       body: JSON.stringify({ x_start, y_start, x_end, y_end }),
       headers: new Headers({ "Content-Type": "application/json" })
+    })
+    .then( (response) => {
+        if( response.status === 200){
+          buildModal("road");
+        }else{
+          alert("Can't do that");
+        }
     });
   }
   if (event.target.classList.contains("tile")) {
@@ -136,11 +148,15 @@ $("form.message").on("submit", event => {
 
 $("#roll").on("click", () => {
   // D6.roll();
-  console.log('ROlled')
   fetch(`/game/${gameId}/dice`, {
     method: "post",
     credentials: "include",
     headers: new Headers({ "Content-Type": "application/json" })
+  })
+  .then( response => {
+    if( response !== 200 ){
+        alert("Can't do that");
+      }
   })
 })
 
@@ -204,7 +220,8 @@ socket.on(`refresh-${gameId}`, () => {
 
 
 socket.on(`message-${gameId}`, (data) => {
-  $('#messages').append('<li><em>' + data.user.bold() + data.message  + '</em></li>');
+  alert("hmmmm");
+  $('#messages').append('<li><em>' + data.message  + '</em></li>');
 });
 
 socket.on(`robber-${gameId}`, ()=>{
