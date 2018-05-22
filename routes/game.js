@@ -210,8 +210,8 @@ router.post("/:id/move-robber",
 });
 
 router.post("/:id/endturn",
-      //gameReady,
-      //isCurrentPlayer,
+      gameReady,
+      isCurrentPlayer,
       (request,response,next) => {
   const { id: userId,username} = request.user;
   console.log("In routes");
@@ -220,6 +220,7 @@ router.post("/:id/endturn",
   .then( () => {
     const io = request.app.get("io");
     io.of('game').emit(`message-${gameId}`, {message: `${username} has ended his turn!`});
+    io.of('game').emit(`refresh-${gameId}`);
     response.sendStatus(200);
   })
   .catch( (error) => {

@@ -4,7 +4,7 @@ let action = "";
 $(".vertex[data-item='empty']").toggle();
 $(".edge[data-owner='0']").toggle();
 $(".robber:not([data-robber])").toggle();
-$("#roll").toggle()
+$("#roll").hide();
 
 
 
@@ -23,6 +23,9 @@ $("body").on("click",".vertex", event => {
   }
   if (event.target.classList.contains("tile")) {
     //console.log("TILE", event.target);
+  }
+  if($(".vertex[data-item='settlement']").length === $(".playercards").length * 2){
+    $("#roll").show();
   }
 });
 
@@ -106,9 +109,8 @@ $(".recieveplayer").on("click", function() {
   });
 });
 
-if($(".vertex[data-item='settlement']").length === $(".playercards").length * 2){
-  $("#roll").toggle()
-}
+
+
 
 // $(".offerbank").on("click", function() {
 //   const id = $(this).attr("id")
@@ -148,7 +150,27 @@ $("#roll").on("click", () => {
     credentials: "include",
     headers: new Headers({ "Content-Type": "application/json" })
   })
-})
+});
+$("body").on("click","#end", event => {
+  // console.log(x, y);
+ 
+  fetch(`/game/${gameId}/endturn`, {
+    method: "post",
+    credentials: "include",
+    headers: new Headers({ "Content-Type": "application/json" })
+  })
+  .then( (response) => {
+    if( response.status === 200){
+      endTurn();
+    }else{
+      alert("Can't do that");
+    }
+  });
+  if (event.target.classList.contains("tile")) {
+    //console.log("TILE", event.target);
+  }
+ });
+
 
 // $("#diceVal").on("submit", event => {
 //   const message = $("#diceVal").val();
@@ -213,4 +235,27 @@ socket.on(`robber-${gameId}`, ()=>{
 });
 socket.on(`message-${gameId}`, (event) => {
   alert(event.message);
-})
+});
+function buildModal(item, event) {
+  $("#Modal").modal('show');
+  if (event == "dice-roll") {
+    $("#Modal").find('.modal-title').text('Dice Roll');
+    $("#Modal").find('.modal-body').text('You rolled a ' + item + '!');
+    $("#diceVal").val(item);
+    $("#diceVal").submit();
+  } else if (event == "end-turn") {
+    $("#Modal").find('.modal-title').text('End Turn');
+    $("#Modal").find('.modal-body').text('You ended your turn!');
+  } else {
+    $("#Modal").find('.modal-title').text(item.charAt(0).toUpperCase() + item.slice(1) + ' Placed');
+    $("#Modal").find('.modal-body').text('You placed a ' + item + '!');
+  }
+  timer = setTimeout(function() {
+    $("#Modal").modal('hide');
+  }, 2000);
+}
+
+
+function endTurn() {
+  buildModal(null, "end-turn");
+}
