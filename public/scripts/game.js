@@ -7,6 +7,12 @@ $(".robber:not([data-robber])").toggle();
 $("#roll").hide();
 
 
+$( document ).ready(function() {
+  if($(".vertex[data-item='settlement']").length >= $(".playercards").length * 2){
+    $("#roll").show();
+  }
+});
+
 
 $("body").on("click",".vertex", event => {
  // console.log(event.target.classList);
@@ -19,13 +25,12 @@ $("body").on("click",".vertex", event => {
       credentials: "include",
       body: JSON.stringify({ x, y, item:action}),
       headers: new Headers({ "Content-Type": "application/json" })
-    });
-  }
-  if (event.target.classList.contains("tile")) {
-    //console.log("TILE", event.target);
-  }
-  if($(".vertex[data-item='settlement']").length === $(".playercards").length * 2){
-    $("#roll").show();
+    })
+    .then( ()=>{
+      if($(".vertex[data-item='settlement']").length === $(".playercards").length * 2){
+        $("#roll").show();
+      }
+    })
   }
 });
 
@@ -143,13 +148,20 @@ $("form.message").on("submit", event => {
   return false;
 })
 
-$("#roll").on("click", () => {
+$("body").on("click","#roll", event => {
   //D6.roll();
   fetch(`/game/${gameId}/dice`, {
     method: "post",
     credentials: "include",
     headers: new Headers({ "Content-Type": "application/json" })
   })
+  .then( (response) => {
+    if( response.status === 200){
+
+    }else{
+      alert("Can't do that");
+    }
+  });
 });
 $("body").on("click","#end", event => {
   // console.log(x, y);
@@ -166,9 +178,6 @@ $("body").on("click","#end", event => {
       alert("Can't do that");
     }
   });
-  if (event.target.classList.contains("tile")) {
-    //console.log("TILE", event.target);
-  }
  });
 
 
@@ -219,22 +228,23 @@ socket.on(`refresh-${gameId}`, () => {
   }).then( (html) => {
     const updatedBoard = $(html).find("#display").html();
     const updatedResources = $(html).find("#game_info").html();
-    console.log(updatedResources);
     $("#display").html(updatedBoard);
     $("#game_info").html(updatedResources);
     $(".vertex[data-item='empty']").toggle();
     $(".edge[data-owner='0']").toggle();
     $(".robber:not([data-robber])").toggle();
 
+  })
+  .then(()=>{
+    if($(".vertex[data-item='settlement']").length >= $(".playercards").length * 2){
+      $("#roll").show();
+    }
   }).catch( (error) => { console.log(error)})
 
 });
 
 socket.on(`robber-${gameId}`, ()=>{
   $(".robber:not([data-robber])").toggle();
-});
-socket.on(`message-${gameId}`, (event) => {
-  alert(event.message);
 });
 function buildModal(item, event) {
   $("#Modal").modal('show');
@@ -254,6 +264,12 @@ function buildModal(item, event) {
     $("#Modal").modal('hide');
   }, 2000);
 }
+socket.on(`diceroll-${gameId}`, (data) =>{
+  buildModal(data, "dice-roll");
+});
+socket.on(`message-${gameId}`, (data) => {
+  $('#messages').append('<li><em>' + data.message  + '</em></li>');
+});
 
 
 function endTurn() {

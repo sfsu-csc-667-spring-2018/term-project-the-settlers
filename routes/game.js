@@ -139,19 +139,25 @@ router.post("/:id/dice",
       gameReady,
       isCurrentPlayer,
       (request,response,next) => {
+
   const {username} = request.user;
   const {id: gameId} = request.params;
   gameLogic.dice.rollDice(gameId)
   .then( (dice) => {
-      const io = request.app.get("io");
-      io.of('game').emit(`refresh-${gameId}`);
-      io.of('game').emit(`message-${gameId}`, {message: `${username}rolled a ${dice.dice_roll}.`});
+    const io = request.app.get("io");
+      io.of('game').emit(`message-${gameId}`, {message: `${username} rolled a ${dice.dice_roll}.`});
+      io.of('game').emit(`diceroll-${gameId}`, dice.dice_roll);
       if(dice.dice_roll == 7){
         io.of('game').emit(`robber-${gameId}`);
       }
-      gameLogic.resourceAllocation.updateResources(gameId);
+  }).then(()=>{
+    gameLogic.resourceAllocation.updateResources(gameId);
   })
-  .then( () => response.sendStatus(200))
+  .then( () => {
+    response.sendStatus(200);
+    const io = request.app.get("io");
+    io.of('game').emit(`refresh-${gameId}`);
+  })
   .catch( (error) => {
     console.log(error);
     response.sendStatus(401);
