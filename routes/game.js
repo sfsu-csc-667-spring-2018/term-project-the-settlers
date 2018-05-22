@@ -131,12 +131,12 @@ router.post("/:id/dice",
       //gameReady,
       //isCurrentPlayer,
       (request,response,next) => {
-  const{id: gameId} = request.params;
+  const{id: gameId, username} = request.params;
   gameLogic.dice.rollDice(gameId)
   .then( (dice) => {
       const io = request.app.get("io");
       io.of('game').emit(`refresh-${gameId}`);
-      io.of('game').emit(`message-${gameId}`, {message: `${dice.dice_roll} was rolled`});
+      io.of('game').emit(`message-${gameId}`, {user: username, message: `rolled a ${dice.dice_roll}.`});
       gameLogic.resourceAllocation.updateResources(gameId);
   })
   .then( () => response.sendStatus(200))

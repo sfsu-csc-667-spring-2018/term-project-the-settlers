@@ -185,7 +185,12 @@ socket.on(`refresh-${gameId}`, () => {
 });
 
 socket.on(`message-${gameId}`, (data) => {
-  $('#messages').append('<li>' + data.user.bold() + data.message  + '</li>');
+  if (data.event == 'dice-roll') {
+    $('#messages').append('<li>' + data.user.bold() + data.message  + '</li>');
+  } else {
+    $('#messages').append('<li>' + data.user.bold() + data.message  + '</li>');
+  }
+  
 })
 
 var timer;
