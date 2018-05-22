@@ -139,19 +139,25 @@ router.post("/:id/dice",
       gameReady,
       isCurrentPlayer,
       (request,response,next) => {
+
   const {username} = request.user;
   const {id: gameId} = request.params;
   gameLogic.dice.rollDice(gameId)
   .then( (dice) => {
-      const io = request.app.get("io");
-      io.of('game').emit(`refresh-${gameId}`);
-      io.of('game').emit(`message-${gameId}`, {message: `${username}rolled a ${dice.dice_roll}.`});
+    const io = request.app.get("io");
+      io.of('game').emit(`message-${gameId}`, {message: `${username} rolled a ${dice.dice_roll}.`});
+      io.of('game').emit(`diceroll-${gameId}`, dice.dice_roll);
       if(dice.dice_roll == 7){
         io.of('game').emit(`robber-${gameId}`);
       }
-      gameLogic.resourceAllocation.updateResources(gameId);
+  }).then(()=>{
+    gameLogic.resourceAllocation.updateResources(gameId);
   })
-  .then( () => response.sendStatus(200))
+  .then( () => {
+    response.sendStatus(200);
+    const io = request.app.get("io");
+    io.of('game').emit(`refresh-${gameId}`);
+  })
   .catch( (error) => {
     console.log(error);
     response.sendStatus(401);
@@ -213,11 +219,14 @@ router.post("/:id/endturn",
       gameReady,
       isCurrentPlayer,
       (request,response,next) => {
-  const { id: userId} = request.user;
+  const { id: userId,username} = request.user;
+  console.log("In routes");
   const {id: gameId} = request.params;
   gameLogic.turn.updatePlayerTurn(gameId)
   .then( () => {
+    const io = request.app.get("io");
     io.of('game').emit(`message-${gameId}`, {message: `${username} has ended his turn!`});
+    io.of('game').emit(`refresh-${gameId}`);
     response.sendStatus(200);
   })
   .catch( (error) => {

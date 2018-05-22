@@ -4,6 +4,14 @@ let action = "";
 $(".vertex[data-item='empty']").toggle();
 $(".edge[data-owner='0']").toggle();
 $(".robber:not([data-robber])").toggle();
+$("#roll").hide();
+
+
+$( document ).ready(function() {
+  if($(".vertex[data-item='settlement']").length >= $(".playercards").length * 2){
+    $("#roll").show();
+  }
+});
 
 
 $("body").on("click",".vertex", event => {
@@ -18,16 +26,11 @@ $("body").on("click",".vertex", event => {
       body: JSON.stringify({ x, y, item:action}),
       headers: new Headers({ "Content-Type": "application/json" })
     })
-    .then( (response) => {
-        if( response.status === 200){
-          buildModal(action);
-        }else{
-          alert("Can't do that");
-        }
-    });
-  }
-  if (event.target.classList.contains("tile")) {
-    //console.log("TILE", event.target);
+    .then( ()=>{
+      if($(".vertex[data-item='settlement']").length === $(".playercards").length * 2){
+        $("#roll").show();
+      }
+    })
   }
 });
 
@@ -45,29 +48,25 @@ $("body").on("click", ".robber", event => {
   if (event.target.classList.contains("tile")) {
     //console.log("TILE", event.target);
   }
-})
+});
 
 $("body").on("click", ".roads", event => {
   if (event.target.classList.contains("edge")) {
     const { x_start, y_start, x_end, y_end} = event.target.dataset;
+
     fetch(`/game/${gameId}/edge`, {
       method: "post",
       credentials: "include",
       body: JSON.stringify({ x_start, y_start, x_end, y_end }),
       headers: new Headers({ "Content-Type": "application/json" })
-    })
-    .then( (response) => {
-        if( response.status === 200){
-          buildModal("road");
-        }else{
-          alert("Can't do that");
-        }
     });
   }
   if (event.target.classList.contains("tile")) {
     console.log("TILE", event.target);
   }
 });
+
+
 
 // document.querySelector("#roll").addEventListener("click", event => {
 //   if (event.target.classList.contains(" ")) {
@@ -115,6 +114,9 @@ $(".recieveplayer").on("click", function() {
   });
 });
 
+
+
+
 // $(".offerbank").on("click", function() {
 //   const id = $(this).attr("id")
 //   $(".offerbank:not(#"+ id + ")").toggle("dim", function(){
@@ -146,19 +148,38 @@ $("form.message").on("submit", event => {
   return false;
 })
 
-$("#roll").on("click", () => {
-  // D6.roll();
+$("body").on("click","#roll", event => {
+  //D6.roll();
   fetch(`/game/${gameId}/dice`, {
     method: "post",
     credentials: "include",
     headers: new Headers({ "Content-Type": "application/json" })
   })
-  .then( response => {
-    if( response !== 200 ){
-        alert("Can't do that");
-      }
+  .then( (response) => {
+    if( response.status === 200){
+
+    }else{
+      alert("Can't do that");
+    }
+  });
+});
+$("body").on("click","#end", event => {
+  // console.log(x, y);
+ 
+  fetch(`/game/${gameId}/endturn`, {
+    method: "post",
+    credentials: "include",
+    headers: new Headers({ "Content-Type": "application/json" })
   })
-})
+  .then( (response) => {
+    if( response.status === 200){
+      endTurn();
+    }else{
+      alert("Can't do that");
+    }
+  });
+ });
+
 
 // $("#diceVal").on("submit", event => {
 //   const message = $("#diceVal").val();
@@ -192,7 +213,7 @@ socket.on(`chat-game-${gameId}`, (data) => {
       h = h ? h : 12; // the hour '0' should be '12'
       m = m < 10 ? '0'+m : m;
       var strTime = h + ':' + m + ' ' + ampm;
-      $('#messages').append('<li>' + data.user.bold() + ' (' + strTime +  '): ' + data.msg + '</li>');
+      $('#messages').append('<li>' + data.user.bold() + '(' + strTime +  '): ' + data.msg + '</li>');
   } else if (data && !isNaN(data.msg)) {
     $('#messages').append('<li>' + data.user.bold() + ' rolled a ' +  data.msg  +' !</li>');
   }
@@ -207,40 +228,24 @@ socket.on(`refresh-${gameId}`, () => {
   }).then( (html) => {
     const updatedBoard = $(html).find("#display").html();
     const updatedResources = $(html).find("#game_info").html();
-    console.log(updatedResources);
     $("#display").html(updatedBoard);
     $("#game_info").html(updatedResources);
     $(".vertex[data-item='empty']").toggle();
     $(".edge[data-owner='0']").toggle();
     $(".robber:not([data-robber])").toggle();
 
+  })
+  .then(()=>{
+    if($(".vertex[data-item='settlement']").length >= $(".playercards").length * 2){
+      $("#roll").show();
+    }
   }).catch( (error) => { console.log(error)})
 
-});
-
-
-socket.on(`message-${gameId}`, (data) => {
-  $('#messages').append('<li><em>' + data.message  + '</em></li>');
 });
 
 socket.on(`robber-${gameId}`, ()=>{
   $(".robber:not([data-robber])").toggle();
 });
-
-var timer;
-
-function attack(result) {
-  $("#roll").hide();
-  $("#end").show();
-  $(document).ready(function() {
-    buildModal(result, "dice-roll")
-  });
-}
-D6.dice(2, attack);
-function stopModal() {
-  clearTimeout(timer);
-}
-
 function buildModal(item, event) {
   $("#Modal").modal('show');
   if (event == "dice-roll") {
@@ -259,10 +264,14 @@ function buildModal(item, event) {
     $("#Modal").modal('hide');
   }, 2000);
 }
+socket.on(`diceroll-${gameId}`, (data) =>{
+  buildModal(data, "dice-roll");
+});
+socket.on(`message-${gameId}`, (data) => {
+  $('#messages').append('<li><em>' + data.message  + '</em></li>');
+});
+
 
 function endTurn() {
-  $("#diceall").hide();
-  $("#end").hide();
-  $("#roll").show();
   buildModal(null, "end-turn");
 }
