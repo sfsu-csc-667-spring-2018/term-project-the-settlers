@@ -109,7 +109,7 @@ router.post("/:id/edge",
       gameReady,
       isCurrentPlayer,
       (request,response,next) => {
-  const {id: userId} = request.user;
+  const {id: userId, username} = request.user;
   const {id: gameId} = request.params;
   const {  x_start: xStart,
            y_start: yStart,
@@ -118,7 +118,7 @@ router.post("/:id/edge",
   gameLogic.building.buildRoad(userId,gameId,xStart,yStart,xEnd,yEnd)
   .then( () => {
     const io = request.app.get("io");
-    io.of('game').emit(`refresh-${gameId}`);
+    io.of('game').emit(`refresh-${gameId}`, {user: username, message: ' placed a road.'});
     response.sendStatus(200);
   })
   .catch( (error) => {

@@ -10,7 +10,7 @@ $("body").on("click",".vertex", event => {
   if (event.target.classList.contains("vertex")) {
     const { x, y , item } = event.target.dataset;
     // console.log(x, y);
-    vertextModal(action);
+    buildModal(action);
 
     fetch(`/game/${gameId}/vertex`, {
       method: "post",
@@ -27,6 +27,8 @@ $("body").on("click",".vertex", event => {
  $("body").on("click", ".roads", event => {
   if (event.target.classList.contains("edge")) {
     const { x_start, y_start, x_end, y_end} = event.target.dataset;
+
+    buildModal("road");
 
     fetch(`/game/${gameId}/edge`, {
       method: "post",
@@ -182,9 +184,8 @@ socket.on(`refresh-${gameId}`, () => {
 
 });
 
-
 socket.on(`message-${gameId}`, (data) => {
-  $('#messages').append('<li>' + data.user.bold() +   data.message  + '</li>');
+  $('#messages').append('<li>' + data.user.bold() + data.message  + '</li>');
 })
 
 var timer;
@@ -208,7 +209,7 @@ function stopModal() {
   clearTimeout(timer);
 }
 
-function vertextModal(item) {
+function buildModal(item) {
   $("#Modal").modal('show');
   $("#Modal").find('.modal-title').text(item.charAt(0).toUpperCase() + item.slice(1) + ' Placed');
   console.log(item.charAt(0).toUpperCase() + item.slice(1) + 'Placed');
@@ -219,4 +220,3 @@ function vertextModal(item) {
       $("#Modal").modal('hide');
   }, 2000);
 }
-
