@@ -210,14 +210,15 @@ router.post("/:id/move-robber",
 });
 
 router.post("/:id/endturn",
-      gameReady,
-      isCurrentPlayer,
+      //gameReady,
+      //isCurrentPlayer,
       (request,response,next) => {
-  const { id: userId} = request.user;
+  const { id: userId,username} = request.user;
   console.log("In routes");
   const {id: gameId} = request.params;
   gameLogic.turn.updatePlayerTurn(gameId)
   .then( () => {
+    const io = request.app.get("io");
     io.of('game').emit(`message-${gameId}`, {message: `${username} has ended his turn!`});
     response.sendStatus(200);
   })
