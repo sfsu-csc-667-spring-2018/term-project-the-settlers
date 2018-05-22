@@ -81,18 +81,6 @@ const insertGameVertices = db => gameId => {
   );
 };
 
-const getPlayerInfo = db => (gameId) => {
-  return db.any('SELECT username, turn_order,COALESCE(cards.card_count,0) AS card_count,resource_count,current_turn  FROM players'
-          +' INNER JOIN users ON users.id = players.user_id'
-          +' LEFT JOIN (SELECT COUNT(*) AS card_count,player_id'
-          +'             FROM dev_cards GROUP BY player_id) cards ON cards.player_id = players.id '
-          +' LEFT JOIN (SELECT SUM(count) AS resource_count, player_id'
-          + '           FROM player_resources GROUP BY player_id) resources'
-          +' ON resources.player_id = players.id'
-          +' WHERE game_id = $1'
-          +' ORDER by turn_order', [gameId] );
-};
-
 const getPlayerResources = db => (gameId) => {
   return db.any('SELECT SUM(count) FROM player_resources GROUP BY player_id WHERE game_id = $1,')
 };
@@ -115,7 +103,7 @@ module.exports = db => {
       ),
       db.many("SELECT * FROM game_vertices WHERE game_id=$1", [id]),
       db.many("SELECT * FROM game_edges WHERE game_id=$1 ORDER BY game_edges.order", [id]),
-      getPlayerInfo(db)(id),
+      gameFunctions.getPlayerInfo(db)(id),
 
     ]).then(([game, tiles, vertices, edges, playerInfo]) => ({
       game,
@@ -124,6 +112,18 @@ module.exports = db => {
       edges,
       playerInfo
     }));
+
+    gameFunctions.getPlayerInfo = db => (gameId) => {
+      return db.any('SELECT username, turn_order,COALESCE(cards.card_count,0) AS card_count,resource_count,current_turn  FROM players'
+              +' INNER JOIN users ON users.id = players.user_id'
+              +' LEFT JOIN (SELECT COUNT(*) AS card_count,player_id'
+              +'             FROM dev_cards GROUP BY player_id) cards ON cards.player_id = players.id '
+              +' LEFT JOIN (SELECT SUM(count) AS resource_count, player_id'
+              + '           FROM player_resources GROUP BY player_id) resources'
+              +' ON resources.player_id = players.id'
+              +' WHERE game_id = $1'
+              +' ORDER by turn_order', [gameId] );
+    };
 
   gameFunctions.getGames = () => {
     return db.any('SELECT id,game_name,player_limit,p.player_count FROM "games" g '
@@ -162,8 +162,8 @@ module.exports = db => {
           t
             .none(
               'UPDATE "game_tiles" SET robber = $1 ' +
-                "WHERE order = $2 AND game_id = $3",
-              [true, gameTileOrder, gameId]
+                "WHERE $2:name = $3 AND game_id = $4",
+              [true, "order",gameTileOrder, gameId]
             )
             .catch(error => error)
         );
@@ -239,18 +239,18 @@ module.exports = db => {
 
   };
 
-  gameFunctions.getItemCount = (gameId) => {
-    return db.one('SELECT count(*) AS count FROM game_vertices WHERE game_id = $1 AND item != $2'
-          ,[gameId,'empty'])
-  };
-
   gameFunctions.getDiceRoll = (gameId) => {
     return db.one('SELECT dice_roll FROM games WHERE id = $1' , [gameId])
   };
 
   gameFunctions.rollDice = (gameId,diceRoll) => {
-    return db.none('UPDATE games SET dice_roll = $1 WHERE id = $2', [diceRoll,gameId]);
+    return db.one('UPDATE games SET dice_roll = $1 WHERE id = $2 RETURNING dice_roll', [diceRoll,gameId]);
   };
+
+  gameFunctions.getItemCount = (gameId) => {
+   return db.one('SELECT count(*) AS count FROM game_vertices WHERE game_id = $1 AND item != $2'
+         ,[gameId,'empty'])
+ };
 
 
   return gameFunctions;

@@ -3,9 +3,10 @@ var socket = io('/game');
 let action = "";
 $(".vertex[data-item='empty']").toggle();
 $(".edge[data-owner='0']").toggle();
+$(".robber:not([data-robber])").toggle();
 
 
-$(".vertex").on("click", event => {
+$("body").on("click",".vertex", event => {
  // console.log(event.target.classList);
   if (event.target.classList.contains("vertex")) {
     const { x, y , item } = event.target.dataset;
@@ -23,7 +24,23 @@ $(".vertex").on("click", event => {
   }
 });
 
-$(".roads").on("click", event => {
+$("body").on("click", ".robber", event => {
+  $(".robber:not([data-robber])").toggle();
+  if (event.target.classList.contains("robber")) {
+
+    fetch(`/game/${gameId}/move-robber`, {
+      method: "post",
+      credentials: "include",
+      body: JSON.stringify({ tile_order }),
+      headers: new Headers({ "Content-Type": "application/json" })
+    });
+  }
+  if (event.target.classList.contains("tile")) {
+    //console.log("TILE", event.target);
+  }
+})
+
+$("body").on("click", ".roads", event => {
   if (event.target.classList.contains("edge")) {
     const { x_start, y_start, x_end, y_end} = event.target.dataset;
 
@@ -39,26 +56,26 @@ $(".roads").on("click", event => {
   }
 });
 
-document.querySelector("#roll").addEventListener("click", event => {
-  if (event.target.classList.contains(" ")) {
-    const {  } = event.target.dataset;
-    
-    fetch(`/game/${gameId}/`, {
-      method: "post",
-      credentials: "include",
-      body: JSON.stringify({  }),
-      headers: new Headers({ "Content-Type": "application/json" })
-    });
-  }
-  if (event.target.classList.contains("tile")) {
-    console.log("TILE", event.target);
-  }
-});
+// document.querySelector("#roll").addEventListener("click", event => {
+//   if (event.target.classList.contains(" ")) {
+//     const {  } = event.target.dataset;
+
+//     fetch(`/game/${gameId}/`, {
+//       method: "post",
+//       credentials: "include",
+//       body: JSON.stringify({  }),
+//       headers: new Headers({ "Content-Type": "application/json" })
+//     });
+//   }
+//   if (event.target.classList.contains("tile")) {
+//     console.log("TILE", event.target);
+//   }
+// });
 
 $(".buildroad").on("click", function() {
   const road = "true";
   $(".edge[data-owner='0']").toggle();
-  
+
 });
 $(".buildsettlement").on("click", function() {
   action = "settlement";
@@ -116,27 +133,36 @@ $("form.message").on("submit", event => {
   return false;
 })
 
-$("#diceVal").on("submit", event => {
-  const message = $("#diceVal").val();
-  if (message !== undefined) {
-    fetch(`/chat/game`, {
-      method: "post",
-      body: JSON.stringify({ message, gameId }),
-      credentials: "include",
-      headers: new Headers({ "Content-Type": "application/json" })
-    }),
-    fetch(`/game/${gameId}/droll`, {
-      method: "post",
-      body: JSON.stringify({ dice_rolled: message }),
-      credentials: "include",
-      headers: new Headers({ "Content-Type": "application/json" })
-    })
-    .catch(error => console.log(error));
-  }
-  event.preventDefault();
-  event.stopPropagation();
-  return false;
-});
+$("#roll").on("click", () => {
+  //D6.roll();
+  fetch(`/game/${gameId}/dice`, {
+    method: "post",
+    credentials: "include",
+    headers: new Headers({ "Content-Type": "application/json" })
+  })
+})
+
+// $("#diceVal").on("submit", event => {
+//   const message = $("#diceVal").val();
+//   if (message !== undefined) {
+//     fetch(`/chat/game`, {
+//       method: "post",
+//       body: JSON.stringify({ message, gameId }),
+//       credentials: "include",
+//       headers: new Headers({ "Content-Type": "application/json" })
+//     }),
+//     fetch(`/game/${gameId}/droll`, {
+//       method: "post",
+//       body: JSON.stringify({ dice_rolled: message }),
+//       credentials: "include",
+//       headers: new Headers({ "Content-Type": "application/json" })
+//     })
+//     .catch(error => console.log(error));
+//   }
+//   event.preventDefault();
+//   event.stopPropagation();
+//   return false;
+// });
 
 socket.on(`chat-game-${gameId}`, (data) => {
   if (data && isNaN(data.msg)) {
@@ -155,5 +181,28 @@ socket.on(`chat-game-${gameId}`, (data) => {
 });
 
 socket.on(`refresh-${gameId}`, () => {
- location.reload();
+  fetch(document.URL,{
+    method: "get",
+    credentials: "include"
+  }).then((response) => {
+    return response.text();
+  }).then( (html) => {
+    const updatedBoard = $(html).find("#display").html();
+    const updatedResources = $(html).find("#game_info").html();
+    console.log(updatedResources);
+    $("#display").html(updatedBoard);
+    $("#game_info").html(updatedResources);
+    $(".vertex[data-item='empty']").toggle();
+    $(".edge[data-owner='0']").toggle();
+    $(".robber:not([data-robber])").toggle();
+
+  }).catch( (error) => { console.log(error)})
+
 });
+
+socket.on(`robber-${gameId}`, ()=>{
+  $(".robber:not([data-robber])").toggle();
+});
+socket.on(`message-${gameId}`, (event) => {
+  alert(event.message);
+})

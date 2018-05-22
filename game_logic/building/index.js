@@ -14,7 +14,6 @@ module.exports = db => {
     const subtractResource = (userId,gameId,type,amount) =>{
       return db.players.getResourceCount(userId,gameId,type)
         .then(({count}) => {
-          console.log(count,amount,type,count<amount);
           if(count >= amount){
             return db.players.updateResources(userId,gameId,type,-amount);
           }else{
@@ -23,12 +22,15 @@ module.exports = db => {
         })
     };
 
-    const firstPhaseBuilding = (gameId) => {
-      return Promise.all([db.games.getItemCount(gameId),db.games.getPlayerLimit(gameId)])
-      .then(([items,players]) => {
+    const firstPhaseBuilding = (gameId,userId) => {
+      return Promise.all([db.games.getItemCount(gameId),
+                          db.games.getPlayerLimit(gameId),
+                          db.players.getSettlementCount(userId,gameId)])
+      .then(([items,players,settlement]) => {
         const {count: itemCount} = items;
         const {player_limit: playerLimit} = players;
-        if(itemCount >= (playerLimit * 2)){
+        const {count: settlementCount} = settlement;
+        if(itemCount >= (playerLimit * 2) || settlementCount >= 2){
           return false;
         }else{
           return true;
@@ -36,12 +38,15 @@ module.exports = db => {
       }).catch( (error) => console.log(error));
     };
 
-    const firstPhaseRoadBuilding = (gameId) => {
-      return Promise.all([db.games.getRoadCount(gameId), db.games.getPlayerLimit(gameId)])
-        .then(([roads,players]) => {
+    const firstPhaseRoadBuilding = (gameId,userId) => {
+      return Promise.all([db.games.getRoadCount(gameId),
+                          db.games.getPlayerLimit(gameId),
+                          db.players.getRoadCount(userId,gameId)])
+        .then(([roads,players,playerRoads]) => {
           const {player_limit: playerLimit} = players;
+          const {count: playerRoadCount} = playerRoads;
           const {count: roadCount} = roads;
-          if(roadCount >= (playerLimit *2)){
+          if(roadCount >= (playerLimit *2) || playerRoadCount >= 2){
             return false;
           }else{
             return true;
@@ -69,7 +74,7 @@ module.exports = db => {
 
     buildingFunctions.buildStructure = (userId,gameId,x,y,buildingType) => {
       if(buildingType.toUpperCase() === "SETTLEMENT"){
-        return firstPhaseBuilding(gameId)
+        return firstPhaseBuilding(gameId,userId)
                 .then( isFirstPhase => buildSettlement(userId,gameId,x,y,buildingType,isFirstPhase))
       }else{
         return buildCity(userId,gameId,x,y,buildingType);
@@ -78,7 +83,7 @@ module.exports = db => {
 
     buildingFunctions.buildRoad = (userId,gameId,xStart,yStart,xEnd,yEnd) => {
       //TODO finish validation
-      return firstPhaseRoadBuilding(gameId)
+      return firstPhaseRoadBuilding(gameId,userId)
         .then( (isFirstPhase) => {
           if( isFirstPhase ){
               return db.players.buildRoad(userId,gameId,xStart,yStart,xEnd,yEnd)

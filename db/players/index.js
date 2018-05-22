@@ -34,6 +34,14 @@ module.exports = (db) => {
     )
   }
 
+  playerFunctions.getResourcesRandom = (userId,gameId) => {
+    return playerFunctions.findPlayerId(userId)
+      .then( ({id}) =>
+        db.any('SELECT resource_type, count FROM "player_resources" '
+                  + 'WHERE player_id = $1 AND game_id = $2 ORDER BY random()',[id,gameId])
+    )
+  }
+
   playerFunctions.getResourceCount = (userId,gameId,type) => {
     return playerFunctions.findPlayerId(userId)
       .then( ({id}) =>
@@ -114,9 +122,29 @@ module.exports = (db) => {
      + 'INNER JOIN  tile_vertex_lookup ON x=affected_x_pos AND y= affected_y_pos '
      + 'INNER JOIN game_tiles ON game_tile_order = game_tiles.order '
      + 'INNER JOIN tiles ON tiles.id = game_tiles.tile_id '
-     + 'WHERE die_number = $1 AND item != $2 AND user_id != $3 AND game_vertices.game_id = $4'
-    , [diceRoll,'empty', 0, gameId])
+     + 'WHERE die_number = $1 AND item != $2 AND user_id != $3 AND game_vertices.game_id = $4 '
+     + 'AND robber = $5'
+    , [diceRoll,'empty', 0, gameId, false])
   }
 
+  playerFunctions.getSettlementCount = (userId,gameId) => {
+    return playerFunctions.findPlayerId(userId)
+    .then( ({id}) => db.one('SELECT count(*) AS count FROM game_vertices WHERE game_id = $1 AND item != $2 AND user_id = $3'
+            ,[gameId,'empty',id]))
+  };
+
+  playerFunctions.getRoadCount = (userId,gameId) => {
+    return playerFunctions.findPlayerId(userId)
+    .then( ({id}) => db.one('SELECT count(*) AS count FROM game_edges WHERE game_id = $1 AND road = $2 AND user_id = $3'
+            ,[gameId,true,id]))
+  };
+
+  playerFunctions.getUserTotalResources = (gameId) => {
+    return db.any('SELECT user_id,pr.count FROM players INNER JOIN '
+       +'         (SELECT SUM(count) AS count,player_id FROM player_resources '
+       +'           WHERE game_id = $1 GROUP BY player_id) pr'
+       +' ON players.id = pr.player_id '
+            ,[gameId]);
+  }
   return playerFunctions;
 }
