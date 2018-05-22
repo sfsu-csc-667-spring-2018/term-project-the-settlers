@@ -89,8 +89,8 @@ router.get("/:id", (request, response, next) => {
 
 
 router.post("/:id/vertex",
-      // gameReady,
-      // isCurrentPlayer,
+      gameReady,
+      isCurrentPlayer,
       (request, response, next) => {
   const{id: userId, username} = request.user;
   const{id: gameId} = request.params;
@@ -136,8 +136,8 @@ router.post("/:id/edge",
 });
 
 router.post("/:id/dice",
-      //gameReady,
-      //isCurrentPlayer,
+      gameReady,
+      isCurrentPlayer,
       (request,response,next) => {
   const{id: gameId, username} = request.params;
   gameLogic.dice.rollDice(gameId)
@@ -190,8 +190,8 @@ router.post("/:id/trade",
 });
 
 router.post("/:id/move-robber",
-    //gameReady,
-    //isCurrentPlayer,
+    gameReady,
+    isCurrentPlayer,
     (request,response,next) => {
   const {id: gameId} = request.params;
   const {tile_order : tileOrder} = request.body;
