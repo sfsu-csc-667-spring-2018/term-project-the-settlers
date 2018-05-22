@@ -121,7 +121,8 @@ $("form.message").on("submit", event => {
 })
 
 $("#roll").on("click", () => {
-  //D6.roll();
+  // D6.roll();
+  console.log('ROlled')
   fetch(`/game/${gameId}/dice`, {
     method: "post",
     credentials: "include",
@@ -194,7 +195,7 @@ function attack(result) {
   $("#roll").hide();
   $("#end").show();
   $(document).ready(function() {
-    buildModal(result, isDiceRoll = true)
+    buildModal(result, "dice-roll")
   });
 }
 D6.dice(2, attack);
@@ -202,18 +203,28 @@ function stopModal() {
   clearTimeout(timer);
 }
 
-function buildModal(item, isDiceRoll) {
+function buildModal(item, event) {
   $("#Modal").modal('show');
-  if (isDiceRoll) {
+  if (event == "dice-roll") {
     $("#Modal").find('.modal-title').text('Dice Roll');
-    $("#Modal").find('.modal-body').text('You rolled a ' + result + '!');
-    $("#diceVal").val(result)
+    $("#Modal").find('.modal-body').text('You rolled a ' + item + '!');
+    $("#diceVal").val(item);
     $("#diceVal").submit();
+  } else if (event == "end-turn") {
+    $("#Modal").find('.modal-title').text('End Turn');
+    $("#Modal").find('.modal-body').text('You ended your turn!');
   } else {
-     $("#Modal").find('.modal-title').text(item.charAt(0).toUpperCase() + item.slice(1) + ' Placed');
+    $("#Modal").find('.modal-title').text(item.charAt(0).toUpperCase() + item.slice(1) + ' Placed');
     $("#Modal").find('.modal-body').text('You placed a ' + item + '!');
   }
   timer = setTimeout(function() {
-      $("#Modal").modal('hide');
+    $("#Modal").modal('hide');
   }, 2000);
+}
+
+function endTurn() {
+  $("#diceall").hide();
+  $("#end").hide();
+  $("#roll").show();
+  buildModal(null, "end-turn");
 }

@@ -159,17 +159,17 @@ router.post("/:id/buy-devcard",
 });
 
 router.post("/:id/play-devcard",
-      gameReady,  isCurrentPlayer, (request,response,next) => {
+      gameReady, isCurrentPlayer, (request,response,next) => {
   response.sendStatus(200);
 });
 
 router.post("/:id/trade-offer",
-      gameReady,  isCurrentPlayer, (request,response,next) => {
+      gameReady, isCurrentPlayer, (request,response,next) => {
   response.sendStatus(200);
 });
 
 router.post("/:id/trade-reply",
-      gameReady,  isCurrentPlayer, (request,response,next) => {
+      gameReady, isCurrentPlayer, (request,response,next) => {
 
   response.sendStatus(200);
 });
