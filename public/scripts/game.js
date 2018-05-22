@@ -69,6 +69,26 @@ $("body").on("click", ".roads", event => {
   }
 });
 
+$("body").on("click","#end", event => {
+  // console.log(x, y);
+ 
+  fetch(`/game/${gameId}/endturn`, {
+    method: "post",
+    credentials: "include",
+    headers: new Headers({ "Content-Type": "application/json" })
+  })
+  .then( (response) => {
+    if( response.status === 200){
+      endTurn();
+    }else{
+      alert("Can't do that");
+    }
+  });
+  if (event.target.classList.contains("tile")) {
+    //console.log("TILE", event.target);
+  }
+ });
+
 // document.querySelector("#roll").addEventListener("click", event => {
 //   if (event.target.classList.contains(" ")) {
 //     const {  } = event.target.dataset;

@@ -214,6 +214,7 @@ router.post("/:id/endturn",
       isCurrentPlayer,
       (request,response,next) => {
   const { id: userId} = request.user;
+  console.log("In routes");
   const {id: gameId} = request.params;
   gameLogic.turn.updatePlayerTurn(gameId)
   .then( () => {

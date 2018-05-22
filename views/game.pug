@@ -107,8 +107,8 @@ body
           .resource
             img(src='/images/devcards/' + val + '.png')
       .row-sm-3
-        input#roll(type='button', value='Roll Dice')
-        input#end(type='button', value='End Turn', onclick='endTurn()',style='display: none')
+        input#roll(type='button', value='Roll Dice', style='display: none')
+        input#end(type='button', value='End Turn')
         input#diceVal(type="hidden", value=dice)
     #Modal.modal.fade(role='dialog')
       .modal-dialog
