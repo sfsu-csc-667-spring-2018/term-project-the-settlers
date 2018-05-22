@@ -161,7 +161,7 @@ socket.on(`chat-game-${gameId}`, (data) => {
       h = h ? h : 12; // the hour '0' should be '12'
       m = m < 10 ? '0'+m : m;
       var strTime = h + ':' + m + ' ' + ampm;
-      $('#messages').append('<li>' + data.user.bold() + '(' + strTime +  '): ' + data.msg + '</li>');
+      $('#messages').append('<li>' + data.user.bold() + ' (' + strTime +  '): ' + data.msg + '</li>');
   } else if (data && !isNaN(data.msg)) {
     $('#messages').append('<li>' + data.user.bold() + ' rolled a ' +  data.msg  +' !</li>');
   }
@@ -185,12 +185,7 @@ socket.on(`refresh-${gameId}`, () => {
 });
 
 socket.on(`message-${gameId}`, (data) => {
-  if (data.event == 'dice-roll') {
-    $('#messages').append('<li>' + data.user.bold() + data.message  + '</li>');
-  } else {
-    $('#messages').append('<li>' + data.user.bold() + data.message  + '</li>');
-  }
-  
+  $('#messages').append('<li>' + data.user.bold() + data.message  + '</li>');
 })
 
 var timer;
@@ -217,8 +212,6 @@ function stopModal() {
 function buildModal(item) {
   $("#Modal").modal('show');
   $("#Modal").find('.modal-title').text(item.charAt(0).toUpperCase() + item.slice(1) + ' Placed');
-  console.log(item.charAt(0).toUpperCase() + item.slice(1) + 'Placed');
-  console.log('You placed a ' + item + '!')
   $("#Modal").find('.modal-body').text('You placed a ' + item + '!');
   $("#diceVal").submit();
   timer = setTimeout(function() {

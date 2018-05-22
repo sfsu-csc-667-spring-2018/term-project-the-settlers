@@ -95,16 +95,16 @@ body
       .row-sm-3.cards
         h5 Resources
         each val in ["brick", "wood",  "ore","wheat", "sheep" ]
-            .resource
-              img(src='/images/resources/' + val + '.png')
+          .resource
+            img(src='/images/resources/' + val + '.png')
         .count
           each resource in playerResources
             p= resource.count
 
         h5 Development Cards
         each val in ["knight",  "monopoly", "plenty",  "roadbuilding", "victorypoint" ]
-            .resource
-              img(src='/images/devcards/' + val + '.png')
+          .resource
+            img(src='/images/devcards/' + val + '.png')
       .row-sm-3
         input#roll(type='button', value='Roll Dice')
         input#end(type='button', value='End Turn', onclick='endTurn()',style='display: none')
