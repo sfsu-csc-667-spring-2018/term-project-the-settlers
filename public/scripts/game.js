@@ -185,7 +185,7 @@ socket.on(`refresh-${gameId}`, () => {
 });
 
 socket.on(`message-${gameId}`, (data) => {
-  $('#messages').append('<li>' + data.user.bold() + data.message  + '</li>');
+  $('#messages').append('<li><em>' + data.user.bold() + data.message  + '</em></li>');
 })
 
 var timer;
@@ -194,14 +194,7 @@ function attack(result) {
   $("#roll").hide();
   $("#end").show();
   $(document).ready(function() {
-    $("#Modal").modal('show');
-    $("#Modal").find('.modal-title').text('Dice Roll');
-    $("#Modal").find('.modal-body').text('You rolled a ' + result + '!');
-    $("#diceVal").val(result)
-    $("#diceVal").submit();
-    timer = setTimeout(function() {
-        $("#Modal").modal('hide');
-    }, 2000);
+    buildModal(result, isDiceRoll = true)
   });
 }
 D6.dice(2, attack);
@@ -209,11 +202,17 @@ function stopModal() {
   clearTimeout(timer);
 }
 
-function buildModal(item) {
+function buildModal(item, isDiceRoll) {
   $("#Modal").modal('show');
-  $("#Modal").find('.modal-title').text(item.charAt(0).toUpperCase() + item.slice(1) + ' Placed');
-  $("#Modal").find('.modal-body').text('You placed a ' + item + '!');
-  $("#diceVal").submit();
+  if (isDiceRoll) {
+    $("#Modal").find('.modal-title').text('Dice Roll');
+    $("#Modal").find('.modal-body').text('You rolled a ' + result + '!');
+    $("#diceVal").val(result)
+    $("#diceVal").submit();
+  } else {
+     $("#Modal").find('.modal-title').text(item.charAt(0).toUpperCase() + item.slice(1) + ' Placed');
+    $("#Modal").find('.modal-body').text('You placed a ' + item + '!');
+  }
   timer = setTimeout(function() {
       $("#Modal").modal('hide');
   }, 2000);
