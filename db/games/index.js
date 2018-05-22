@@ -200,6 +200,10 @@ module.exports = db => {
       ,[true,gameId, 5]);
   };
 
+  gameFunctions.getRoadCount = (gameId) => {
+    return db.one('SELECT COUNT(*) AS count FROM game_edges WHERE road = $1 AND game_id = $2'
+      ,[true,gameId])
+  };
   gameFunctions.getDevCardTypeCount = (gameId,devCardType) => {
     return db.any('SELECT player_id,COUNT(*) AS count FROM dev_cards '
       +'WHERE game_id = $1 AND UPPER(dev_card_type) = UPPER($2) GROUP BY player_id'

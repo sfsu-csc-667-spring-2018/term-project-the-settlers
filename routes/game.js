@@ -102,7 +102,7 @@ router.post("/:id/vertex",
   .then( () => {
       const io = request.app.get("io");
       io.of('game').emit(`refresh-${gameId}`);
-      io.of('game').emit(`message-${gameId}`, {user: username, message: ` placed a ${buildingType}.`});
+      io.of('game').emit(`message-${gameId}`, {message: `${username} placed a ${buildingType}.`});
       response.sendStatus(200);
     })
   .catch( (error) => {
@@ -126,7 +126,7 @@ router.post("/:id/edge",
   .then( () => {
     const io = request.app.get("io");
     io.of('game').emit(`refresh-${gameId}`);
-    io.of('game').emit(`message-${gameId}`, {user: username, message: ` placed a road.`});
+    io.of('game').emit(`message-${gameId}`, {message: `${username} placed a road.`});
     response.sendStatus(200);
   })
   .catch( (error) => {
@@ -139,12 +139,13 @@ router.post("/:id/dice",
       gameReady,
       isCurrentPlayer,
       (request,response,next) => {
-  const{id: gameId, username} = request.params;
+  const {username} = request.user;
+  const {id: gameId} = request.params;
   gameLogic.dice.rollDice(gameId)
   .then( (dice) => {
       const io = request.app.get("io");
       io.of('game').emit(`refresh-${gameId}`);
-      io.of('game').emit(`message-${gameId}`, {user: username, message: `rolled a ${dice.dice_roll}.`});
+      io.of('game').emit(`message-${gameId}`, {message: `${username}rolled a ${dice.dice_roll}.`});
       if(dice.dice_roll == 7){
         io.of('game').emit(`robber-${gameId}`);
       }

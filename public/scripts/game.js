@@ -220,7 +220,6 @@ socket.on(`refresh-${gameId}`, () => {
 
 
 socket.on(`message-${gameId}`, (data) => {
-  alert("hmmmm");
   $('#messages').append('<li><em>' + data.message  + '</em></li>');
 });
 
