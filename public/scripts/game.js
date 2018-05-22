@@ -5,12 +5,12 @@ $(".vertex[data-item='empty']").toggle();
 $(".edge[data-owner='0']").toggle();
 
 
-$(".vertex").on("click", event => {
+$("body").on("click",".vertex", event => {
  // console.log(event.target.classList);
   if (event.target.classList.contains("vertex")) {
     const { x, y , item } = event.target.dataset;
     // console.log(x, y);
-    showModal(action);
+    vertextModal(action);
 
     fetch(`/game/${gameId}/vertex`, {
       method: "post",
@@ -24,19 +24,7 @@ $(".vertex").on("click", event => {
   }
 });
 
- function showModal(item) {
-   $("#Modal").modal('show');
-   $("#Modal").find('.modal-title').text(item.charAt(0).toUpperCase() + item.slice(1) + ' Placed');
-   console.log(item.charAt(0).toUpperCase() + item.slice(1) + 'Placed');
-   console.log('You placed a ' + item + '!')
-   $("#Modal").find('.modal-body').text('You placed a ' + item + '!');
-   $("#diceVal").submit();
-   timer = setTimeout(function() {
-       $("#Modal").modal('hide');
-   }, 2000);
- }
-
-$(".roads").on("click", event => {
+ $("body").on("click", ".roads", event => {
   if (event.target.classList.contains("edge")) {
     const { x_start, y_start, x_end, y_end} = event.target.dataset;
 
@@ -178,12 +166,24 @@ socket.on(`chat-game-${gameId}`, (data) => {
 });
 
 socket.on(`refresh-${gameId}`, () => {
-  console.log("reloaded!");
-  location.reload();
+  fetch(document.URL,{
+    method: "get",
+    credentials: "include"
+  }).then((response) => {
+    return response.text();
+  }).then( (html) => {
+    const updatedBoard = $(html).find("#display").html();
+    const updatedResources = $(html).find("#game_info").html();
+    console.log(updatedResources);
+    $("#display").html(updatedBoard);
+    $("#game_info").html(updatedResources);
+
+  }).catch( (error) => { console.log(error)})
+
 });
 
+
 socket.on(`message-${gameId}`, (data) => {
-  alert(data.message);
   $('#messages').append('<li>' + data.user.bold() +   data.message  + '</li>');
 })
 
@@ -207,3 +207,16 @@ D6.dice(2, attack);
 function stopModal() {
   clearTimeout(timer);
 }
+
+function vertextModal(item) {
+  $("#Modal").modal('show');
+  $("#Modal").find('.modal-title').text(item.charAt(0).toUpperCase() + item.slice(1) + ' Placed');
+  console.log(item.charAt(0).toUpperCase() + item.slice(1) + 'Placed');
+  console.log('You placed a ' + item + '!')
+  $("#Modal").find('.modal-body').text('You placed a ' + item + '!');
+  $("#diceVal").submit();
+  timer = setTimeout(function() {
+      $("#Modal").modal('hide');
+  }, 2000);
+}
+
