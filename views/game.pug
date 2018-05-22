@@ -106,28 +106,6 @@ body
             .resource
               img(src='/images/devcards/' + val + '.png')
       .row-sm-3
-        script.
-          var timer;
-
-          function attack(result) {
-            $("#roll").hide();
-            $("#end").show();
-            $(document).ready(function() {
-              $("#Modal").modal('show');
-              $("#Modal").find('.modal-title').text('Dice Roll');
-              $("#Modal").find('.modal-body').text('You rolled a ' + result + '!');
-              $("#diceVal").val(result)
-              $("#diceVal").submit();
-              timer = setTimeout(function() {
-                  $("#Modal").modal('hide');
-              }, 2000);
-            });
-          }
-          D6.dice(2, attack);
-          function stopModal() {
-            clearTimeout(timer);
-          }
-
         input#roll(type='button', value='Roll Dice')
         input#end(type='button', value='End Turn', onclick='endTurn()',style='display: none')
         input#diceVal(type="hidden", value=dice)

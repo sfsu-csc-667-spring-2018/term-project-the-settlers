@@ -11,7 +11,7 @@ $(".vertex").on("click", event => {
     const { x, y , item } = event.target.dataset;
     // console.log(x, y);
     showModal(action);
-    
+
     fetch(`/game/${gameId}/vertex`, {
       method: "post",
       credentials: "include",
@@ -186,3 +186,24 @@ socket.on(`message-${gameId}`, (data) => {
   alert(data.message);
   $('#messages').append('<li>' + data.user.bold() +   data.message  + '</li>');
 })
+
+var timer;
+
+function attack(result) {
+  $("#roll").hide();
+  $("#end").show();
+  $(document).ready(function() {
+    $("#Modal").modal('show');
+    $("#Modal").find('.modal-title').text('Dice Roll');
+    $("#Modal").find('.modal-body').text('You rolled a ' + result + '!');
+    $("#diceVal").val(result)
+    $("#diceVal").submit();
+    timer = setTimeout(function() {
+        $("#Modal").modal('hide');
+    }, 2000);
+  });
+}
+D6.dice(2, attack);
+function stopModal() {
+  clearTimeout(timer);
+}
