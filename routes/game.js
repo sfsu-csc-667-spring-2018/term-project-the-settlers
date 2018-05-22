@@ -74,10 +74,16 @@ router.get("/:id", (request, response, next) => {
 
   Promise.all([db.games.getGame(gameId),
               db.players.getDevCards(userId ,gameId),
-              db.players.getResources(userId,gameId)])
-  .then(([gameInfo, playerDevCard,playerResources]) => {
+              db.players.getResources(userId,gameId),
+              gameLogic.stats.getPlayerStats(gameId)])
+  .then(([gameInfo, playerDevCard,playerResources,playerInfo]) => {
     //console.log(Object.assign({}, gameInfo, {playerDevCard},{playerResources}));
-    response.render("game", Object.assign({}, gameInfo, {playerDevCard},{playerResources}, { username, userId }));
+    response.render("game", Object.assign({},
+                                          gameInfo,
+                                          {playerDevCard},
+                                          {playerResources},
+                                          {playerInfo},
+                                          { username, userId }));
   }).catch(error => console.log(error));
 });
 
