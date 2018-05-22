@@ -169,6 +169,7 @@ socket.on(`refresh-${gameId}`, () => {
   location.reload();
 });
 
-socket.on(`message-${gameId}`, (event) => {
-  alert(event.message);
+socket.on(`message-${gameId}`, (data) => {
+  alert(data.message);
+  $('#messages').append('<li>' + data.user.bold() +   data.message  + '</li>');
 })

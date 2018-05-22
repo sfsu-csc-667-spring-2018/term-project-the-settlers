@@ -82,10 +82,10 @@ router.get("/:id", (request, response, next) => {
 });
 
 router.post("/:id/vertex",
-      gameReady,
-      isCurrentPlayer,
+      // gameReady,
+      // isCurrentPlayer,
       (request, response, next) => {
-  const{id: userId} = request.user;
+  const{id: userId, username} = request.user;
   const{id: gameId} = request.params;
   console.log(request.body);
   const {  x: x,
@@ -95,6 +95,7 @@ router.post("/:id/vertex",
   .then( () => {
       const io = request.app.get("io");
       io.of('game').emit(`refresh-${gameId}`);
+      io.of('game').emit(`message-${gameId}`, {user: username, message: ` placed a ${buildingType}.`});
       response.sendStatus(200);
     })
   .catch( (error) => {
