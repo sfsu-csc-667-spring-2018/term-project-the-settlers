@@ -20,7 +20,7 @@ $("body").on("click",".vertex", event => {
     })
     .then( (response) => {
         if( response.status === 200){
-          buildModal("road");
+          buildModal(action);
         }else{
           alert("Can't do that");
         }

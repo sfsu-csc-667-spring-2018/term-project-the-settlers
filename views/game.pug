@@ -79,7 +79,7 @@ body
               .roads
                 each edge in edges
                   span.edge(data-x_start=edge.x_start, data-y_start=edge.y_start, data-x_end=edge.x_end, data-y_end=edge.y_end, data-owner=edge.user_id, data-item=edge.road )
-              
+
     .col.col-2#game_info
       .row-sm-3
         each player in playerInfo
@@ -110,15 +110,15 @@ body
         input#roll(type='button', value='Roll Dice')
         input#end(type='button', value='End Turn', onclick='endTurn()',style='display: none')
         input#diceVal(type="hidden", value=dice)
-        #Modal.modal.fade(role='dialog')
-          .modal-dialog
-            .modal-content
-              .modal-header
-                h4.modal-title Game Event
-                button.close(type='button', data-dismiss='modal', onclick='stopModal()') ×
-              .modal-body
-                p Catan messages goes here...
-              .modal-footer
-                button.btn.btn-default(type='button', data-dismiss='modal', onclick='stopModal()') Close
+    #Modal.modal.fade(role='dialog')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            h4.modal-title Game Event
+            button.close(type='button', data-dismiss='modal', onclick='stopModal()') ×
+          .modal-body
+            p Catan messages goes here...
+          .modal-footer
+            button.btn.btn-default(type='button', data-dismiss='modal', onclick='stopModal()') Close
 
   script(src="/scripts/game.js")
