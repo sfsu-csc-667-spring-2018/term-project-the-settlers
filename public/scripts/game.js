@@ -3,6 +3,7 @@ var socket = io('/game');
 let action = "";
 $(".vertex[data-item='empty']").toggle();
 $(".edge[data-owner='0']").toggle();
+$(".robber:not([data-robber])").toggle();
 
 
 $("body").on("click",".vertex", event => {
@@ -24,12 +25,26 @@ $("body").on("click",".vertex", event => {
   }
 });
 
- $("body").on("click", ".roads", event => {
+$("body").on("click", ".robber", event => {
+  $(".robber:not([data-robber])").toggle();
+  if (event.target.classList.contains("robber")) {
+
+    fetch(`/game/${gameId}/move-robber`, {
+      method: "post",
+      credentials: "include",
+      body: JSON.stringify({ tile_order }),
+      headers: new Headers({ "Content-Type": "application/json" })
+    });
+  }
+  if (event.target.classList.contains("tile")) {
+    //console.log("TILE", event.target);
+  }
+})
+
+$("body").on("click", ".roads", event => {
   if (event.target.classList.contains("edge")) {
     const { x_start, y_start, x_end, y_end} = event.target.dataset;
-
     buildModal("road");
-
     fetch(`/game/${gameId}/edge`, {
       method: "post",
       credentials: "include",
@@ -42,21 +57,21 @@ $("body").on("click",".vertex", event => {
   }
 });
 
-document.querySelector("#roll").addEventListener("click", event => {
-  if (event.target.classList.contains(" ")) {
-    const {  } = event.target.dataset;
+// document.querySelector("#roll").addEventListener("click", event => {
+//   if (event.target.classList.contains(" ")) {
+//     const {  } = event.target.dataset;
 
-    fetch(`/game/${gameId}/`, {
-      method: "post",
-      credentials: "include",
-      body: JSON.stringify({  }),
-      headers: new Headers({ "Content-Type": "application/json" })
-    });
-  }
-  if (event.target.classList.contains("tile")) {
-    console.log("TILE", event.target);
-  }
-});
+//     fetch(`/game/${gameId}/`, {
+//       method: "post",
+//       credentials: "include",
+//       body: JSON.stringify({  }),
+//       headers: new Headers({ "Content-Type": "application/json" })
+//     });
+//   }
+//   if (event.target.classList.contains("tile")) {
+//     console.log("TILE", event.target);
+//   }
+// });
 
 $(".buildroad").on("click", function() {
   const road = "true";
@@ -70,13 +85,12 @@ $(".buildsettlement").on("click", function() {
 
 $(".buildcity").on("click", function() {
   action = "city";
-  $(".vertex[data-item='empty']").toggle();
 });
 
 $(".offerplayer").on("click", function() {
   const id = $(this).attr("id")
   $(".offerplayer:not(#"+ id + ")").toggle("dim", function(){
-    $(".offerplayer:not(#"+ id + ")");
+    //$(".offerplayer:not(#"+ id + ")");
   });
   $("#" + id).toggleClass("selected");
 });
@@ -180,14 +194,22 @@ socket.on(`refresh-${gameId}`, () => {
     console.log(updatedResources);
     $("#display").html(updatedBoard);
     $("#game_info").html(updatedResources);
+    $(".vertex[data-item='empty']").toggle();
+    $(".edge[data-owner='0']").toggle();
+    $(".robber:not([data-robber])").toggle();
 
   }).catch( (error) => { console.log(error)})
 
 });
 
+
 socket.on(`message-${gameId}`, (data) => {
   $('#messages').append('<li><em>' + data.user.bold() + data.message  + '</em></li>');
-})
+});
+
+socket.on(`robber-${gameId}`, ()=>{
+  $(".robber:not([data-robber])").toggle();
+});
 
 var timer;
 

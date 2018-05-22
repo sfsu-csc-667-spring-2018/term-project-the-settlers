@@ -8,8 +8,6 @@ head
   script(src='/socket.io/socket.io.js')
   link(rel='stylesheet', href='/stylesheets/game.css')
   script(type='text/javascript', src='/scripts/d6.js')
-  script(type='text/javascript', src='/scripts/board.js')
-  script(type='text/javascript', src='/scripts/helper.js')
 body
   input#gameId(type='hidden', value=game.id)
 
@@ -74,30 +72,33 @@ body
             img.ocean(src='/images/tiles/ocean.png')
             #display
               each tile, index in tiles
-                span.tile(data-prob=tile.die_number, data-type=tile.resource_type)
+                span.tile(data-tile-id= index, data-prob=tile.die_number, data-type=tile.resource_type, data-robber=tile.robber)
+                span.robber(data-tile_order=index, data-robber=tile.robber)
               each vertex in vertices
                 span.vertex(data-x=vertex.x, data-y=vertex.y, data-owner= vertex.user_id data-item=vertex.item)
               .roads
                 each edge in edges
                   span.edge(data-x_start=edge.x_start, data-y_start=edge.y_start, data-x_end=edge.x_end, data-y_end=edge.y_end, data-owner=edge.user_id, data-item=edge.road )
-    .col.col-2
+              
+    .col.col-2#game_info
       .row-sm-3
         each player in playerInfo
           .row.playercards(turn= player.current_turn)
             h3= player.username
-            .playerStats
+            .playerStats#stats
               img(src='/images/cards.png')
               h6= player.resource_count
               img(src='/images/devcards.png')
               h6= player.card_count
               h6 Victory Points:
+              h6=player.victoryPoint
 
       .row-sm-3.cards
         h5 Resources
         each val in ["brick", "wood",  "ore","wheat", "sheep" ]
-          .resource
-            img(src='/images/resources/' + val + '.png')
-        .count
+            .resource
+              img(src='/images/resources/' + val + '.png')
+        .count#count
           each resource in playerResources
             p= resource.count
 

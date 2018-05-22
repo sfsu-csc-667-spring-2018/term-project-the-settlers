@@ -2,7 +2,7 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("tile_vertex_lookup",{
+    queryInterface.createTable("tile_vertex_lookup",{
       game_tile_order:{
         type:Sequelize.INTEGER,
         allowNull:false

@@ -74,12 +74,19 @@ router.get("/:id", (request, response, next) => {
 
   Promise.all([db.games.getGame(gameId),
               db.players.getDevCards(userId ,gameId),
-              db.players.getResources(userId,gameId)])
-  .then(([gameInfo, playerDevCard,playerResources]) => {
+              db.players.getResources(userId,gameId),
+              gameLogic.stats.getPlayerStats(gameId)])
+  .then(([gameInfo, playerDevCard,playerResources,playerInfo]) => {
     //console.log(Object.assign({}, gameInfo, {playerDevCard},{playerResources}));
-    response.render("game", Object.assign({}, gameInfo, {playerDevCard},{playerResources}, { username, userId }));
+    response.render("game", Object.assign({},
+                                          gameInfo,
+                                          {playerDevCard},
+                                          {playerResources},
+                                          {playerInfo},
+                                          { username, userId }));
   }).catch(error => console.log(error));
 });
+
 
 router.post("/:id/vertex",
       // gameReady,
@@ -138,6 +145,9 @@ router.post("/:id/dice",
       const io = request.app.get("io");
       io.of('game').emit(`refresh-${gameId}`);
       io.of('game').emit(`message-${gameId}`, {user: username, message: `rolled a ${dice.dice_roll}.`});
+      if(dice.dice_roll == 7){
+        io.of('game').emit(`robber-${gameId}`);
+      }
       gameLogic.resourceAllocation.updateResources(gameId);
   })
   .then( () => response.sendStatus(200))
@@ -180,8 +190,22 @@ router.post("/:id/trade",
 });
 
 router.post("/:id/move-robber",
-      gameReady, isCurrentPlayer, (request,response,next) => {
-  response.sendStatus(200);
+    //gameReady,
+    //isCurrentPlayer,
+    (request,response,next) => {
+  const {id: gameId} = request.params;
+  const {tile_order : tileOrder} = request.body;
+  //const tileOrder = 5;
+  gameLogic.robber.moveRobber(gameId,tileOrder)
+  .then( () => {
+    response.sendStatus(200)
+    const io = request.app.get("io");
+    io.of('game').emit(`refresh-${gameId}`);
+  })
+  .catch( (error) => {
+    console.log(error);
+    response.sendStatus(401);
+  })
 });
 
 router.post("/:id/endturn",
