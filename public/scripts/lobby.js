@@ -2,8 +2,6 @@ var socket = io("/lobby");
 
 document.querySelector("form.chat").addEventListener("submit", event => {
   const message = $("#m").val();
-
-  console.log(message);
   if (message !== undefined && message !== "") {
     fetch("/chat/lobby", {
       method: "post",
@@ -46,7 +44,6 @@ $("div.joinableGame").each((index,element) => {
 
 $("form.join").on("submit", event => {
   const game_id = $("div.joinableGame.selected").attr("data");
-  console.log(game_id);
   if (game_id !== undefined) {
     fetch(`/game/join/${game_id}`,{
           method: "post",

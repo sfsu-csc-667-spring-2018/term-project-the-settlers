@@ -12,7 +12,6 @@ module.exports = db => {
   allocationFunctions.updateResources = (gameId) => {
     db.games.getDiceRoll(gameId)
       .then( (dice) =>{
-        console.log(dice)
         return db.players.getUpdateableVertices(1,dice.dice_roll)
       })
       .then( (ownedVertices) => {

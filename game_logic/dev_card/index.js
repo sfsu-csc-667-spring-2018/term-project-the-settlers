@@ -1,10 +1,8 @@
 module.exports = db => {
   const devCardFunctions = {};
-
   const subtractResource = (userId,gameId,type,amount) =>{
     return db.players.getResourceCount(userId,gameId,type)
       .then(({count}) => {
-        console.log(count,amount,type,count<amount);
         if(count >= amount){
           return db.players.updateResources(userId,gameId,type,-amount);
         }else{

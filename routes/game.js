@@ -77,7 +77,6 @@ router.get("/:id", (request, response, next) => {
               db.players.getResources(userId,gameId),
               gameLogic.stats.getPlayerStats(gameId)])
   .then(([gameInfo, playerDevCard,playerResources,playerInfo]) => {
-    //console.log(Object.assign({}, gameInfo, {playerDevCard},{playerResources}));
     response.render("game", Object.assign({},
                                           gameInfo,
                                           {playerDevCard},
@@ -94,7 +93,6 @@ router.post("/:id/vertex",
       (request, response, next) => {
   const{id: userId, username} = request.user;
   const{id: gameId} = request.params;
-  console.log(request.body);
   const {  x: x,
            y: y,
            item: buildingType} = request.body;
@@ -202,7 +200,6 @@ router.post("/:id/move-robber",
     (request,response,next) => {
   const {id: gameId} = request.params;
   const {tile_order : tileOrder} = request.body;
-  //const tileOrder = 5;
   gameLogic.robber.moveRobber(gameId,tileOrder)
   .then( () => {
     response.sendStatus(200)
@@ -220,7 +217,6 @@ router.post("/:id/endturn",
       isCurrentPlayer,
       (request,response,next) => {
   const { id: userId,username} = request.user;
-  console.log("In routes");
   const {id: gameId} = request.params;
   gameLogic.turn.updatePlayerTurn(gameId)
   .then( () => {

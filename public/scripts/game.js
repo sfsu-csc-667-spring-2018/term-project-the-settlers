@@ -15,10 +15,8 @@ $( document ).ready(function() {
 
 
 $("body").on("click",".vertex", event => {
- // console.log(event.target.classList);
   if (event.target.classList.contains("vertex")) {
     const { x, y , item } = event.target.dataset;
-    // console.log(x, y);
 
     fetch(`/game/${gameId}/vertex`, {
       method: "post",
@@ -61,27 +59,8 @@ $("body").on("click", ".roads", event => {
     });
   }
   if (event.target.classList.contains("tile")) {
-    console.log("TILE", event.target);
   }
 });
-
-
-
-// document.querySelector("#roll").addEventListener("click", event => {
-//   if (event.target.classList.contains(" ")) {
-//     const {  } = event.target.dataset;
-
-//     fetch(`/game/${gameId}/`, {
-//       method: "post",
-//       credentials: "include",
-//       body: JSON.stringify({  }),
-//       headers: new Headers({ "Content-Type": "application/json" })
-//     });
-//   }
-//   if (event.target.classList.contains("tile")) {
-//     console.log("TILE", event.target);
-//   }
-// });
 
 $(".buildroad").on("click", function() {
   const road = "true";
@@ -100,7 +79,6 @@ $(".buildcity").on("click", function() {
 $(".offerplayer").on("click", function() {
   const id = $(this).attr("id")
   $(".offerplayer:not(#"+ id + ")").toggle("dim", function(){
-    //$(".offerplayer:not(#"+ id + ")");
   });
   $("#" + id).toggleClass("selected");
 });
@@ -112,23 +90,6 @@ $(".recieveplayer").on("click", function() {
     $("#" + id).toggleClass("selected");
   });
 });
-
-
-
-
-// $(".offerbank").on("click", function() {
-//   const id = $(this).attr("id")
-//   $(".offerbank:not(#"+ id + ")").toggle("dim", function(){
-//     $(".offerplayer:not(#"+ id + ")");
-
-//   });
-// });
-// $(".recievebank").on("click", function() {
-//   const id = $(this).attr("id")
-//   $(".offerplayer:not(#"+ id + ")").toggle("dim", function(){
-//     $(".offerplayer:not(#"+ id + ")");
-//   });
-// });
 
 $("form.message").on("submit", event => {
   const message = $("#m").val();
@@ -148,7 +109,6 @@ $("form.message").on("submit", event => {
 })
 
 $("body").on("click","#roll", event => {
-  //D6.roll();
   fetch(`/game/${gameId}/dice`, {
     method: "post",
     credentials: "include",
@@ -163,7 +123,6 @@ $("body").on("click","#roll", event => {
   });
 });
 $("body").on("click","#end", event => {
-  // console.log(x, y);
  
   fetch(`/game/${gameId}/endturn`, {
     method: "post",
@@ -178,29 +137,6 @@ $("body").on("click","#end", event => {
     }
   });
  });
-
-
-// $("#diceVal").on("submit", event => {
-//   const message = $("#diceVal").val();
-//   if (message !== undefined) {
-//     fetch(`/chat/game`, {
-//       method: "post",
-//       body: JSON.stringify({ message, gameId }),
-//       credentials: "include",
-//       headers: new Headers({ "Content-Type": "application/json" })
-//     }),
-//     fetch(`/game/${gameId}/droll`, {
-//       method: "post",
-//       body: JSON.stringify({ dice_rolled: message }),
-//       credentials: "include",
-//       headers: new Headers({ "Content-Type": "application/json" })
-//     })
-//     .catch(error => console.log(error));
-//   }
-//   event.preventDefault();
-//   event.stopPropagation();
-//   return false;
-// });
 
 socket.on(`chat-game-${gameId}`, (data) => {
   if (data && isNaN(data.msg)) {

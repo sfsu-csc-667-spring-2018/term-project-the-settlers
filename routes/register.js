@@ -3,7 +3,6 @@ var router = express.Router();
 const bcrypt = require('bcrypt');
 const db = require('../db');
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('register', { title: 'Express' });
 });
@@ -15,14 +14,11 @@ router.post('/', function(request, response, next){
   bcrypt.hash(password, 10, (error,hashedPass) => {
     db.users.createUser(username,email,hashedPass, username+email)
       .then( (successMsg) =>  {
-                                response.redirect("./");
-                                console.log(successMsg);
-                              }
-
+        response.redirect("./");
+      }
       ).catch( (rejectMsg) => {
-                                response.redirect("./register");
-                                console.log(rejectMsg);
-                              }
+          response.redirect("./register");
+        }
       )
   })
 

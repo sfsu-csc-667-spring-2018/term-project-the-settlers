@@ -5,10 +5,7 @@ const db = require('../db');
 
 router.use(authenticate);
 
-/* GET home page. */
 router.get('/', function(request, response, next) {
-    console.log('from lobby', request.user);
-
     db.games.getGames()
     .then ( gameList =>
               {

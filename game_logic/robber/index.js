@@ -24,7 +24,6 @@ module.exports = db => {
         if(subtractedResources >= Math.floor(total/2)){
           halfOfResource = 0;
         }
-        console.log("subtracting", halfOfResource, resourceType, "from", userId, "total",total);
         queries.push(db.players.updateResources(userId,gameId,resourceType,-halfOfResource))
         subtractedResources += halfOfResource;
       })
@@ -46,7 +45,6 @@ module.exports = db => {
   };
 
   robberFunctions.moveRobber = (gameId,tileOrder) => {
-    console.log(gameId,tileOrder);
     return sevenRolled(gameId)
       .then( (sevenRolled) => {
         if(sevenRolled){

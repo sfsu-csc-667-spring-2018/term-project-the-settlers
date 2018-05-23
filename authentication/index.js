@@ -4,18 +4,18 @@ const db = require('../db');
 const bcrypt = require("bcrypt");
 
 passport.use(new LocalStrategy(
-            (username,password,done) => {
-                db.users.findByUsername(username)
-                .then( ({id,username,email, password: hash}) => {
-                      if(bcrypt.compareSync(password,hash)){
-                        return done(null,{id,username,email})
-                      }else{
-                        return done(null,false);
-                      }
-                  } )
-                .catch( () => done(null,false));
-
+  (username,password,done) => {
+      db.users.findByUsername(username)
+      .then( ({id,username,email, password: hash}) => {
+            if(bcrypt.compareSync(password,hash)){
+              return done(null,{id,username,email})
+            }else{
+              return done(null,false);
             }
+        } )
+      .catch( () => done(null,false));
+
+  }
 ));
 
 passport.serializeUser(function(user,done){

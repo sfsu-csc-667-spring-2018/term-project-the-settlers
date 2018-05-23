@@ -3,7 +3,6 @@ var router = express.Router();
 const db = require('../db');
 const passport = require('../authentication');
 
-/* GET home page. */
 router.get('/', function(req, res, next) {
     res.render('index', { title: 'Express' });
 });
