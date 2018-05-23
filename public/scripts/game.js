@@ -35,18 +35,17 @@ $("body").on("click",".vertex", event => {
 });
 
 $("body").on("click", ".robber", event => {
-  $(".robber:not([data-robber])").toggle();
   if (event.target.classList.contains("robber")) {
-
+    const {tile_order} = event.target.dataset;
     fetch(`/game/${gameId}/move-robber`, {
       method: "post",
       credentials: "include",
       body: JSON.stringify({ tile_order }),
       headers: new Headers({ "Content-Type": "application/json" })
-    });
-  }
-  if (event.target.classList.contains("tile")) {
-    //console.log("TILE", event.target);
+    })
+    .then(() =>{
+      $(".robber:not([data-robber])").toggle();
+    })
   }
 });
 
@@ -219,7 +218,7 @@ socket.on(`chat-game-${gameId}`, (data) => {
   }
 });
 
-socket.on(`refresh-${gameId}`, () => {
+socket.on(`refresh-board-${gameId}`, () => {
   fetch(document.URL,{
     method: "get",
     credentials: "include"
@@ -227,13 +226,23 @@ socket.on(`refresh-${gameId}`, () => {
     return response.text();
   }).then( (html) => {
     const updatedBoard = $(html).find("#display").html();
-    const updatedResources = $(html).find("#game_info").html();
     $("#display").html(updatedBoard);
-    $("#game_info").html(updatedResources);
     $(".vertex[data-item='empty']").toggle();
     $(".edge[data-owner='0']").toggle();
     $(".robber:not([data-robber])").toggle();
 
+  }).catch( (error) => { console.log(error)})
+
+});
+socket.on(`refresh-stats-${gameId}`, () => {
+  fetch(document.URL,{
+    method: "get",
+    credentials: "include"
+  }).then((response) => {
+    return response.text();
+  }).then( (html) => {
+    const updatedResources = $(html).find("#game_info").html();
+    $("#game_info").html(updatedResources);
   })
   .then(()=>{
     if($(".vertex[data-item='settlement']").length >= $(".playercards").length * 2){
@@ -242,6 +251,8 @@ socket.on(`refresh-${gameId}`, () => {
   }).catch( (error) => { console.log(error)})
 
 });
+
+
 
 socket.on(`robber-${gameId}`, ()=>{
   $(".robber:not([data-robber])").toggle();

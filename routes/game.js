@@ -101,7 +101,7 @@ router.post("/:id/vertex",
   gameLogic.building.buildStructure(userId, gameId, x, y , buildingType)
   .then( () => {
       const io = request.app.get("io");
-      io.of('game').emit(`refresh-${gameId}`);
+      io.of('game').emit(`refresh-board-${gameId}`);
       io.of('game').emit(`message-${gameId}`, {message: `${username} placed a ${buildingType}.`});
       response.sendStatus(200);
     })
@@ -125,7 +125,7 @@ router.post("/:id/edge",
   gameLogic.building.buildRoad(userId,gameId,xStart,yStart,xEnd,yEnd)
   .then( () => {
     const io = request.app.get("io");
-    io.of('game').emit(`refresh-${gameId}`);
+    io.of('game').emit(`refresh-board-${gameId}`);
     io.of('game').emit(`message-${gameId}`, {message: `${username} placed a road.`});
     response.sendStatus(200);
   })
@@ -156,7 +156,7 @@ router.post("/:id/dice",
   .then( () => {
     response.sendStatus(200);
     const io = request.app.get("io");
-    io.of('game').emit(`refresh-${gameId}`);
+    io.of('game').emit(`refresh-stats-${gameId}`);
   })
   .catch( (error) => {
     console.log(error);
@@ -207,7 +207,7 @@ router.post("/:id/move-robber",
   .then( () => {
     response.sendStatus(200)
     const io = request.app.get("io");
-    io.of('game').emit(`refresh-${gameId}`);
+    io.of('game').emit(`refresh-board-${gameId}`);
   })
   .catch( (error) => {
     console.log(error);
@@ -226,7 +226,7 @@ router.post("/:id/endturn",
   .then( () => {
     const io = request.app.get("io");
     io.of('game').emit(`message-${gameId}`, {message: `${username} has ended his turn!`});
-    io.of('game').emit(`refresh-${gameId}`);
+    io.of('game').emit(`refresh-stats-${gameId}`);
     response.sendStatus(200);
   })
   .catch( (error) => {
